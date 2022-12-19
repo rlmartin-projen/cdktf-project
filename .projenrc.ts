@@ -6,7 +6,7 @@ const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
   defaultReleaseBranch: 'main',
-  devDeps: ['@rlmartin-projen/projen-project'],
+  devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',
   projenrcTs: true,
   repositoryUrl: 'git@github.com:rlmartin-projen/cdktf-project.git',

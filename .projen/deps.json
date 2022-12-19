@@ -111,6 +111,7 @@
     },
     {
       "name": "@rlmartin-projen/projen-project",
+      "version": "~0",
       "type": "peer"
     },
     {
@@ -120,6 +121,7 @@
     },
     {
       "name": "@rlmartin-projen/projen-project",
+      "version": "~0",
       "type": "runtime"
     },
     {
