@@ -82,7 +82,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       jest: false,
       licensed: false,
       mergify: false,
-      opts: squashPackages([...(options.deps ?? []), ...deps]),
+      deps: squashPackages([...(options.deps ?? []), ...deps]),
       pullRequestTemplate: false,
       releaseWorkflow: false,
       sampleCode: false,
