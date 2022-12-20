@@ -149,12 +149,12 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDev">tsconfigDev</a></code> | <code>projen.javascript.TypescriptConfigOptions</code> | Custom tsconfig options for the development tsconfig.json file (used for testing). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDevFile">tsconfigDevFile</a></code> | <code>string</code> | The name of the development tsconfig.json file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModules">terraformModules</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions">TerraformModuleOptions</a>[]</code> | Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
@@ -2039,19 +2039,6 @@ same minor, so we recommend using a `~` dependency (e.g. `~1.2.3`).
 
 ---
 
-##### `terraformBackend`<sup>Required</sup> <a name="terraformBackend" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend"></a>
-
-```typescript
-public readonly terraformBackend: TerraformBackend;
-```
-
-- *Type:* <a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a>
-- *Default:* S3Backend
-
-Terraform backend configuration.
-
----
-
 ##### `artifactsFolder`<sup>Optional</sup> <a name="artifactsFolder" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder"></a>
 
 ```typescript
@@ -2118,6 +2105,19 @@ The GitHub Team slug (including the org_name/ prefix) or GitHub username for the
 As a hack, and to avoid async fetching from the GitHub API to lookup ids, this is a map of
 username => GitHub id (which will need to be looked up manually). In the future it would be
 nice to make this a simple string[] (list of usernames) and automatically lookup the ids.
+
+---
+
+##### `terraformBackend`<sup>Optional</sup> <a name="terraformBackend" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend"></a>
+
+```typescript
+public readonly terraformBackend: TerraformBackend;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a>
+- *Default:* S3Backend
+
+Terraform backend configuration.
 
 ---
 

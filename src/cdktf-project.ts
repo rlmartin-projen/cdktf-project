@@ -128,7 +128,7 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    *
    * @default - S3Backend
    */
-  readonly terraformBackend: TerraformBackend;
+  readonly terraformBackend?: TerraformBackend;
 
   /**
    * Terraform Providers to add to cdktf.json
@@ -220,9 +220,9 @@ export class CdktfProject extends typescript.TypeScriptProject {
       workflowNodeVersion,
       terraformBackend: {
         aws: {
-          accountId: options.terraformBackend.aws.accountId,
-          prefix: options.terraformBackend.aws.prefix,
-          region: options.terraformBackend.aws.region ?? 'us-east-1',
+          accountId: options.terraformBackend?.aws.accountId ?? 'TODO',
+          prefix: options.terraformBackend?.aws.prefix ?? 'TODO',
+          region: options.terraformBackend?.aws.region ?? 'us-east-1',
         },
       },
       _name: allCases(options.name),
