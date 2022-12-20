@@ -1,0 +1,10 @@
+# CDKTF infrastructure for {{ name}}
+
+## Bootstrapping
+1. Add resources to `src/stack.ts`. The exported function should produce one stack per environment.
+2. Add all `terraformVars` as GitHub secrets at the org, repo, or environment level.
+3. Turn on [Settings Bot](https://github.com/apps/settings) if it is not already on.
+4. Make sure the following AWS resources exist in account `{{ terraformBackend.aws.accountId }}` in region `{{ terraformBackend.aws.region || 'us-east-1' }}`:
+  1. `{{ terraformBackend.aws.prefix }}-terraform-state` S3 bucket
+  2. `{{ terraformBackend.aws.prefix }}-terraform-locks` DynamoDB table
+  3. `{{ terraformBackend.aws.prefix }}-terraform-state` IAM role, with object read/write permissions on the above

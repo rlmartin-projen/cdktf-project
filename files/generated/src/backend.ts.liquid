@@ -6,7 +6,7 @@ export const pushBackend = <T>(scope: Construct, env: Environment<T>) => {
   return new S3Backend(scope, {
     bucket: "{{ terraformBackend.aws.prefix }}-terraform-state",
     key: `{{ _name.kebab }}/${env}/terraform.tfstate`,
-    region: "{{ terraformBackend.aws.prefix }}",
+    region: "{{ terraformBackend.aws.region || 'us-east-1' }}",
     dynamodbTable: "{{ terraformBackend.aws.prefix }}-terraform-locks",
     roleArn: "arn:aws:iam::{{ terraformBackend.aws.accountId }}:role/{{ terraformBackend.aws.prefix }}-terraform-state"
   });

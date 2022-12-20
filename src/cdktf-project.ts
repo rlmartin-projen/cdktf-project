@@ -515,7 +515,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     new TextFile(this, 'src/environments.ts', {
       lines: [
         'export interface Environments<T> {',
-        ...Object.keys(deploymentEnvironments).map(env => ` . ${env}: T`),
+        ...Object.keys(deploymentEnvironments).map(env => `  readonly ${env}: T`),
         '}',
         '',
         'export type Environment<T> = keyof Environments<T>',
@@ -531,7 +531,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         '',
         'export const pushStacks = (scope: Construct): Environments<TerraformStack> => {',
         '  return {',
-        ...Object.keys(deploymentEnvironments).map(env => `    '${env}': new TerraformStack(scope, '${env}', organization, people, teams),`),
+        ...Object.keys(deploymentEnvironments).map(env => `    '${env}': new TerraformStack(scope, '${env}'),`),
         '  }',
         '}',
         '',
