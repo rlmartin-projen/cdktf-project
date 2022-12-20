@@ -218,6 +218,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
         include: mergeUnique(options.tsconfig?.include || [], ['**/*.ts']),
       },
       workflowNodeVersion,
+      terraformBackend: {
+        aws: {
+          accountId: options.terraformBackend.aws.accountId,
+          prefix: options.terraformBackend.aws.prefix,
+          region: options.terraformBackend.aws.region ?? 'us-east-1',
+        }
+      },
       _name: allCases(options.name),
     };
     const { options: projectOpts, files } = loadSettings(tempOptions, path.join(__dirname, '../files'), true);
