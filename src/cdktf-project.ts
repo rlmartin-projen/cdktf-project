@@ -223,7 +223,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           accountId: options.terraformBackend.aws.accountId,
           prefix: options.terraformBackend.aws.prefix,
           region: options.terraformBackend.aws.region ?? 'us-east-1',
-        }
+        },
       },
       _name: allCases(options.name),
     };
