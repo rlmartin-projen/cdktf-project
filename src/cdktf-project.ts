@@ -275,7 +275,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       obj:
       {
         language: 'typescript',
-        app: `tsc && node ${options.entrypoint ?? 'index.js'}`,
+        app: `tsc && node ${artifactsFolder}/index.js`,
         terraformProviders: terraformProviders,
         terraformModules: tfModules,
         context: {
