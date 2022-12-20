@@ -149,6 +149,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDev">tsconfigDev</a></code> | <code>projen.javascript.TypescriptConfigOptions</code> | Custom tsconfig options for the development tsconfig.json file (used for testing). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDevFile">tsconfigDevFile</a></code> | <code>string</code> | The name of the development tsconfig.json file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
@@ -2038,6 +2039,19 @@ same minor, so we recommend using a `~` dependency (e.g. `~1.2.3`).
 
 ---
 
+##### `terraformBackend`<sup>Required</sup> <a name="terraformBackend" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend"></a>
+
+```typescript
+public readonly terraformBackend: TerraformBackend;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a>
+- *Default:* S3Backend
+
+Terraform backend configuration.
+
+---
+
 ##### `artifactsFolder`<sup>Optional</sup> <a name="artifactsFolder" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder"></a>
 
 ```typescript
@@ -2226,6 +2240,91 @@ public readonly requireApproval: boolean;
 Whether the environment requires approval before applying;
 
 plans always run
+
+---
+
+### S3Backend <a name="S3Backend" id="@rlmartin-projen/cdktf-project.S3Backend"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.S3Backend.Initializer"></a>
+
+```typescript
+import { S3Backend } from '@rlmartin-projen/cdktf-project'
+
+const s3Backend: S3Backend = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.accountId">accountId</a></code> | <code>string</code> | The AWS accountId where the S3 bucket and DynamoDB locks table exist. |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.prefix">prefix</a></code> | <code>string</code> | Prefix to use when naming backend resources. |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.region">region</a></code> | <code>string</code> | AWS region where the S3 bucket and DynamoDB locks table exist. |
+
+---
+
+##### `accountId`<sup>Required</sup> <a name="accountId" id="@rlmartin-projen/cdktf-project.S3Backend.property.accountId"></a>
+
+```typescript
+public readonly accountId: string;
+```
+
+- *Type:* string
+
+The AWS accountId where the S3 bucket and DynamoDB locks table exist.
+
+---
+
+##### `prefix`<sup>Required</sup> <a name="prefix" id="@rlmartin-projen/cdktf-project.S3Backend.property.prefix"></a>
+
+```typescript
+public readonly prefix: string;
+```
+
+- *Type:* string
+
+Prefix to use when naming backend resources.
+
+---
+
+##### `region`<sup>Optional</sup> <a name="region" id="@rlmartin-projen/cdktf-project.S3Backend.property.region"></a>
+
+```typescript
+public readonly region: string;
+```
+
+- *Type:* string
+- *Default:* 'us-east-1'
+
+AWS region where the S3 bucket and DynamoDB locks table exist.
+
+---
+
+### TerraformBackend <a name="TerraformBackend" id="@rlmartin-projen/cdktf-project.TerraformBackend"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.TerraformBackend.Initializer"></a>
+
+```typescript
+import { TerraformBackend } from '@rlmartin-projen/cdktf-project'
+
+const terraformBackend: TerraformBackend = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend.property.aws">aws</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.S3Backend">S3Backend</a></code> | *No description.* |
+
+---
+
+##### `aws`<sup>Required</sup> <a name="aws" id="@rlmartin-projen/cdktf-project.TerraformBackend.property.aws"></a>
+
+```typescript
+public readonly aws: S3Backend;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.S3Backend">S3Backend</a>
 
 ---
 

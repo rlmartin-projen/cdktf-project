@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { addFiles, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
-import { JsonFile, TextFile, typescript, YamlFile } from 'projen';
+import { addFiles, allCases, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
+import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 const deps = [
@@ -54,6 +54,28 @@ interface GitHubEnvironment {
   };
 }
 
+export interface TerraformBackend {
+  readonly aws: S3Backend;
+}
+
+export interface S3Backend {
+  /**
+   * The AWS accountId where the S3 bucket and DynamoDB locks table exist.
+   */
+  readonly accountId: string;
+  /**
+   * Prefix to use when naming backend resources
+   */
+  readonly prefix: string;
+
+  /**
+   * AWS region where the S3 bucket and DynamoDB locks table exist.
+   *
+   * @default - 'us-east-1'
+   */
+  readonly region?: string;
+}
+
 export interface TerraformModuleOptions {
   readonly name: string;
   readonly nameOverride?: string;
@@ -100,6 +122,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * @default - {}
    */
   readonly repoAdmins?: { [key: string]: number };
+
+  /**
+   * Terraform backend configuration.
+   *
+   * @default - S3Backend
+   */
+  readonly terraformBackend: TerraformBackend;
 
   /**
    * Terraform Providers to add to cdktf.json
@@ -189,6 +218,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         include: mergeUnique(options.tsconfig?.include || [], ['**/*.ts']),
       },
       workflowNodeVersion,
+      _name: allCases(options.name),
     };
     const { options: projectOpts, files } = loadSettings(tempOptions, path.join(__dirname, '../files'), true);
     super(projectOpts);
@@ -480,6 +510,32 @@ export class CdktfProject extends typescript.TypeScriptProject {
         ],
         environments,
       },
+    });
+
+    new TextFile(this, 'src/environments.ts', {
+      lines: [
+        'export interface Environments<T> {',
+        ...Object.keys(deploymentEnvironments).map(env => ` . ${env}: T`),
+        '}',
+        '',
+        'export type Environment<T> = keyof Environments<T>',
+        '',
+      ],
+    });
+
+    new SampleFile(this, 'src/stack.ts', {
+      contents: [
+        'import { Construct } from \'constructs\';',
+        'import { Environments } from \'./environments\';',
+        'import { TerraformStack } from \'cdktf\';',
+        '',
+        'export const pushStacks = (scope: Construct): Environments<TerraformStack> => {',
+        '  return {',
+        ...Object.keys(deploymentEnvironments).map(env => `    '${env}': new TerraformStack(scope, '${env}', organization, people, teams),`),
+        '  }',
+        '}',
+        '',
+      ].join('\n'),
     });
   }
 }

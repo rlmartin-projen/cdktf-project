@@ -21,6 +21,12 @@ test('ProjenProject', () => {
       },
     ],
     terraformProviders: ['aws@~3'],
+    terraformBackend: {
+      aws: {
+        prefix: 'foo',
+        accountId: '1234',
+      },
+    },
   });
   const fileNames = project.files.map(_ => _.path);
   ['.projen/tasks.json'].forEach(fileName => {
