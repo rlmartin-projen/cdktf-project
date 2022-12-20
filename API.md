@@ -149,12 +149,16 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDev">tsconfigDev</a></code> | <code>projen.javascript.TypescriptConfigOptions</code> | Custom tsconfig options for the development tsconfig.json file (used for testing). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDevFile">tsconfigDevFile</a></code> | <code>string</code> | The name of the development tsconfig.json file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.enabledEnvs">enabledEnvs</a></code> | <code>string[]</code> | Add GitHub Wokflows for enabled environments. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>string[]</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModules">terraformModules</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions">TerraformModuleOptions</a>[]</code> | Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
 
 ---
 
@@ -2035,14 +2039,27 @@ same minor, so we recommend using a `~` dependency (e.g. `~1.2.3`).
 
 ---
 
-##### `enabledEnvs`<sup>Optional</sup> <a name="enabledEnvs" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.enabledEnvs"></a>
+##### `artifactsFolder`<sup>Optional</sup> <a name="artifactsFolder" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder"></a>
 
 ```typescript
-public readonly enabledEnvs: string[];
+public readonly artifactsFolder: string;
 ```
 
-- *Type:* string[]
-- *Default:* []
+- *Type:* string
+- *Default:* 'dist'
+
+Configurable folder for artifacts to package when transitioning from plan to apply.
+
+---
+
+##### `deploymentEnvironments`<sup>Optional</sup> <a name="deploymentEnvironments" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments"></a>
+
+```typescript
+public readonly deploymentEnvironments: {[ key: string ]: DeploymentEnvironment};
+```
+
+- *Type:* {[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}
+- *Default:* {}
 
 Add GitHub Wokflows for enabled environments.
 
@@ -2061,16 +2078,46 @@ A set of scripts to be added to package.json but not wrapped by projen.
 
 ---
 
-##### `repoAdmins`<sup>Optional</sup> <a name="repoAdmins" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins"></a>
+##### `npmrc`<sup>Optional</sup> <a name="npmrc" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc"></a>
 
 ```typescript
-public readonly repoAdmins: string[];
+public readonly npmrc: string[];
 ```
 
 - *Type:* string[]
 - *Default:* []
 
+Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required.
+
+---
+
+##### `repoAdmins`<sup>Optional</sup> <a name="repoAdmins" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins"></a>
+
+```typescript
+public readonly repoAdmins: {[ key: string ]: number};
+```
+
+- *Type:* {[ key: string ]: number}
+- *Default:* {}
+
 The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure.
+
+As a hack, and to avoid async fetching from the GitHub API to lookup ids, this is a map of
+username => GitHub id (which will need to be looked up manually). In the future it would be
+nice to make this a simple string[] (list of usernames) and automatically lookup the ids.
+
+---
+
+##### `terraformBackend`<sup>Optional</sup> <a name="terraformBackend" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend"></a>
+
+```typescript
+public readonly terraformBackend: TerraformBackend;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a>
+- *Default:* S3Backend
+
+Terraform backend configuration.
 
 ---
 
@@ -2110,6 +2157,174 @@ public readonly terraformProviders: string[];
 - *Default:* []
 
 Terraform Providers to add to cdktf.json.
+
+---
+
+##### `terraformVars`<sup>Optional</sup> <a name="terraformVars" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars"></a>
+
+```typescript
+public readonly terraformVars: string[];
+```
+
+- *Type:* string[]
+- *Default:* []
+
+List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan.
+
+The secrets will need to be set
+manually, on one of org/repo/environment. The name of the var is expected to
+not include the TF_VAR_ prefix.
+
+---
+
+### DeploymentEnvironment <a name="DeploymentEnvironment" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.Initializer"></a>
+
+```typescript
+import { DeploymentEnvironment } from '@rlmartin-projen/cdktf-project'
+
+const deploymentEnvironment: DeploymentEnvironment = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.branchFilters">branchFilters</a></code> | <code>string[]</code> | Branch matchers from which code can be deployed for this environment. |
+| <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.onlyProtectedBranches">onlyProtectedBranches</a></code> | <code>boolean</code> | Instead of filtering branches, use branches protected in the repo settings. |
+| <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.requireApproval">requireApproval</a></code> | <code>boolean</code> | Whether the environment requires approval before applying; |
+
+---
+
+##### `branchFilters`<sup>Optional</sup> <a name="branchFilters" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.branchFilters"></a>
+
+```typescript
+public readonly branchFilters: string[];
+```
+
+- *Type:* string[]
+- *Default:* []
+
+Branch matchers from which code can be deployed for this environment.
+
+Empty implies "all".
+Mutually-exclusive from onlyProtectedBranches.
+
+---
+
+##### `onlyProtectedBranches`<sup>Optional</sup> <a name="onlyProtectedBranches" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.onlyProtectedBranches"></a>
+
+```typescript
+public readonly onlyProtectedBranches: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Instead of filtering branches, use branches protected in the repo settings.
+
+Mutually-exclusive from branchFilters
+
+---
+
+##### `requireApproval`<sup>Optional</sup> <a name="requireApproval" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.requireApproval"></a>
+
+```typescript
+public readonly requireApproval: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether the environment requires approval before applying;
+
+plans always run
+
+---
+
+### S3Backend <a name="S3Backend" id="@rlmartin-projen/cdktf-project.S3Backend"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.S3Backend.Initializer"></a>
+
+```typescript
+import { S3Backend } from '@rlmartin-projen/cdktf-project'
+
+const s3Backend: S3Backend = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.accountId">accountId</a></code> | <code>string</code> | The AWS accountId where the S3 bucket and DynamoDB locks table exist. |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.prefix">prefix</a></code> | <code>string</code> | Prefix to use when naming backend resources. |
+| <code><a href="#@rlmartin-projen/cdktf-project.S3Backend.property.region">region</a></code> | <code>string</code> | AWS region where the S3 bucket and DynamoDB locks table exist. |
+
+---
+
+##### `accountId`<sup>Required</sup> <a name="accountId" id="@rlmartin-projen/cdktf-project.S3Backend.property.accountId"></a>
+
+```typescript
+public readonly accountId: string;
+```
+
+- *Type:* string
+
+The AWS accountId where the S3 bucket and DynamoDB locks table exist.
+
+---
+
+##### `prefix`<sup>Required</sup> <a name="prefix" id="@rlmartin-projen/cdktf-project.S3Backend.property.prefix"></a>
+
+```typescript
+public readonly prefix: string;
+```
+
+- *Type:* string
+
+Prefix to use when naming backend resources.
+
+---
+
+##### `region`<sup>Optional</sup> <a name="region" id="@rlmartin-projen/cdktf-project.S3Backend.property.region"></a>
+
+```typescript
+public readonly region: string;
+```
+
+- *Type:* string
+- *Default:* 'us-east-1'
+
+AWS region where the S3 bucket and DynamoDB locks table exist.
+
+---
+
+### TerraformBackend <a name="TerraformBackend" id="@rlmartin-projen/cdktf-project.TerraformBackend"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.TerraformBackend.Initializer"></a>
+
+```typescript
+import { TerraformBackend } from '@rlmartin-projen/cdktf-project'
+
+const terraformBackend: TerraformBackend = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend.property.aws">aws</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.S3Backend">S3Backend</a></code> | *No description.* |
+
+---
+
+##### `aws`<sup>Required</sup> <a name="aws" id="@rlmartin-projen/cdktf-project.TerraformBackend.property.aws"></a>
+
+```typescript
+public readonly aws: S3Backend;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.S3Backend">S3Backend</a>
 
 ---
 

@@ -1,0 +1,13 @@
+import { S3Backend } from "cdktf";
+import { Construct } from "constructs";
+import { Environment } from "./environments";
+
+export const pushBackend = <T>(scope: Construct, env: Environment<T>) => {
+  return new S3Backend(scope, {
+    bucket: "{{ terraformBackend.aws.prefix }}-terraform-state",
+    key: `{{ _name.kebab }}/${env}/terraform.tfstate`,
+    region: "{{ terraformBackend.aws.region }}",
+    dynamodbTable: "{{ terraformBackend.aws.prefix }}-terraform-locks",
+    roleArn: "arn:aws:iam::{{ terraformBackend.aws.accountId }}:role/{{ terraformBackend.aws.prefix }}-terraform-state"
+  });
+}

@@ -4,8 +4,15 @@ test('ProjenProject', () => {
   const project = new CdktfProject({
     name: 'foo-project',
     defaultReleaseBranch: 'main',
-    enabledEnvs: ['dev', 'prod'],
-    repoAdmins: ['@foo-name'],
+    deploymentEnvironments: {
+      dev: {},
+      prod: {
+        requireApproval: true,
+      },
+    },
+    repoAdmins: {
+      '@foo-name': 1234,
+    },
     terraformModules: [
       {
         name: 'foo',
@@ -14,6 +21,12 @@ test('ProjenProject', () => {
       },
     ],
     terraformProviders: ['aws@~3'],
+    terraformBackend: {
+      aws: {
+        prefix: 'foo',
+        accountId: '1234',
+      },
+    },
   });
   const fileNames = project.files.map(_ => _.path);
   ['.projen/tasks.json'].forEach(fileName => {
