@@ -8,6 +8,6 @@ CDKTF uses Node 14 and will show unexpected errors in higher versions of Node. A
 ```
 nvm use 14
 npx projen new \
-  --from @rlmartin-projen/cdktf-project \
+  --from @rlmartin-projen/cdktf-project@~0 \
   --projenrc-ts
 ```
