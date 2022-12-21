@@ -352,8 +352,10 @@ export class CdktfProject extends typescript.TypeScriptProject {
       });
       const on = {
         workflow_dispatch: {},
+        pull_request: { },
+        push: { branches: [defaultReleaseBranch] },
       };
-      Object.assign(on, { push: { } });
+      Object.assign(on, { pull_request: { } });
       new YamlFile(this, `.github/workflows/plan-apply-${env}.yml`, {
         obj: {
           name: `plan-apply-${env}`,
