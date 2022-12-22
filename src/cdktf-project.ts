@@ -276,6 +276,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       {
         language: 'typescript',
         app: `tsc && node ${artifactsFolder}/index.js`,
+        codeMakerOutput: `src/.gen`,
         terraformProviders: terraformProviders,
         terraformModules: tfModules,
         context: {
