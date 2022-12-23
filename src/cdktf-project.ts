@@ -276,7 +276,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       {
         language: 'typescript',
         app: `tsc && node ${artifactsFolder}/index.js`,
-        codeMakerOutput: `src/.gen`,
+        codeMakerOutput: 'src/.gen',
         terraformProviders: terraformProviders,
         terraformModules: tfModules,
         context: {
@@ -488,15 +488,15 @@ export class CdktfProject extends typescript.TypeScriptProject {
           delete_branch_on_merge: true,
           topics: ['cdktf', 'infra', 'platform'].join(', '),
         },
-        contributors: githubAdmins.filter(name => !isGitHubTeam(name)).map(name => {
+        collaborators: githubAdmins.filter(name => !isGitHubTeam(name)).map(name => {
           return {
-            name,
+            username: name.replace(/^@/, ''),
             permission: 'admin',
           };
         }),
         teams: githubAdmins.filter(name => isGitHubTeam(name)).map(name => {
           return {
-            name,
+            name: name.split('/')[1],
             permission: 'admin',
           };
         }),
