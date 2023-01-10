@@ -351,6 +351,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
         reviewers,
         deployment_branch_policy: deploymentBranchPolicy,
       });
+      const applyStepConditional = ['needs.plan.outputs.latest_commit == github.sha'];
+      if (config.branchFilters) {
+        applyStepConditional.push(`contains('${config.branchFilters.map(filter => `refs/heads/${filter}`).join('|')}', github.ref)`);
+      } else if (config.onlyProtectedBranches) {
+        applyStepConditional.push(`github.ref == 'refs/heads/${defaultReleaseBranch}'`);
+      }
       const on = {
         workflow_dispatch: {},
         pull_request: { },
@@ -441,7 +447,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 'id-token': 'write',
                 'contents': 'read',
               },
-              'if': 'needs.plan.outputs.latest_commit == github.sha',
+              'if': applyStepConditional.join(' && '),
               'steps': [
                 setupNodeStep,
                 {
