@@ -184,8 +184,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
       buildWorkflow: false,
       depsUpgrade: false,
       entrypoint: `${artifactsFolder}/index.js`,
-      eslint: false,
-      jest: false,
       licensed: false,
       maxNodeVersion,
       mergify: false,
