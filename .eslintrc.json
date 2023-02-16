@@ -41,7 +41,9 @@
     "*.generated.ts",
     "coverage",
     "!.projenrc.ts",
-    "!projenrc/**/*.ts"
+    "!projenrc/**/*.ts",
+    "src/backend.ts",
+    "src/index.ts"
   ],
   "rules": {
     "indent": [
