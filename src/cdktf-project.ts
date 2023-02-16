@@ -529,13 +529,14 @@ export class CdktfProject extends typescript.TypeScriptProject {
     new TextFile(this, 'src/environments.ts', {
       lines: [
         'export interface Environments<T> {',
-        ...Object.keys(deploymentEnvironments).map(env => `  readonly ${env}: T`),
+        ...Object.keys(deploymentEnvironments).map(env => `  readonly ${env}: T;`),
         '}',
         '',
         'export type Environment<T> = keyof Environments<T>',
         '',
       ],
     });
+    this.eslint?.addIgnorePattern('src/environments.ts');
 
     new SampleFile(this, 'src/stack.ts', {
       contents: [
