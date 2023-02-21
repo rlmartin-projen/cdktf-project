@@ -383,7 +383,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'steps': [
                 {
                   name: 'Checkout code',
-                  uses: 'actions/checkout@v2',
+                  uses: 'actions/checkout@v3',
                 },
                 setupNodeStep,
                 npmrcStep,
