@@ -592,13 +592,15 @@ export class CdktfProject extends typescript.TypeScriptProject {
   addEmbeddedFunction(name: string, config: EmbeddedFunction) {
     const cleanName = `${kebabCase(name).replace('/-function/', '')}-function`;
     const { deps: embeddedDeps, devDeps: embeddedDevDeps } = config;
+    const artifactsDirectory = this.artifactsDirectory;
     const embedded = new typescript.TypeScriptProject({
+      artifactsDirectory,
       name: cleanName,
       parent: this,
       defaultReleaseBranch: 'main',
       deps: embeddedDeps,
       devDeps: embeddedDevDeps,
-      entrypoint: path.join('dist', 'index.js'),
+      entrypoint: path.join(artifactsDirectory, 'index.js'),
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
       outdir: path.join('packages', cleanName),
@@ -612,7 +614,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       test: 'jest --passWithNoTests --updateSnapshot',
       prepackage: '$npm_execpath run test && $npm_execpath run eslint',
       package: '$npm_execpath run build',
-      postpackage: 'rm -rf node_modules && cp package.json dist && cd dist && yarn install --production',
+      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && yarn install --production`,
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
     this.embeddedFunctionNames.push(cleanName);
   }
