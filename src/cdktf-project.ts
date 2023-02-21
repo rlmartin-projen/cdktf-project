@@ -598,10 +598,10 @@ export class CdktfProject extends typescript.TypeScriptProject {
       defaultReleaseBranch: 'main',
       deps: embeddedDeps,
       devDeps: embeddedDevDeps,
-      entrypoint: 'dist/index.js',
+      entrypoint: path.join('dist', 'index.js'),
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
-      outdir: `packages\\${cleanName}`,
+      outdir: path.join('packages', cleanName),
     });
     embedded.addFields({
       private: true,
