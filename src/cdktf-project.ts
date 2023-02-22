@@ -593,7 +593,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
     const cleanName = `${kebabCase(name).replace('/-function/', '')}-function`;
     const { deps: embeddedDeps, devDeps: embeddedDevDeps } = config;
     const artifactsDirectory = this.artifactsDirectory;
-    const outdir = path.join('packages', cleanName);
     const embedded = new typescript.TypeScriptProject({
       artifactsDirectory,
       name: cleanName,
@@ -604,16 +603,16 @@ export class CdktfProject extends typescript.TypeScriptProject {
       entrypoint: path.join(artifactsDirectory, 'index.js'),
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
-      outdir,
+      outdir: path.join('packages', cleanName),
       tsconfig: {
         ...this.tsconfig,
         compilerOptions: this.tsconfig?.compilerOptions ?? {},
-        fileName: path.join(outdir, this.tsconfig?.fileName ?? 'tsconfig.json'),
+        fileName: this.tsconfig?.fileName ?? 'tsconfig.json',
       },
       tsconfigDev: {
         ...this.tsconfigDev,
         compilerOptions: this.tsconfigDev?.compilerOptions ?? {},
-        fileName: path.join(outdir, this.tsconfigDev?.fileName ?? 'tsconfig.dev.json'),
+        fileName: this.tsconfigDev?.fileName ?? 'tsconfig.dev.json',
       },
     });
     embedded.addFields({
