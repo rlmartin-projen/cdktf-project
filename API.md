@@ -19,6 +19,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.name">name</a></code> | <code>string</code> | This is the name of your project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.commitGenerated">commitGenerated</a></code> | <code>boolean</code> | Whether to commit the managed files by default. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitOptions">gitOptions</a></code> | <code>projen.GitOptions</code> | Configuration options for git. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.logging">logging</a></code> | <code>projen.LoggerOptions</code> | Configure logging options such as verbosity. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.outdir">outdir</a></code> | <code>string</code> | The root directory of the project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.parent">parent</a></code> | <code>projen.Project</code> | The parent project, if this project is part of a bigger project. |
@@ -186,6 +187,18 @@ public readonly commitGenerated: boolean;
 - *Default:* true
 
 Whether to commit the managed files by default.
+
+---
+
+##### `gitOptions`<sup>Optional</sup> <a name="gitOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitOptions"></a>
+
+```typescript
+public readonly gitOptions: GitOptions;
+```
+
+- *Type:* projen.GitOptions
+
+Configuration options for git.
 
 ---
 
