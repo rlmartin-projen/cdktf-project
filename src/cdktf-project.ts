@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { addFiles, allCases, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
+import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { cleanArray, isGitHubTeam } from './helpers';
 
@@ -38,6 +38,21 @@ export interface DeploymentEnvironment {
    * @default - false
    */
   readonly requireApproval?: boolean;
+}
+
+export interface EmbeddedFunction {
+  /**
+   * Any dependencies specific to the embedded function.
+   *
+   * @default - []
+   */
+  readonly deps?: string[];
+  /**
+   * Any dev dependencies specific to the embedded function.
+   *
+   * @default - []
+   */
+  readonly devDeps?: string[];
 }
 
 interface GitHubEnvironmentReviewer {
@@ -97,6 +112,15 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * @default - {}
    */
   readonly deploymentEnvironments?: { [key: string]: DeploymentEnvironment };
+
+  /**
+   * Small functions to be deployed with the other resources in the repo.
+   * Should be viewed more as infrastructure than services. Testing and linting
+   * intentionally mirror the overall repo.
+   *
+   * @default - {}
+   */
+  readonly embeddedFunctions?: { [key: string]: EmbeddedFunction };
 
   /**
    * A set of scripts to be added to package.json but not wrapped by projen
@@ -164,6 +188,8 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
+  private embeddedFunctionNames: string[];
+
   constructor(options: CdktfProjectOptions) {
     const {
       artifactsFolder = 'dist',
@@ -286,6 +312,9 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
 
+    this.embeddedFunctionNames = [];
+    Object.entries(options.embeddedFunctions ?? {}).forEach(([name, funcConfig]) => this.addEmbeddedFunction(name, funcConfig));
+
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {
       name: 'Setup Node.js',
@@ -383,7 +412,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'steps': [
                 {
                   name: 'Checkout code',
-                  uses: 'actions/checkout@v2',
+                  uses: 'actions/checkout@v3',
                 },
                 setupNodeStep,
                 npmrcStep,
@@ -391,6 +420,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Install dependencies',
                   run: 'yarn install',
                 },
+                ...this.embeddedFunctionNames.map(name => {
+                  return {
+                    name: `Build + package ${name}`,
+                    run: `yarn workspace ${name} package`,
+                  };
+                }),
                 {
                   name: 'Build',
                   run: 'yarn cdktf-build',
@@ -552,5 +587,45 @@ export class CdktfProject extends typescript.TypeScriptProject {
         '',
       ].join('\n'),
     });
+  }
+
+  addEmbeddedFunction(name: string, config: EmbeddedFunction) {
+    const cleanName = `${kebabCase(name).replace('/-function/', '')}-function`;
+    const { deps: embeddedDeps, devDeps: embeddedDevDeps } = config;
+    const artifactsDirectory = this.artifactsDirectory;
+    const embedded = new typescript.TypeScriptProject({
+      artifactsDirectory,
+      name: cleanName,
+      parent: this,
+      defaultReleaseBranch: 'main',
+      deps: embeddedDeps,
+      devDeps: embeddedDevDeps,
+      entrypoint: path.join(artifactsDirectory, 'index.js'),
+      eslintOptions: this.eslint?.config,
+      jest: this.jest?.config,
+      outdir: path.join('packages', cleanName),
+      tsconfig: {
+        ...this.tsconfig,
+        compilerOptions: this.tsconfig?.compilerOptions ?? {},
+        fileName: this.tsconfig?.fileName ?? 'tsconfig.json',
+      },
+      tsconfigDev: {
+        ...this.tsconfigDev,
+        compilerOptions: this.tsconfigDev?.compilerOptions ?? {},
+        fileName: this.tsconfigDev?.fileName ?? 'tsconfig.dev.json',
+      },
+    });
+    embedded.addFields({
+      private: true,
+    });
+    Object.entries({
+      build: 'tsc --build',
+      eslint: 'eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test',
+      test: 'jest --passWithNoTests --updateSnapshot',
+      prepackage: '$npm_execpath run test && $npm_execpath run eslint',
+      package: '$npm_execpath run build',
+      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && yarn install --production`,
+    }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
+    this.embeddedFunctionNames.push(cleanName);
   }
 }

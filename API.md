@@ -19,6 +19,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.name">name</a></code> | <code>string</code> | This is the name of your project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.commitGenerated">commitGenerated</a></code> | <code>boolean</code> | Whether to commit the managed files by default. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitOptions">gitOptions</a></code> | <code>projen.GitOptions</code> | Configuration options for git. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.logging">logging</a></code> | <code>projen.LoggerOptions</code> | Configure logging options such as verbosity. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.outdir">outdir</a></code> | <code>string</code> | The root directory of the project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.parent">parent</a></code> | <code>projen.Project</code> | The parent project, if this project is part of a bigger project. |
@@ -151,6 +152,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedFunctions">embeddedFunctions</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedFunction">EmbeddedFunction</a>}</code> | Small functions to be deployed with the other resources in the repo. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
@@ -185,6 +187,18 @@ public readonly commitGenerated: boolean;
 - *Default:* true
 
 Whether to commit the managed files by default.
+
+---
+
+##### `gitOptions`<sup>Optional</sup> <a name="gitOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitOptions"></a>
+
+```typescript
+public readonly gitOptions: GitOptions;
+```
+
+- *Type:* projen.GitOptions
+
+Configuration options for git.
 
 ---
 
@@ -2065,6 +2079,22 @@ Add GitHub Wokflows for enabled environments.
 
 ---
 
+##### `embeddedFunctions`<sup>Optional</sup> <a name="embeddedFunctions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedFunctions"></a>
+
+```typescript
+public readonly embeddedFunctions: {[ key: string ]: EmbeddedFunction};
+```
+
+- *Type:* {[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedFunction">EmbeddedFunction</a>}
+- *Default:* {}
+
+Small functions to be deployed with the other resources in the repo.
+
+Should be viewed more as infrastructure than services. Testing and linting
+intentionally mirror the overall repo.
+
+---
+
 ##### `nodeScripts`<sup>Optional</sup> <a name="nodeScripts" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts"></a>
 
 ```typescript
@@ -2240,6 +2270,51 @@ public readonly requireApproval: boolean;
 Whether the environment requires approval before applying;
 
 plans always run
+
+---
+
+### EmbeddedFunction <a name="EmbeddedFunction" id="@rlmartin-projen/cdktf-project.EmbeddedFunction"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.EmbeddedFunction.Initializer"></a>
+
+```typescript
+import { EmbeddedFunction } from '@rlmartin-projen/cdktf-project'
+
+const embeddedFunction: EmbeddedFunction = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedFunction.property.deps">deps</a></code> | <code>string[]</code> | Any dependencies specific to the embedded function. |
+| <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedFunction.property.devDeps">devDeps</a></code> | <code>string[]</code> | Any dev dependencies specific to the embedded function. |
+
+---
+
+##### `deps`<sup>Optional</sup> <a name="deps" id="@rlmartin-projen/cdktf-project.EmbeddedFunction.property.deps"></a>
+
+```typescript
+public readonly deps: string[];
+```
+
+- *Type:* string[]
+- *Default:* []
+
+Any dependencies specific to the embedded function.
+
+---
+
+##### `devDeps`<sup>Optional</sup> <a name="devDeps" id="@rlmartin-projen/cdktf-project.EmbeddedFunction.property.devDeps"></a>
+
+```typescript
+public readonly devDeps: string[];
+```
+
+- *Type:* string[]
+- *Default:* []
+
+Any dev dependencies specific to the embedded function.
 
 ---
 
@@ -2445,6 +2520,7 @@ new CdktfProject(options: CdktfProjectOptions)
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.removeScript">removeScript</a></code> | Removes the npm script (always successful). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.renderWorkflowSetup">renderWorkflowSetup</a></code> | Returns the set of workflow steps which should be executed to bootstrap a workflow. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.setScript">setScript</a></code> | Replaces the contents of an npm package.json script. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedFunction">addEmbeddedFunction</a></code> | *No description.* |
 
 ---
 
@@ -2939,6 +3015,24 @@ The script name.
 - *Type:* string
 
 The command to execute.
+
+---
+
+##### `addEmbeddedFunction` <a name="addEmbeddedFunction" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedFunction"></a>
+
+```typescript
+public addEmbeddedFunction(name: string, config: EmbeddedFunction): void
+```
+
+###### `name`<sup>Required</sup> <a name="name" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedFunction.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+###### `config`<sup>Required</sup> <a name="config" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedFunction.parameter.config"></a>
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.EmbeddedFunction">EmbeddedFunction</a>
 
 ---
 
