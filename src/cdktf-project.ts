@@ -604,6 +604,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
       outdir: path.join('packages', cleanName),
+      tsconfig: this.tsconfig,
     });
     embedded.addFields({
       private: true,
