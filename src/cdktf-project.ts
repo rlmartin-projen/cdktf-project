@@ -607,7 +607,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       tsconfig: {
         ...this.tsconfig,
         compilerOptions: this.tsconfig?.compilerOptions ?? {},
-      }
+      },
     });
     embedded.addFields({
       private: true,
