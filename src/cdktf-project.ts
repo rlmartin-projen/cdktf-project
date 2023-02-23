@@ -33,11 +33,26 @@ export interface DeploymentEnvironment {
   readonly onlyProtectedBranches?: boolean;
 
   /**
+   * The AWS region to deploy to.
+   *
+   * @default - us-east-1
+   */
+  readonly region?: string;
+
+  /**
    * Whether the environment requires approval before applying; plans always run
    *
    * @default - false
    */
   readonly requireApproval?: boolean;
+
+  /**
+   * Whether this deployment uses a GitHub OIDC connection to deploy.
+   * See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+   *
+   * @default - false
+   */
+  readonly useOidc?: boolean;
 }
 
 export interface EmbeddedFunction {
@@ -360,7 +375,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
       return all;
     }, Object.assign({}));
     Object.entries(deploymentEnvironments).map(([env, config]) => {
-      if (config.onlyProtectedBranches !== undefined && config.branchFilters !== undefined) throw new Error(`Please set either branchFilters OR onlyProtectedBranches for ${env}, not both.`);
+      const { branchFilters, onlyProtectedBranches, region = 'us-east-1', useOidc = false } = config;
+      if (onlyProtectedBranches !== undefined && branchFilters !== undefined) throw new Error(`Please set either branchFilters OR onlyProtectedBranches for ${env}, not both.`);
       environments.push({
         name: `${env}-plan`,
       });
@@ -370,18 +386,18 @@ export class CdktfProject extends typescript.TypeScriptProject {
           type: isGitHubTeam(name) ? 'Team' : 'User',
         } as GitHubEnvironmentReviewer;
       }) : undefined;
-      const deploymentBranchPolicy = config.branchFilters
-        ? { custom_branches: config.branchFilters }
-        : { protected_branches: config.onlyProtectedBranches ?? false };
+      const deploymentBranchPolicy = branchFilters
+        ? { custom_branches: branchFilters }
+        : { protected_branches: onlyProtectedBranches ?? false };
       environments.push({
         name: env,
         reviewers,
         deployment_branch_policy: deploymentBranchPolicy,
       });
       const applyStepConditional = ['needs.plan.outputs.latest_commit == github.sha'];
-      if (config.branchFilters) {
-        applyStepConditional.push(`contains('${config.branchFilters.map(filter => `refs/heads/${filter}`).join('|')}', github.ref)`);
-      } else if (config.onlyProtectedBranches) {
+      if (branchFilters) {
+        applyStepConditional.push(`contains('${branchFilters.map(filter => `refs/heads/${filter}`).join('|')}', github.ref)`);
+      } else if (onlyProtectedBranches) {
         applyStepConditional.push(`github.ref == 'refs/heads/${defaultReleaseBranch}'`);
       }
       const on = {
@@ -389,6 +405,31 @@ export class CdktfProject extends typescript.TypeScriptProject {
         pull_request: { },
         push: { branches: [defaultReleaseBranch] },
       };
+      var awsCredsEnvVars = undefined;
+      var awsCredsStep = undefined;
+      var oidcPermissions = undefined;
+      if (useOidc) {
+        oidcPermissions = {
+          'id-token': 'write',
+          'contents': 'read',
+        };
+        awsCredsStep = {
+          name: 'Configure AWS Credentials',
+          uses: 'aws-actions/configure-aws-credentials@v1',
+          with: {
+            'aws-region': region,
+            // TODO: Move this into environment-level variables once this Settings App is implemented:
+            // https://github.com/repository-settings/app/issues/711
+            'role-to-assume': `\${{ vars.${env.toUpperCase()}_DEPLOYMENT_ROLE }}`,
+            'role-session-name': `${kebabCase(this.name)}-${kebabCase(env)}-oidc-session`,
+          },
+        };
+      } else {
+        awsCredsEnvVars = {
+          AWS_ACCESS_KEY_ID: `\${{ secrets.${env.toUpperCase()}_AWS_ACCESS_KEY_ID }}`,
+          AWS_SECRET_ACCESS_KEY: `\${{ secrets.${env.toUpperCase()}_AWS_SECRET_ACCESS_KEY }}`,
+        };
+      }
       Object.assign(on, { pull_request: { } });
       new YamlFile(this, `.github/workflows/plan-apply-${env}.yml`, {
         obj: {
@@ -402,10 +443,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
             plan: {
               'runs-on': 'ubuntu-latest',
               'environment': `${env}-plan`,
-              'permissions': {
-                'id-token': 'write',
-                'contents': 'read',
-              },
+              'permissions': oidcPermissions,
               'outputs': {
                 latest_commit: '${{ steps.git_remote.outputs.latest_commit }}',
               },
@@ -434,12 +472,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Generate Terraform',
                   run: 'yarn cdktf-synth',
                 },
+                awsCredsStep,
                 {
                   name: 'Terraform plan',
                   env: {
                     ...tfVars,
-                    AWS_ACCESS_KEY_ID: '\${{ secrets.AWS_ACCESS_KEY_ID }}',
-                    AWS_SECRET_ACCESS_KEY: '\${{ secrets.AWS_SECRET_ACCESS_KEY }}',
+                    ...awsCredsEnvVars,
                   },
                   run: [
                     `terraform -chdir=cdktf.out/stacks/${env} init`,
@@ -476,10 +514,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'runs-on': 'ubuntu-latest',
               'environment': env,
               'needs': 'plan',
-              'permissions': {
-                'id-token': 'write',
-                'contents': 'read',
-              },
+              'permissions': oidcPermissions,
               'if': applyStepConditional.join(' && '),
               'steps': [
                 setupNodeStep,
@@ -498,10 +533,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 },
                 {
                   name: 'Terraform apply',
-                  env: {
-                    AWS_ACCESS_KEY_ID: '\${{ secrets.AWS_ACCESS_KEY_ID }}',
-                    AWS_SECRET_ACCESS_KEY: '\${{ secrets.AWS_SECRET_ACCESS_KEY }}',
-                  },
+                  env: awsCredsEnvVars,
                   run: `cd ${artifactsFolder} && terraform apply ${env}.tfplan`,
                 },
               ],
@@ -603,6 +635,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       entrypoint: path.join(artifactsDirectory, 'index.js'),
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
+      licensed: false,
       outdir: path.join('packages', cleanName),
       tsconfig: {
         ...this.tsconfig,

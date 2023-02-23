@@ -2223,7 +2223,9 @@ const deploymentEnvironment: DeploymentEnvironment = { ... }
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.branchFilters">branchFilters</a></code> | <code>string[]</code> | Branch matchers from which code can be deployed for this environment. |
 | <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.onlyProtectedBranches">onlyProtectedBranches</a></code> | <code>boolean</code> | Instead of filtering branches, use branches protected in the repo settings. |
+| <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.region">region</a></code> | <code>string</code> | The AWS region to deploy to. |
 | <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.requireApproval">requireApproval</a></code> | <code>boolean</code> | Whether the environment requires approval before applying; |
+| <code><a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.useOidc">useOidc</a></code> | <code>boolean</code> | Whether this deployment uses a GitHub OIDC connection to deploy. |
 
 ---
 
@@ -2258,6 +2260,19 @@ Mutually-exclusive from branchFilters
 
 ---
 
+##### `region`<sup>Optional</sup> <a name="region" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.region"></a>
+
+```typescript
+public readonly region: string;
+```
+
+- *Type:* string
+- *Default:* us-east-1
+
+The AWS region to deploy to.
+
+---
+
 ##### `requireApproval`<sup>Optional</sup> <a name="requireApproval" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.requireApproval"></a>
 
 ```typescript
@@ -2270,6 +2285,21 @@ public readonly requireApproval: boolean;
 Whether the environment requires approval before applying;
 
 plans always run
+
+---
+
+##### `useOidc`<sup>Optional</sup> <a name="useOidc" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.property.useOidc"></a>
+
+```typescript
+public readonly useOidc: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether this deployment uses a GitHub OIDC connection to deploy.
+
+See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
 
 ---
 
