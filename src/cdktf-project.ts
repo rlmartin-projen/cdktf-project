@@ -421,7 +421,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
             // TODO: Move this into environment-level variables once this Settings App is implemented:
             // https://github.com/repository-settings/app/issues/711
             'role-to-assume': `\${{ vars.${env.toUpperCase()}_DEPLOYMENT_ROLE }}`,
-            'role-session-name': 'OIDCSession',
+            'role-session-name': `${kebabCase(this.name)}-${kebabCase(env)}-oidc-session`,
           },
         };
       } else {
