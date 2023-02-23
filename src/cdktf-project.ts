@@ -486,6 +486,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
                     `cp cdktf.out/stacks/${env}/${env}.tfplan ${artifactsFolder}`,
                     `cp cdktf.out/stacks/${env}/.terraform.lock.hcl ${artifactsFolder}`,
                     `cp -R cdktf.out/stacks/${env}/.terraform/* ${artifactsFolder}/.terraform`,
+                    `mkdir -p ${artifactsFolder}/assets`,
+                    `(cp -R cdktf.out/stacks/${env}/assets/* ${artifactsFolder}/assets) 2> /dev/null`,
                   ].join('\n'),
                 },
                 {
