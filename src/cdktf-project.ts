@@ -531,6 +531,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   'run': `cd ${artifactsFolder} && setfacl --restore=permissions-backup.acl`,
                   'continue-on-error': true,
                 },
+                awsCredsStep,
                 {
                   name: 'Terraform apply',
                   env: awsCredsEnvVars,
