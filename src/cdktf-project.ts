@@ -603,6 +603,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       entrypoint: path.join(artifactsDirectory, 'index.js'),
       eslintOptions: this.eslint?.config,
       jest: this.jest?.config,
+      licensed: false,
       outdir: path.join('packages', cleanName),
       tsconfig: {
         ...this.tsconfig,
