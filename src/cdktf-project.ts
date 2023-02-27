@@ -55,7 +55,9 @@ export interface DeploymentEnvironment {
   readonly useOidc?: boolean;
 }
 
-export interface EmbeddedFunction {
+export type EmbeddedPackageType = 'function' | 'library';
+
+export interface EmbeddedPackage {
   /**
    * Any dependencies specific to the embedded function.
    *
@@ -68,6 +70,10 @@ export interface EmbeddedFunction {
    * @default - []
    */
   readonly devDeps?: string[];
+  /**
+   * Determined whether the embedded package is a function or a library
+   */
+  readonly type: EmbeddedPackageType;
 }
 
 interface GitHubEnvironmentReviewer {
@@ -135,7 +141,7 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    *
    * @default - {}
    */
-  readonly embeddedFunctions?: { [key: string]: EmbeddedFunction };
+  readonly embeddedPackages?: { [key: string]: EmbeddedPackage };
 
   /**
    * A set of scripts to be added to package.json but not wrapped by projen
@@ -328,7 +334,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
 
     this.embeddedFunctionNames = [];
-    Object.entries(options.embeddedFunctions ?? {}).forEach(([name, funcConfig]) => this.addEmbeddedFunction(name, funcConfig));
+    Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => this.addEmbeddedPackage(name, funcConfig));
 
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {
@@ -624,9 +630,14 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
   }
 
-  addEmbeddedFunction(name: string, config: EmbeddedFunction) {
-    const cleanName = `${kebabCase(name).replace('/-function/', '')}-function`;
-    const { deps: embeddedDeps, devDeps: embeddedDevDeps } = config;
+  addEmbeddedPackage(name: string, config: EmbeddedPackage) {
+    const { deps: embeddedDeps, devDeps: embeddedDevDeps, type: packageType } = config;
+    const suffixes: Record<EmbeddedPackageType, string> = {
+      function: 'function',
+      library: 'shared',
+    };
+    var suffix = suffixes[packageType];
+    const cleanName = `${kebabCase(name).replace(new RegExp(`-${suffix}$`), '')}-${suffix}`;
     const artifactsDirectory = this.artifactsDirectory;
     const embedded = new typescript.TypeScriptProject({
       artifactsDirectory,
@@ -642,12 +653,18 @@ export class CdktfProject extends typescript.TypeScriptProject {
       outdir: path.join('packages', cleanName),
       tsconfig: {
         ...this.tsconfig,
-        compilerOptions: this.tsconfig?.compilerOptions ?? {},
+        compilerOptions: {
+          ...this.tsconfig?.compilerOptions,
+          declaration: packageType === 'library',
+        },
         fileName: this.tsconfig?.fileName ?? 'tsconfig.json',
       },
       tsconfigDev: {
         ...this.tsconfigDev,
-        compilerOptions: this.tsconfigDev?.compilerOptions ?? {},
+        compilerOptions: {
+          ...this.tsconfigDev?.compilerOptions,
+          declaration: packageType === 'library',
+        },
         fileName: this.tsconfigDev?.fileName ?? 'tsconfig.dev.json',
       },
     });
