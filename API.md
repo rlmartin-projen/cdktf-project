@@ -152,6 +152,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedNamespace">embeddedNamespace</a></code> | <code>string</code> | Used to scope the embedded packages to avoid naming collisions. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedPackages">embeddedPackages</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage">EmbeddedPackage</a>}</code> | Small functions to be deployed with the other resources in the repo. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
@@ -2079,6 +2080,19 @@ Add GitHub Wokflows for enabled environments.
 
 ---
 
+##### `embeddedNamespace`<sup>Optional</sup> <a name="embeddedNamespace" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedNamespace"></a>
+
+```typescript
+public readonly embeddedNamespace: string;
+```
+
+- *Type:* string
+- *Default:* top-level project name
+
+Used to scope the embedded packages to avoid naming collisions.
+
+---
+
 ##### `embeddedPackages`<sup>Optional</sup> <a name="embeddedPackages" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedPackages"></a>
 
 ```typescript
@@ -2320,6 +2334,7 @@ const embeddedPackage: EmbeddedPackage = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage.property.type">type</a></code> | <code>string</code> | Determined whether the embedded package is a function or a library. |
 | <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage.property.deps">deps</a></code> | <code>string[]</code> | Any dependencies specific to the embedded function. |
 | <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage.property.devDeps">devDeps</a></code> | <code>string[]</code> | Any dev dependencies specific to the embedded function. |
+| <code><a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage.property.localDeps">localDeps</a></code> | <code>string[]</code> | Local dependencies on other embedded packages. |
 
 ---
 
@@ -2358,6 +2373,19 @@ public readonly devDeps: string[];
 - *Default:* []
 
 Any dev dependencies specific to the embedded function.
+
+---
+
+##### `localDeps`<sup>Optional</sup> <a name="localDeps" id="@rlmartin-projen/cdktf-project.EmbeddedPackage.property.localDeps"></a>
+
+```typescript
+public readonly localDeps: string[];
+```
+
+- *Type:* string[]
+- *Default:* []
+
+Local dependencies on other embedded packages.
 
 ---
 
@@ -3064,7 +3092,7 @@ The command to execute.
 ##### `addEmbeddedPackage` <a name="addEmbeddedPackage" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage"></a>
 
 ```typescript
-public addEmbeddedPackage(name: string, config: EmbeddedPackage): void
+public addEmbeddedPackage(name: string, config: EmbeddedPackage, namespace?: string): void
 ```
 
 ###### `name`<sup>Required</sup> <a name="name" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.name"></a>
@@ -3076,6 +3104,12 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage): void
 ###### `config`<sup>Required</sup> <a name="config" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.config"></a>
 
 - *Type:* <a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage">EmbeddedPackage</a>
+
+---
+
+###### `namespace`<sup>Optional</sup> <a name="namespace" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.namespace"></a>
+
+- *Type:* string
 
 ---
 
