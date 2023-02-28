@@ -709,7 +709,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       test: 'jest --passWithNoTests --updateSnapshot',
       prepackage: '$npm_execpath run test && $npm_execpath run eslint',
       package: '$npm_execpath run build',
-      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && npm install --production --ignore-optional ${localDeps.map(dep => `&& npm pack ../../${dep} | grep .tgz | xargs npm install --production`)} && rm *.tgz || true`,
+      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && npm install --production --ignore-optional ${localDeps.map(dep => `&& npm pack ../../${dep} | grep .tgz | xargs npm install --production`).join(' ')} && rm *.tgz || true`,
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
     this.embeddedPackageNames[packageType].push(`${npmScope}${cleanName}`);
   }
