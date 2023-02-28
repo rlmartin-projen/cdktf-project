@@ -229,6 +229,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       artifactsFolder = 'dist',
       defaultReleaseBranch,
       deploymentEnvironments = {},
+      majorVersion = 0,
       maxNodeVersion = NodeVersion,
       minNodeVersion = `${NodeVersion}.0.0`,
       npmrc = [],
@@ -246,6 +247,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       entrypoint: `${artifactsFolder}/index.js`,
       licensed: false,
       maxNodeVersion,
+      majorVersion,
       mergify: false,
       minNodeVersion,
       deps: squashPackages([...(options.deps ?? []), ...deps]),
@@ -351,7 +353,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       function: [],
     };
     Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => {
-      this.addEmbeddedPackage(name, funcConfig, options.embeddedNamespace);
+      this.addEmbeddedPackage(name, funcConfig, majorVersion, options.embeddedNamespace);
     });
 
     const environments: GitHubEnvironment[] = [];
@@ -654,7 +656,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
   }
 
-  addEmbeddedPackage(name: string, config: EmbeddedPackage, namespaceOpt?: string) {
+  addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, namespaceOpt?: string) {
     const { deps: embeddedDeps, devDeps: embeddedDevDeps, localDeps = [], type: packageType } = config;
     const suffixes: Record<EmbeddedPackageType, string> = {
       function: '-function',
@@ -695,7 +697,10 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
     embedded.addFields({
-      optionalDependencies: localDeps.map(dep => `@${namespace}/${dep}`),
+      optionalDependencies: localDeps.reduce((current, dep) => {
+        current[`@${namespace}/${dep}`] = `~${majorVersion}`;
+        return current;
+      }, Object.assign({})),
       private: true,
     });
     Object.entries({
