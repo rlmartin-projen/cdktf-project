@@ -711,6 +711,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
       package: '$npm_execpath run build',
       postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && npm install --production --ignore-optional ${localDeps.map(dep => `&& npm pack ../../${dep} | grep .tgz | xargs npm install --production`)} && rm *.tgz || true`,
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
-    this.embeddedPackageNames[packageType].push(cleanName);
+    this.embeddedPackageNames[packageType].push(`${npmScope}${cleanName}`);
   }
 }
