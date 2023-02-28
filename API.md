@@ -3092,7 +3092,7 @@ The command to execute.
 ##### `addEmbeddedPackage` <a name="addEmbeddedPackage" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage"></a>
 
 ```typescript
-public addEmbeddedPackage(name: string, config: EmbeddedPackage, namespace?: string): void
+public addEmbeddedPackage(name: string, config: EmbeddedPackage, namespaceOpt?: string): void
 ```
 
 ###### `name`<sup>Required</sup> <a name="name" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.name"></a>
@@ -3107,7 +3107,7 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage, namespace?: str
 
 ---
 
-###### `namespace`<sup>Optional</sup> <a name="namespace" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.namespace"></a>
+###### `namespaceOpt`<sup>Optional</sup> <a name="namespaceOpt" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.namespaceOpt"></a>
 
 - *Type:* string
 

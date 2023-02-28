@@ -654,7 +654,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
   }
 
-  addEmbeddedPackage(name: string, config: EmbeddedPackage, namespace?: string) {
+  addEmbeddedPackage(name: string, config: EmbeddedPackage, namespaceOpt?: string) {
     const { deps: embeddedDeps, devDeps: embeddedDevDeps, localDeps = [], type: packageType } = config;
     const suffixes: Record<EmbeddedPackageType, string> = {
       function: '-function',
@@ -662,7 +662,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
     };
     var suffix = suffixes[packageType];
     const cleanName = `${kebabCase(name).replace(new RegExp(`${suffix}$`), '')}${suffix}`;
-    const npmScope = packageType === 'function' ? '' : namespace === '' ? `@${this.name}/` : `@${namespace}/`;
+    const namespace = namespaceOpt ?? this.name;
+    const npmScope = packageType === 'function' ? '' : `@${namespace}/`;
     const artifactsDirectory = this.artifactsDirectory;
     const embedded = new typescript.TypeScriptProject({
       artifactsDirectory,
@@ -694,7 +695,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
     embedded.addFields({
-      optionalDependencies: localDeps.map(dep => `${npmScope}${dep}`),
+      optionalDependencies: localDeps.map(dep => `@${namespace}/${dep}`),
       private: true,
     });
     Object.entries({
