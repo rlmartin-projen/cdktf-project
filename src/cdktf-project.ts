@@ -71,6 +71,12 @@ export interface EmbeddedPackage {
    */
   readonly devDeps?: string[];
   /**
+   * Local dependencies on other embedded packages.
+   *
+   * @default - []
+   */
+  readonly localDeps?: string[];
+  /**
    * Determined whether the embedded package is a function or a library
    */
   readonly type: EmbeddedPackageType;
@@ -133,6 +139,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * @default - {}
    */
   readonly deploymentEnvironments?: { [key: string]: DeploymentEnvironment };
+
+  /**
+   * Used to scope the embedded packages to avoid naming collisions.
+   *
+   * @default - top-level project name
+   */
+  readonly embeddedNamespace?: string;
 
   /**
    * Small functions to be deployed with the other resources in the repo.
@@ -209,13 +222,14 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
-  private embeddedFunctionNames: string[];
+  private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
     const {
       artifactsFolder = 'dist',
       defaultReleaseBranch,
       deploymentEnvironments = {},
+      majorVersion = 0,
       maxNodeVersion = NodeVersion,
       minNodeVersion = `${NodeVersion}.0.0`,
       npmrc = [],
@@ -233,6 +247,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       entrypoint: `${artifactsFolder}/index.js`,
       licensed: false,
       maxNodeVersion,
+      majorVersion,
       mergify: false,
       minNodeVersion,
       deps: squashPackages([...(options.deps ?? []), ...deps]),
@@ -333,8 +348,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
 
-    this.embeddedFunctionNames = [];
-    Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => this.addEmbeddedPackage(name, funcConfig));
+    this.embeddedPackageNames = {
+      library: [],
+      function: [],
+    };
+    Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => {
+      this.addEmbeddedPackage(name, funcConfig, majorVersion, options.embeddedNamespace);
+    });
 
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {
@@ -464,7 +484,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Install dependencies',
                   run: 'yarn install',
                 },
-                ...this.embeddedFunctionNames.map(name => {
+                ...this.embeddedPackageNames.library.map(name => {
+                  return {
+                    name: `Build + package ${name}`,
+                    run: `yarn workspace ${name} package`,
+                  };
+                }),
+                ...this.embeddedPackageNames.function.map(name => {
                   return {
                     name: `Build + package ${name}`,
                     run: `yarn workspace ${name} package`,
@@ -630,18 +656,20 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
   }
 
-  addEmbeddedPackage(name: string, config: EmbeddedPackage) {
-    const { deps: embeddedDeps, devDeps: embeddedDevDeps, type: packageType } = config;
+  addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, namespaceOpt?: string) {
+    const { deps: embeddedDeps, devDeps: embeddedDevDeps, localDeps = [], type: packageType } = config;
     const suffixes: Record<EmbeddedPackageType, string> = {
-      function: 'function',
-      library: 'shared',
+      function: '-function',
+      library: '',
     };
     var suffix = suffixes[packageType];
-    const cleanName = `${kebabCase(name).replace(new RegExp(`-${suffix}$`), '')}-${suffix}`;
+    const cleanName = `${kebabCase(name).replace(new RegExp(`${suffix}$`), '')}${suffix}`;
+    const namespace = namespaceOpt ?? this.name;
+    const npmScope = packageType === 'function' ? '' : `@${namespace}/`;
     const artifactsDirectory = this.artifactsDirectory;
     const embedded = new typescript.TypeScriptProject({
       artifactsDirectory,
-      name: cleanName,
+      name: `${npmScope}${cleanName}`,
       parent: this,
       defaultReleaseBranch: 'main',
       deps: embeddedDeps,
@@ -669,6 +697,10 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
     embedded.addFields({
+      optionalDependencies: localDeps.reduce((current, dep) => {
+        current[`@${namespace}/${dep}`] = `~${majorVersion}`;
+        return current;
+      }, Object.assign({})),
       private: true,
     });
     Object.entries({
@@ -677,8 +709,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
       test: 'jest --passWithNoTests --updateSnapshot',
       prepackage: '$npm_execpath run test && $npm_execpath run eslint',
       package: '$npm_execpath run build',
-      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && yarn install --production`,
+      postpackage: `rm -rf node_modules && cp package.json ${artifactsDirectory} && cd ${artifactsDirectory} && npm install --production --ignore-optional ${localDeps.map(dep => `&& npm pack ../../${dep} | grep .tgz | xargs npm install --production`).join(' ')} && rm *.tgz || true`,
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
-    this.embeddedFunctionNames.push(cleanName);
+    this.embeddedPackageNames[packageType].push(`${npmScope}${cleanName}`);
   }
 }
