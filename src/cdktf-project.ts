@@ -534,12 +534,16 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   'continue-on-error': true,
                 },
                 {
+                  name: 'Zip artifact',
+                  run: 'zip -r ${artifactsFolder}.zip ${artifactsFolder}',
+                },
+                {
                   name: 'Upload artifact',
                   if: '\${{ steps.git_remote.outputs.latest_commit == github.sha }}',
                   uses: 'actions/upload-artifact@v3',
                   with: {
-                    name: 'build-artifact',
-                    path: artifactsFolder,
+                    name: `${artifactsFolder}.zip`,
+                    path: `${artifactsFolder}.zip`,
                   },
                 },
               ],
@@ -556,9 +560,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Download build artifacts',
                   uses: 'actions/download-artifact@v3',
                   with: {
-                    name: 'build-artifact',
-                    path: artifactsFolder,
+                    name: `${artifactsFolder}.zip`,
                   },
+                },
+                {
+                  name: 'Unzip artifact',
+                  run: `unzip ${artifactsFolder}.zip`,
                 },
                 {
                   'name': 'Restore build artifact permissions',
