@@ -535,7 +535,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 },
                 {
                   name: 'Zip artifact',
-                  run: 'zip -r ${artifactsFolder}.zip ${artifactsFolder}',
+                  run: `zip -r ${artifactsFolder}.zip ${artifactsFolder}`,
                 },
                 {
                   name: 'Upload artifact',
