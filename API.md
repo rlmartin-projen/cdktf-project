@@ -163,6 +163,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
 
 ---
 
@@ -2232,6 +2233,19 @@ List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ envir
 The secrets will need to be set
 manually, on one of org/repo/environment. The name of the var is expected to
 not include the TF_VAR_ prefix.
+
+---
+
+##### `terraformVersion`<sup>Optional</sup> <a name="terraformVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion"></a>
+
+```typescript
+public readonly terraformVersion: string;
+```
+
+- *Type:* string
+- *Default:* latest
+
+The Terraform version to use in the build pipelines.
 
 ---
 

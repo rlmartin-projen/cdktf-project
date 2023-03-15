@@ -219,6 +219,12 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    */
   readonly terraformVars?: string[];
 
+  /**
+   * The Terraform version to use in the build pipelines.
+   *
+   * @default - latest
+   */
+  readonly terraformVersion?: string;
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
@@ -238,6 +244,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformProviders = ['aws@~> 4.24.0'],
       terraformModulesSsh = false,
       terraformVars = [],
+      terraformVersion = 'latest',
       workflowNodeVersion = NodeVersion,
     } = options;
     const tempOptions = {
@@ -481,6 +488,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 setupNodeStep,
                 npmrcStep,
                 {
+                  uses: 'hashicorp/setup-terraform@v2',
+                  with: {
+                    terraform_version: terraformVersion,
+                    terraform_wrapper: false,
+                  },
+                },
+                {
                   name: 'Install dependencies',
                   run: 'yarn install',
                 },
@@ -556,6 +570,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'if': applyStepConditional.join(' && '),
               'steps': [
                 setupNodeStep,
+                {
+                  uses: 'hashicorp/setup-terraform@v2',
+                  with: {
+                    terraform_version: terraformVersion,
+                    terraform_wrapper: false,
+                  },
+                },
                 {
                   name: 'Download build artifacts',
                   uses: 'actions/download-artifact@v3',
