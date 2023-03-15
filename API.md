@@ -74,7 +74,6 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.packageName">packageName</a></code> | <code>string</code> | The "name" in package.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.peerDependencyOptions">peerDependencyOptions</a></code> | <code>projen.javascript.PeerDependencyOptions</code> | Options for `peerDeps`. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.peerDeps">peerDeps</a></code> | <code>string[]</code> | Peer dependencies for this module. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.pnpmVersion">pnpmVersion</a></code> | <code>string</code> | The version of PNPM to use if using PNPM as a package manager. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repository">repository</a></code> | <code>string</code> | The repository is the location where the actual code for your package lives. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repositoryDirectory">repositoryDirectory</a></code> | <code>string</code> | If the package.json for your package is not in the root directory (for example if it is part of a monorepo), you can specify the directory in which it lives. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.scopedPackagesOptions">scopedPackagesOptions</a></code> | <code>projen.javascript.ScopedPackagesOptions[]</code> | Options for privately hosted scoped packages. |
@@ -163,6 +162,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
 
 ---
 
@@ -1009,19 +1009,6 @@ Unless `peerDependencyOptions.pinnedDevDependency` is disabled (it is
 enabled by default), projen will automatically add a dev dependency with a
 pinned version for each peer dependency. This will ensure that you build &
 test your module against the lowest peer version required.
-
----
-
-##### `pnpmVersion`<sup>Optional</sup> <a name="pnpmVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.pnpmVersion"></a>
-
-```typescript
-public readonly pnpmVersion: string;
-```
-
-- *Type:* string
-- *Default:* "7"
-
-The version of PNPM to use if using PNPM as a package manager.
 
 ---
 
@@ -2235,6 +2222,19 @@ not include the TF_VAR_ prefix.
 
 ---
 
+##### `terraformVersion`<sup>Optional</sup> <a name="terraformVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion"></a>
+
+```typescript
+public readonly terraformVersion: string;
+```
+
+- *Type:* string
+- *Default:* latest
+
+The Terraform version to use in the build pipelines.
+
+---
+
 ### DeploymentEnvironment <a name="DeploymentEnvironment" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment"></a>
 
 #### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.Initializer"></a>
@@ -3180,7 +3180,7 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: n
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.buildWorkflow">buildWorkflow</a></code> | <code>projen.build.BuildWorkflow</code> | The PR build GitHub workflow. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.buildWorkflowJobId">buildWorkflowJobId</a></code> | <code>string</code> | The job ID of the build workflow. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.jest">jest</a></code> | <code>projen.javascript.Jest</code> | The Jest configuration (if enabled). |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.maxNodeVersion">maxNodeVersion</a></code> | <code>string</code> | Maximum node version required by this package. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.maxNodeVersion">maxNodeVersion</a></code> | <code>string</code> | Maximum node version required by this pacakge. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.minNodeVersion">minNodeVersion</a></code> | <code>string</code> | Minimum node.js version required by this package. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.npmignore">npmignore</a></code> | <code>projen.IgnoreFile</code> | The .npmignore file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.prettier">prettier</a></code> | <code>projen.javascript.Prettier</code> | *No description.* |
@@ -3721,7 +3721,7 @@ public readonly maxNodeVersion: string;
 
 - *Type:* string
 
-Maximum node version required by this package.
+Maximum node version required by this pacakge.
 
 ---
 
