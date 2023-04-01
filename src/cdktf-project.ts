@@ -3,11 +3,15 @@ import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rl
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { cleanArray, isGitHubTeam } from './helpers';
 
+export const sharedDeps = [
+  'cdktf@~0',
+  'constructs@~10',
+];
+
 const deps = [
   'projen@~0',
-  'cdktf@~0',
   'cdktf-cli@~0',
-  'constructs@~10',
+  ...sharedDeps,
 ];
 const NodeVersion = '14';
 

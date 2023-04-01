@@ -116,8 +116,28 @@
       "type": "peer"
     },
     {
+      "name": "@cdktf/provider-archive",
+      "version": "~5",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-aws",
+      "version": "~12",
+      "type": "runtime"
+    },
+    {
       "name": "@rlmartin-projen/projen-project",
       "version": "~0",
+      "type": "runtime"
+    },
+    {
+      "name": "cdktf",
+      "version": "~0",
+      "type": "runtime"
+    },
+    {
+      "name": "constructs",
+      "version": "~10",
       "type": "runtime"
     },
     {
