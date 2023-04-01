@@ -130,6 +130,24 @@
         }
       ]
     },
+    "install": {
+      "name": "install",
+      "description": "Install project dependencies and update lockfile (non-frozen)",
+      "steps": [
+        {
+          "exec": "yarn install --check-files"
+        }
+      ]
+    },
+    "install:ci": {
+      "name": "install:ci",
+      "description": "Install project dependencies using frozen lockfile",
+      "steps": [
+        {
+          "exec": "yarn install --check-files --frozen-lockfile"
+        }
+      ]
+    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package",
@@ -179,7 +197,7 @@
       "description": "Prepare a release from \"main\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "0"
+        "MAJOR": "1"
       },
       "steps": [
         {
@@ -204,7 +222,7 @@
       "description": "Prepare a release from \"dev\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "0",
+        "MAJOR": "1",
         "PRERELEASE": "dev"
       },
       "steps": [
@@ -274,19 +292,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='jsii,liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='jsii,liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='jsii,liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='jsii,liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='jsii,liquidjs,@rlmartin-projen/projen-project,projen,@cdktf/provider-archive,@cdktf/provider-aws,cdktf,constructs'"
         },
         {
           "exec": "yarn install --check-files"

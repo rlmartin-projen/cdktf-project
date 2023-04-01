@@ -156,6 +156,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedNamespace">embeddedNamespace</a></code> | <code>string</code> | Used to scope the embedded packages to avoid naming collisions. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedPackages">embeddedPackages</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage">EmbeddedPackage</a>}</code> | Small functions to be deployed with the other resources in the repo. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion">nodeVersion</a></code> | <code>string</code> | The Node.js version to use when building. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
@@ -2134,6 +2135,19 @@ public readonly nodeScripts: {[ key: string ]: string};
 - *Default:* {}
 
 A set of scripts to be added to package.json but not wrapped by projen.
+
+---
+
+##### `nodeVersion`<sup>Optional</sup> <a name="nodeVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion"></a>
+
+```typescript
+public readonly nodeVersion: string;
+```
+
+- *Type:* string
+- *Default:* 18.0.0
+
+The Node.js version to use when building.
 
 ---
 

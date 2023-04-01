@@ -13,11 +13,11 @@ const deps = [
   'cdktf-cli@~0',
   ...sharedDeps,
 ];
-const NodeVersion = '14';
-
 function mergeUnique<T>(arr1: T[], arr2: T[]): T[] {
   return [...new Set(arr1.concat(arr2))];
 }
+
+export type NodeVersion = '19.0.0' | '16.3.0' | '18.0.0'
 
 export interface DeploymentEnvironment {
   /**
@@ -168,6 +168,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly nodeScripts?: { [name:string]: string };
 
   /**
+   * The Node.js version to use when building.
+   *
+   * @default - 18.0.0
+   */
+  readonly nodeVersion?: NodeVersion;
+
+  /**
    * Raw lines to drop into the workflow's .npmrc file, to access private package.
    * Empty implies no .npmrc required.
    *
@@ -235,13 +242,15 @@ export class CdktfProject extends typescript.TypeScriptProject {
   private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
+    const { nodeVersion = '18.0.0' } = options;
+    const nodeMajorVersion = nodeVersion.split('.')[0];
     const {
       artifactsFolder = 'dist',
       defaultReleaseBranch,
       deploymentEnvironments = {},
       majorVersion = 0,
-      maxNodeVersion = NodeVersion,
-      minNodeVersion = `${NodeVersion}.0.0`,
+      maxNodeVersion = nodeMajorVersion,
+      minNodeVersion = nodeVersion,
       npmrc = [],
       repoAdmins = {},
       terraformModules = [],
@@ -249,7 +258,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformModulesSsh = false,
       terraformVars = [],
       terraformVersion = 'latest',
-      workflowNodeVersion = NodeVersion,
+      workflowNodeVersion = nodeMajorVersion,
     } = options;
     const tempOptions = {
       ...options,
