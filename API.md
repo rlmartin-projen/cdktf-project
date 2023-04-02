@@ -19,13 +19,14 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.name">name</a></code> | <code>string</code> | This is the name of your project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.commitGenerated">commitGenerated</a></code> | <code>boolean</code> | Whether to commit the managed files by default. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitIgnoreOptions">gitIgnoreOptions</a></code> | <code>projen.IgnoreFileOptions</code> | Configuration options for .gitignore file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitOptions">gitOptions</a></code> | <code>projen.GitOptions</code> | Configuration options for git. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.logging">logging</a></code> | <code>projen.LoggerOptions</code> | Configure logging options such as verbosity. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.outdir">outdir</a></code> | <code>string</code> | The root directory of the project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.parent">parent</a></code> | <code>projen.Project</code> | The parent project, if this project is part of a bigger project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.projenCommand">projenCommand</a></code> | <code>string</code> | The shell command to use in order to run the projen CLI. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.projenrcJson">projenrcJson</a></code> | <code>boolean</code> | Generate (once) .projenrc.json (in JSON). Set to `false` in order to disable .projenrc.json generation. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.projenrcJsonOptions">projenrcJsonOptions</a></code> | <code>projen.ProjenrcOptions</code> | Options for .projenrc.json. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.projenrcJsonOptions">projenrcJsonOptions</a></code> | <code>projen.ProjenrcJsonOptions</code> | Options for .projenrc.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.renovatebot">renovatebot</a></code> | <code>boolean</code> | Use renovatebot to handle dependency upgrades. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.renovatebotOptions">renovatebotOptions</a></code> | <code>projen.RenovatebotOptions</code> | Options for renovatebot. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.autoApproveOptions">autoApproveOptions</a></code> | <code>projen.github.AutoApproveOptions</code> | Enable and configure the 'auto approve' workflow. |
@@ -120,6 +121,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.mutableBuild">mutableBuild</a></code> | <code>boolean</code> | Automatically update files modified during builds to pull-request branches. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmignore">npmignore</a></code> | <code>string[]</code> | Additional entries to .npmignore. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmignoreEnabled">npmignoreEnabled</a></code> | <code>boolean</code> | Defines an .npmignore file. Normally this is only needed for libraries that are packaged as tarballs. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmIgnoreOptions">npmIgnoreOptions</a></code> | <code>projen.IgnoreFileOptions</code> | Configuration options for .npmignore file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.package">package</a></code> | <code>boolean</code> | Defines a `package` task that will produce an npm tarball under the artifacts directory (e.g. `dist`). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.prettier">prettier</a></code> | <code>boolean</code> | Setup prettier. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.prettierOptions">prettierOptions</a></code> | <code>projen.javascript.PrettierOptions</code> | Prettier options. |
@@ -156,6 +158,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedNamespace">embeddedNamespace</a></code> | <code>string</code> | Used to scope the embedded packages to avoid naming collisions. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedPackages">embeddedPackages</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage">EmbeddedPackage</a>}</code> | Small functions to be deployed with the other resources in the repo. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion">nodeVersion</a></code> | <code>string</code> | The Node.js version to use when building. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
@@ -190,6 +193,18 @@ public readonly commitGenerated: boolean;
 - *Default:* true
 
 Whether to commit the managed files by default.
+
+---
+
+##### `gitIgnoreOptions`<sup>Optional</sup> <a name="gitIgnoreOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.gitIgnoreOptions"></a>
+
+```typescript
+public readonly gitIgnoreOptions: IgnoreFileOptions;
+```
+
+- *Type:* projen.IgnoreFileOptions
+
+Configuration options for .gitignore file.
 
 ---
 
@@ -280,10 +295,10 @@ Generate (once) .projenrc.json (in JSON). Set to `false` in order to disable .pr
 ##### `projenrcJsonOptions`<sup>Optional</sup> <a name="projenrcJsonOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.projenrcJsonOptions"></a>
 
 ```typescript
-public readonly projenrcJsonOptions: ProjenrcOptions;
+public readonly projenrcJsonOptions: ProjenrcJsonOptions;
 ```
 
-- *Type:* projen.ProjenrcOptions
+- *Type:* projen.ProjenrcJsonOptions
 - *Default:* default options
 
 Options for .projenrc.json.
@@ -368,7 +383,7 @@ public readonly clobber: boolean;
 ```
 
 - *Type:* boolean
-- *Default:* true
+- *Default:* true, but false for subprojects
 
 Add a `clobber` task which resets the repo to origin.
 
@@ -1657,6 +1672,18 @@ Defines an .npmignore file. Normally this is only needed for libraries that are 
 
 ---
 
+##### `npmIgnoreOptions`<sup>Optional</sup> <a name="npmIgnoreOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmIgnoreOptions"></a>
+
+```typescript
+public readonly npmIgnoreOptions: IgnoreFileOptions;
+```
+
+- *Type:* projen.IgnoreFileOptions
+
+Configuration options for .npmignore file.
+
+---
+
 ##### `package`<sup>Optional</sup> <a name="package" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.package"></a>
 
 ```typescript
@@ -2137,6 +2164,19 @@ A set of scripts to be added to package.json but not wrapped by projen.
 
 ---
 
+##### `nodeVersion`<sup>Optional</sup> <a name="nodeVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion"></a>
+
+```typescript
+public readonly nodeVersion: string;
+```
+
+- *Type:* string
+- *Default:* 18.0.0
+
+The Node.js version to use when building.
+
+---
+
 ##### `npmrc`<sup>Optional</sup> <a name="npmrc" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc"></a>
 
 ```typescript
@@ -2614,6 +2654,7 @@ new CdktfProject(options: CdktfProjectOptions)
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addFields">addFields</a></code> | Directly set fields in `package.json`. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addKeywords">addKeywords</a></code> | Adds keywords to package.json (deduplicated). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addPeerDeps">addPeerDeps</a></code> | Defines peer dependencies. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addScripts">addScripts</a></code> | Replaces the contents of multiple npm package.json scripts. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addTestCommand">addTestCommand</a></code> | DEPRECATED. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.hasScript">hasScript</a></code> | Indicates if a script by the name name is defined. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.removeScript">removeScript</a></code> | Removes the npm script (always successful). |
@@ -3028,6 +3069,22 @@ be installed in the next `npx projen` run and the version will be recorded
 in your `package.json` file. You can upgrade manually or using `yarn
 add/upgrade`. If you wish to specify a version range use this syntax:
 `module@^7`.
+
+---
+
+##### `addScripts` <a name="addScripts" id="@rlmartin-projen/cdktf-project.CdktfProject.addScripts"></a>
+
+```typescript
+public addScripts(scripts: {[ key: string ]: string}): void
+```
+
+Replaces the contents of multiple npm package.json scripts.
+
+###### `scripts`<sup>Required</sup> <a name="scripts" id="@rlmartin-projen/cdktf-project.CdktfProject.addScripts.parameter.scripts"></a>
+
+- *Type:* {[ key: string ]: string}
+
+The scripts to set.
 
 ---
 

@@ -3,17 +3,21 @@ import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rl
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { cleanArray, isGitHubTeam } from './helpers';
 
-const deps = [
-  'projen@~0',
+export const sharedDeps = [
   'cdktf@~0',
-  'cdktf-cli@~0',
   'constructs@~10',
 ];
-const NodeVersion = '14';
 
+const deps = [
+  'projen@~0',
+  'cdktf-cli@~0',
+  ...sharedDeps,
+];
 function mergeUnique<T>(arr1: T[], arr2: T[]): T[] {
   return [...new Set(arr1.concat(arr2))];
 }
+
+export type NodeVersion = '19.0.0' | '16.3.0' | '18.0.0'
 
 export interface DeploymentEnvironment {
   /**
@@ -164,6 +168,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly nodeScripts?: { [name:string]: string };
 
   /**
+   * The Node.js version to use when building.
+   *
+   * @default - 18.0.0
+   */
+  readonly nodeVersion?: NodeVersion;
+
+  /**
    * Raw lines to drop into the workflow's .npmrc file, to access private package.
    * Empty implies no .npmrc required.
    *
@@ -231,21 +242,23 @@ export class CdktfProject extends typescript.TypeScriptProject {
   private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
+    const { nodeVersion = '18.0.0' } = options;
+    const nodeMajorVersion = nodeVersion.split('.')[0];
     const {
       artifactsFolder = 'dist',
       defaultReleaseBranch,
       deploymentEnvironments = {},
       majorVersion = 0,
-      maxNodeVersion = NodeVersion,
-      minNodeVersion = `${NodeVersion}.0.0`,
+      maxNodeVersion = nodeMajorVersion,
+      minNodeVersion = nodeVersion,
       npmrc = [],
       repoAdmins = {},
       terraformModules = [],
-      terraformProviders = ['aws@~> 4.24.0'],
+      terraformProviders = [],
       terraformModulesSsh = false,
       terraformVars = [],
       terraformVersion = 'latest',
-      workflowNodeVersion = NodeVersion,
+      workflowNodeVersion = nodeMajorVersion,
     } = options;
     const tempOptions = {
       ...options,
@@ -362,6 +375,14 @@ export class CdktfProject extends typescript.TypeScriptProject {
     Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => {
       this.addEmbeddedPackage(name, funcConfig, majorVersion, options.embeddedNamespace);
     });
+    if (Object.entries(options.embeddedPackages ?? {}).length > 0) {
+      this.addFields({
+        private: true,
+        workspaces: [
+          'packages/*',
+        ],
+      });
+    }
 
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {

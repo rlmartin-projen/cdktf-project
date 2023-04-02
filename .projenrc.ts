@@ -1,11 +1,17 @@
 import { ProjenProject } from '@rlmartin-projen/projen-project';
 import { NpmAccess } from 'projen/lib/javascript';
+import { sharedDeps } from './src/cdktf-project';
 
-const majorVersion = 0;
+const majorVersion = 1;
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
   defaultReleaseBranch: 'main',
+  deps: [
+    '@cdktf/provider-archive@~5',
+    '@cdktf/provider-aws@~12',
+    ...sharedDeps,
+  ],
   devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',
   projenrcTs: true,
