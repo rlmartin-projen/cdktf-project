@@ -254,7 +254,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       npmrc = [],
       repoAdmins = {},
       terraformModules = [],
-      terraformProviders = ['aws@~> 4.24.0'],
+      terraformProviders = [],
       terraformModulesSsh = false,
       terraformVars = [],
       terraformVersion = 'latest',
