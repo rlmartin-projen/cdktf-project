@@ -56,8 +56,10 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   readonly runtime?: LambdaRuntime;
   /**
    * Set of triggers for the function
+   *
+   * @default - {}
    */
-  readonly triggers: EventTriggers;
+  readonly triggers?: EventTriggers;
   /**
    * The absolute path to the workspace where the code is. Assumes a 'dist'
    * subdirectory that includes compiled code to zip.
@@ -84,7 +86,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       namespace,
       runtime = LambdaRuntime.NODEJS_16_X,
       tags,
-      triggers,
+      triggers = {},
       workspacePath,
     } = config;
     this.functionName = `${namespace}-${path.parse(workspacePath).name}`;
