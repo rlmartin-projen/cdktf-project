@@ -375,6 +375,14 @@ export class CdktfProject extends typescript.TypeScriptProject {
     Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => {
       this.addEmbeddedPackage(name, funcConfig, majorVersion, options.embeddedNamespace);
     });
+    if (Object.entries(options.embeddedPackages ?? {}).length > 0) {
+      this.addFields({
+        private: true,
+        workspaces: [
+          'packages/*',
+        ],
+      });
+    }
 
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {
