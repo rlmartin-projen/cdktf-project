@@ -136,17 +136,19 @@ export class WorkspaceFunction extends TaggedConstruct {
       managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
       tags,
     });
-    const additionalPolicyDocument = new DataAwsIamPolicyDocument(this, 'additional-policy-document', {
-      statement: [
-        ...additionalPermissions,
-        ...functionPermissions,
-      ],
-    });
-    new IamRolePolicy(this, 'additional-policy', {
-      name: `${this.functionName}-policy`,
-      policy: additionalPolicyDocument.json,
-      role: role.name,
-    });
+    if (additionalPermissions.length > 0 || functionPermissions.length > 0) {
+      const additionalPolicyDocument = new DataAwsIamPolicyDocument(this, 'additional-policy-document', {
+        statement: [
+          ...additionalPermissions,
+          ...functionPermissions,
+        ],
+      });
+      new IamRolePolicy(this, 'additional-policy', {
+        name: `${this.functionName}-policy`,
+        policy: additionalPolicyDocument.json,
+        role: role.name,
+      });
+    }
 
     const assetDir = new TerraformAsset(this, 'code-directory', {
       path: `${workspacePath}/dist`,
