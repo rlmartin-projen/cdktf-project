@@ -242,7 +242,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
   private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
-    const { nodeVersion = '18.0.0' } = options;
+    const { nodeVersion = '16.3.0' } = options;
     const nodeMajorVersion = nodeVersion.split('.')[0];
     const {
       artifactsFolder = 'dist',
