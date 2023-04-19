@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
@@ -75,6 +75,9 @@
   "resolutions": {
     "@types/prettier": "2.6.0",
     "@types/babel__traverse": "7.18.2"
+  },
+  "engines": {
+    "node": ">= 18.0.0 <= 18"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
