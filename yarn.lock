@@ -292,15 +292,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cdktf/provider-archive@~5":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@cdktf/provider-archive/-/provider-archive-5.0.1.tgz#27c5055e73c3a41292adcf3fae4939e7d289e47e"
-  integrity sha512-SX52AMZCSmnQQdMC76R+N2TH4B9ffIUFT3WHqcj3QdFu9M5QAJ07AmtMzuRKvbIw3BKvjPpkuA2ngmq8E3w8MA==
+"@cdktf/provider-archive@~6":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@cdktf/provider-archive/-/provider-archive-6.0.0.tgz#727371bd1fd4cbc843e6a37c3c4334579438bd04"
+  integrity sha512-m6Hkk4naUY/VSY7XrOVgSCkDyF/zZfCUu17iX4JVloWoyjiRnWu9UPMaOATYs5sK67tMzRph1jfzysezikIyWw==
 
-"@cdktf/provider-aws@~12":
-  version "12.0.13"
-  resolved "https://registry.yarnpkg.com/@cdktf/provider-aws/-/provider-aws-12.0.13.tgz#66bcaafc3b18247897c62057b3a41b84cea2dbe4"
-  integrity sha512-uGayQpfVsxPYbsTrxM1p/9mtb6MbrrFqWHgHqLyhoOUzHqunwTtoGrcJJtkPZJwqHUdkZwK3OWwEYy7RtD2dow==
+"@cdktf/provider-aws@~14":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@cdktf/provider-aws/-/provider-aws-14.0.0.tgz#1f08461c62f24ee0bd01a46807385e1831952dbe"
+  integrity sha512-YOzpa332N7QGTpx0dFHQTGQ618WxKZdUxF+wXHuUTwlTwKPsYwmFxOLxLoBQCdoA7tR61S7tlfisIByRxDnjKQ==
 
 "@colors/colors@1.5.0":
   version "1.5.0"
@@ -963,15 +963,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*":
+"@types/node@*", "@types/node@^18":
   version "18.15.11"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
   integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
-
-"@types/node@^14":
-  version "14.18.42"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.42.tgz#fa39b2dc8e0eba61bdf51c66502f84e23b66e114"
-  integrity sha512-xefu+RBie4xWlK8hwAzGh3npDz/4VhF6icY/shU+zv/1fNn+ZVG7T7CRwe9LId9sAYRPxI+59QBPuKL3WpyGRg==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -3868,10 +3863,10 @@ jest-jasmine2@^27.5.1:
     pretty-format "^27.5.1"
     throat "^6.0.1"
 
-jest-junit@^13:
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-13.2.0.tgz#66eeb86429aafac8c1745a70f44ace185aacb943"
-  integrity sha512-B0XNlotl1rdsvFZkFfoa19mc634+rrd8E4Sskb92Bb8MmSXeWV9XJGUyctunZS1W410uAxcyYuPUGVnbcOH8cg==
+jest-junit@^15:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-15.0.0.tgz#a47544ab42e9f8fe7ada56306c218e09e52bd690"
+  integrity sha512-Z5sVX0Ag3HZdMUnD5DFlG+1gciIFSy7yIVPhOdGUi8YJaI9iLvvBb530gtQL2CHmv0JJeiwRZenr0VrSR7frvg==
   dependencies:
     mkdirp "^1.0.4"
     strip-ansi "^6.0.1"

@@ -9,8 +9,8 @@ const project = new ProjenProject({
   authorAddress: 'rlmartin@gmail.com',
   defaultReleaseBranch: 'main',
   deps: [
-    '@cdktf/provider-archive@~5',
-    '@cdktf/provider-aws@~12',
+    '@cdktf/provider-archive@~6',
+    '@cdktf/provider-aws@~14',
     ...sharedDeps,
   ],
   devDeps: ['@rlmartin-projen/projen-project@~0'],
