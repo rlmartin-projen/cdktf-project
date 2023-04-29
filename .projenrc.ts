@@ -19,7 +19,6 @@ const project = new ProjenProject({
   repositoryUrl: 'git@github.com:rlmartin-projen/cdktf-project.git',
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
-  maxNodeVersion: nodeVersion,
   minNodeVersion: `${nodeVersion}.0.0`,
   workflowNodeVersion: nodeVersion,
   majorVersion,
