@@ -3262,6 +3262,7 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: n
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.projectBuild">projectBuild</a></code> | <code>projen.ProjectBuild</code> | Manages the build process of the project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.projenCommand">projenCommand</a></code> | <code>string</code> | The command to use in order to run the projen CLI. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.root">root</a></code> | <code>projen.Project</code> | The root project. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.subprojects">subprojects</a></code> | <code>projen.Project[]</code> | Returns all the subprojects within this project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.tasks">tasks</a></code> | <code>projen.Tasks</code> | Project tasks. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.testTask">testTask</a></code> | <code>projen.Task</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.defaultTask">defaultTask</a></code> | <code>projen.Task</code> | This is the "default" task, the one that executes "projen". |
@@ -3279,6 +3280,7 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: n
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.bundler">bundler</a></code> | <code>projen.javascript.Bundler</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.entrypoint">entrypoint</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.manifest">manifest</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.npmrc">npmrc</a></code> | <code>projen.javascript.NpmConfig</code> | The .npmrc file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.package">package</a></code> | <code>projen.javascript.NodePackage</code> | API for managing the node package. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.packageManager">packageManager</a></code> | <code>projen.javascript.NodePackageManager</code> | The package manager to use. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.runScriptCommand">runScriptCommand</a></code> | <code>string</code> | The command to use to run scripts (e.g. `yarn run` or `npm run` depends on the package manager). |
@@ -3512,6 +3514,18 @@ The root project.
 
 ---
 
+##### `subprojects`<sup>Required</sup> <a name="subprojects" id="@rlmartin-projen/cdktf-project.CdktfProject.property.subprojects"></a>
+
+```typescript
+public readonly subprojects: Project[];
+```
+
+- *Type:* projen.Project[]
+
+Returns all the subprojects within this project.
+
+---
+
 ##### `tasks`<sup>Required</sup> <a name="tasks" id="@rlmartin-projen/cdktf-project.CdktfProject.property.tasks"></a>
 
 ```typescript
@@ -3728,6 +3742,18 @@ public readonly manifest: any;
 ```
 
 - *Type:* any
+
+---
+
+##### `npmrc`<sup>Required</sup> <a name="npmrc" id="@rlmartin-projen/cdktf-project.CdktfProject.property.npmrc"></a>
+
+```typescript
+public readonly npmrc: NpmConfig;
+```
+
+- *Type:* projen.javascript.NpmConfig
+
+The .npmrc file.
 
 ---
 

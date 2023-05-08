@@ -50,6 +50,12 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly namespace: string;
   /**
+   * Append this suffix to the lambda function name.
+   *
+   * @default - undefined
+   */
+  readonly nameSuffix?: string;
+  /**
    * The runtime to use for the Lambda function.
    * Optional, defaults to NODEJS_16_X
    */
@@ -84,12 +90,13 @@ export class WorkspaceFunction extends TaggedConstruct {
       hasSecret = false,
       logRetentionDays = 7,
       namespace,
+      nameSuffix,
       runtime = LambdaRuntime.NODEJS_16_X,
       tags,
       triggers = {},
       workspacePath,
     } = config;
-    this.functionName = `${namespace}-${path.parse(workspacePath).name}`;
+    this.functionName = `${namespace}-${path.parse(workspacePath).name}${nameSuffix ? '-' + nameSuffix : ''}`;
 
     new CloudwatchLogGroup(this, 'log-group', {
       name: `/aws/lambda/${this.functionName}`,
