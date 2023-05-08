@@ -12,6 +12,8 @@ import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 
+const IAM_ROLE_MAX_LENGTH = 64;
+
 export interface EventTriggers {
   /**
    * List of S3 buckets that will trigger invoking the function
@@ -138,7 +140,8 @@ export class WorkspaceFunction extends TaggedConstruct {
       ],
     });
     const role = new IamRole(this, 'lambda-role', {
-      name: `${this.functionName}-role`,
+      name: this.functionName.length > IAM_ROLE_MAX_LENGTH ? undefined : this.functionName,
+      namePrefix: this.functionName.length > IAM_ROLE_MAX_LENGTH ? namespace : undefined,
       assumeRolePolicy: assumeRolePolicy.json,
       managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
       tags,
