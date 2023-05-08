@@ -51,7 +51,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   readonly namespace: string;
   /**
    * Append this suffix to the lambda function name.
-   * 
+   *
    * @default - undefined
    */
   readonly nameSuffix?: string;
