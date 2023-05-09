@@ -745,6 +745,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         fileName: this.tsconfigDev?.fileName ?? 'tsconfig.dev.json',
       },
     });
+    embedded.npmignore?.include('dist');
     embedded.addFields({
       optionalDependencies: localDeps.reduce((current, dep) => {
         current[`@${namespace}/${dep}`] = `~${majorVersion}`;
