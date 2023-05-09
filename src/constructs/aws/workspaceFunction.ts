@@ -55,7 +55,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    * The function name will automatically be generated. If you need to
    * override that default name, use this property instead. Setting this
    * will result in ignoring nameSuffix.
-   * 
+   *
    * @default - undefined
    */
   readonly nameOverride?: string;
