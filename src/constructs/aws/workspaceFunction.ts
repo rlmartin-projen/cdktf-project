@@ -52,6 +52,14 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly namespace: string;
   /**
+   * The function name will automatically be generated. If you need to
+   * override that default name, use this property instead. Setting this
+   * will result in ignoring nameSuffix.
+   *
+   * @default - undefined
+   */
+  readonly nameOverride?: string;
+  /**
    * Append this suffix to the lambda function name.
    *
    * @default - undefined
@@ -92,13 +100,14 @@ export class WorkspaceFunction extends TaggedConstruct {
       hasSecret = false,
       logRetentionDays = 7,
       namespace,
+      nameOverride,
       nameSuffix,
       runtime = LambdaRuntime.NODEJS_16_X,
       tags,
       triggers = {},
       workspacePath,
     } = config;
-    this.functionName = `${namespace}-${path.parse(workspacePath).name}${nameSuffix ? '-' + nameSuffix : ''}`;
+    this.functionName = nameOverride ?? `${namespace}-${path.parse(workspacePath).name}${nameSuffix ? '-' + nameSuffix : ''}`;
 
     new CloudwatchLogGroup(this, 'log-group', {
       name: `/aws/lambda/${this.functionName}`,
