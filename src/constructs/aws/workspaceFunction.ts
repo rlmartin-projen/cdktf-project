@@ -142,12 +142,9 @@ export class WorkspaceFunction extends TaggedConstruct {
       });
     }
     if (dlqArn) {
-      const actions = [];
-      if (dlqArn.includes('sqs')) actions.push('sqs:SendMessage');
-      if (dlqArn.includes('sns')) actions.push('sns:Publish');
       functionPermissions.push({
         effect: 'Allow',
-        actions,
+        actions: ['sqs:SendMessage', 'sns:Publish'],
         resources: [dlqArn],
       });
     }
