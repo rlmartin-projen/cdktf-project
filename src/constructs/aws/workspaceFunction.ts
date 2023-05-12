@@ -28,6 +28,13 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly additionalPermissions?: DataAwsIamPolicyDocumentStatement[];
   /**
+   * Set this to the a dead-letter queue ARN that should be used when event
+   * triggers result in failures in the function.
+   * 
+   * @default - undefined
+   */
+  readonly dlqArn?: string;
+  /**
    * Environment variables to inject into the function.
    * Optional, defaults to {}
    */
@@ -95,6 +102,7 @@ export class WorkspaceFunction extends TaggedConstruct {
     super(scope, id, config);
     const {
       additionalPermissions = [],
+      dlqArn,
       envVars = {},
       handler = 'index.handler',
       hasSecret = false,
@@ -132,6 +140,16 @@ export class WorkspaceFunction extends TaggedConstruct {
         actions: ['s3:GetObject'],
         resources: triggers.s3Buckets.map(bucketName => `arn:aws:s3:::${bucketName}/*`),
       });
+    }
+    if (dlqArn) {
+      const actions = [];
+      if (dlqArn.includes('sqs')) actions.push('sqs:SendMessage');
+      if (dlqArn.includes('sns')) actions.push('sns:Publish');
+      functionPermissions.push({
+        effect: 'Allow',
+        actions,
+        resources: [dlqArn],
+      })
     }
 
     const assumeRolePolicy = new DataAwsIamPolicyDocument(this, 'assume-role-policy', {
@@ -187,6 +205,9 @@ export class WorkspaceFunction extends TaggedConstruct {
       environment: {
         variables: envVars,
       },
+      deadLetterConfig: dlqArn ? {
+        targetArn: dlqArn
+      } : undefined,
       dependsOn: [assetFile],
       timeout: 30,
       tags,
