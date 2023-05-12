@@ -30,7 +30,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   /**
    * Set this to the a dead-letter queue ARN that should be used when event
    * triggers result in failures in the function.
-   * 
+   *
    * @default - undefined
    */
   readonly dlqArn?: string;
@@ -149,7 +149,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         effect: 'Allow',
         actions,
         resources: [dlqArn],
-      })
+      });
     }
 
     const assumeRolePolicy = new DataAwsIamPolicyDocument(this, 'assume-role-policy', {
@@ -206,7 +206,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         variables: envVars,
       },
       deadLetterConfig: dlqArn ? {
-        targetArn: dlqArn
+        targetArn: dlqArn,
       } : undefined,
       dependsOn: [assetFile],
       timeout: 30,
