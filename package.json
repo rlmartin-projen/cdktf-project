@@ -73,8 +73,8 @@
     "liquidjs"
   ],
   "resolutions": {
-    "@types/babel__traverse": "7.18.2",
-    "@types/prettier": "2.6.0"
+    "@types/prettier": "2.6.0",
+    "@types/babel__traverse": "7.18.2"
   },
   "engines": {
     "node": ">= 16.0.0"
