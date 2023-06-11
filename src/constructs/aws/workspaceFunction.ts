@@ -190,11 +190,13 @@ export class WorkspaceFunction extends TaggedConstruct {
         },
       ],
     });
+    const managedPolicies = ['AWSLambdaBasicExecutionRole'];
+    if (networking) managedPolicies.push('AWSLambdaVPCAccessExecutionRole');
     const role = new IamRole(this, 'lambda-role', {
       name: this.functionName.length > IAM_ROLE_MAX_LENGTH ? undefined : this.functionName,
       namePrefix: this.functionName.length > IAM_ROLE_MAX_LENGTH ? namespace : undefined,
       assumeRolePolicy: assumeRolePolicy.json,
-      managedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'],
+      managedPolicyArns: managedPolicies.map(name => `arn:aws:iam::aws:policy/service-role/${name}`),
       tags,
     });
     if (additionalPermissions.length > 0 || functionPermissions.length > 0) {
