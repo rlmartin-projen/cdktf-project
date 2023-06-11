@@ -59,6 +59,14 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly namespace: string;
   /**
+   * Used to set the networking configuration of the function.
+   * @default - no vpc_config for the function
+   */
+  readonly networking?: {
+    readonly securityGroupIds: string[];
+    readonly subnetIds: string[];
+  };
+  /**
    * The function name will automatically be generated. If you need to
    * override that default name, use this property instead. Setting this
    * will result in ignoring nameSuffix.
@@ -110,6 +118,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       namespace,
       nameOverride,
       nameSuffix,
+      networking,
       runtime = LambdaRuntime.NODEJS_16_X,
       tags,
       triggers = {},
@@ -208,6 +217,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       dependsOn: [assetFile],
       timeout: 30,
       tags,
+      vpcConfig: networking,
     });
 
     if (triggers.s3Buckets) {
