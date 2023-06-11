@@ -6,6 +6,7 @@ import { IamRole } from '@cdktf/provider-aws/lib/iam-role';
 import { IamRolePolicy } from '@cdktf/provider-aws/lib/iam-role-policy';
 import { LambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import { SecretsmanagerSecret } from '@cdktf/provider-aws/lib/secretsmanager-secret';
+import { SecretsmanagerSecretVersion } from '@cdktf/provider-aws/lib/secretsmanager-secret-version';
 import { TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { LambdaRuntime } from 'projen/lib/awscdk';
@@ -45,11 +46,6 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly handler?: string;
   /**
-   * Whether or not the function will utilize a secret. Name matches the function name.
-   * Optional, defaults to false
-   */
-  readonly hasSecret?: boolean;
-  /**
    * Number of days to retain logs in CloudWatch Logs.
    * Optional, defaults to 7
    */
@@ -86,6 +82,20 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly runtime?: LambdaRuntime;
   /**
+   * Set this to create a secret for the function.
+   * @default - no secret is created.
+   */
+  readonly secret?: {
+    /**
+     * The value to set for the secret.
+     */
+    readonly value?: string;
+    /**
+     * Set to true if the secret value will change outside of this infra.
+     */
+    readonly ignoreChanges?: boolean;
+  };
+  /**
    * Set of triggers for the function
    *
    * @default - {}
@@ -113,13 +123,13 @@ export class WorkspaceFunction extends TaggedConstruct {
       dlqArn,
       envVars = {},
       handler = 'index.handler',
-      hasSecret = false,
       logRetentionDays = 7,
       namespace,
       nameOverride,
       nameSuffix,
       networking,
       runtime = LambdaRuntime.NODEJS_16_X,
+      secret: secretConfig,
       tags,
       triggers = {},
       workspacePath,
@@ -133,7 +143,7 @@ export class WorkspaceFunction extends TaggedConstruct {
     });
 
     const functionPermissions: DataAwsIamPolicyDocumentStatement[] = [];
-    if (hasSecret) {
+    if (secretConfig) {
       const secret = new SecretsmanagerSecret(this, 'secret', {
         name: this.functionName,
       });
@@ -142,6 +152,14 @@ export class WorkspaceFunction extends TaggedConstruct {
         actions: ['secretsmanager:GetSecretValue'],
         resources: [secret.arn],
       });
+      if (secretConfig.value) {
+        const lifecycle = secretConfig.ignoreChanges ? { ignoreChanges: ['secret_string'] } : undefined;
+        new SecretsmanagerSecretVersion(this, 'secret-value', {
+          secretId: secret.id,
+          secretString: secretConfig.value,
+          lifecycle,
+        });
+      }
     }
     if (triggers.s3Buckets && triggers.s3Buckets.length > 0) {
       functionPermissions.push({
