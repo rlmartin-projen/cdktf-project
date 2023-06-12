@@ -122,10 +122,21 @@ export interface S3Backend {
   readonly region?: string;
 }
 
+export interface TerraformSubmoduleOptions {
+  readonly name: string;
+  /**
+   * The directory where the module can be found. Should not include 'name'.
+   * 
+   * @default - modules
+   */
+  readonly rootPath?: string;
+}
+
 export interface TerraformModuleOptions {
   readonly name: string;
   readonly nameOverride?: string;
   readonly githubOrgName: string;
+  readonly submodule?: TerraformSubmoduleOptions;
   readonly version: string;
 }
 
@@ -346,8 +357,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
       let sourceBase = terraformModulesSsh ? `git@github.com:${module.githubOrgName}` : `https://github.com/${module.githubOrgName}`;
 
       let tfModule = {
-        name: (module.nameOverride) ? module.nameOverride : module.name,
-        source: `git::${sourceBase}/${module.name}?ref=${module.version}`,
+        name: (module.nameOverride) ? module.nameOverride : module.name + `${module.submodule ? '-' + module.submodule.name : ''}`,
+        source: `git::${sourceBase}/${module.name}${module.submodule ? '//' + module.submodule.rootPath ?? 'modules' + module.submodule.name : ''}?ref=${module.version}`,
       };
       tfModules.push(tfModule);
     });
