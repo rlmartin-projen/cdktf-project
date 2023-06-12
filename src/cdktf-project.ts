@@ -126,7 +126,7 @@ export interface TerraformSubmoduleOptions {
   readonly name: string;
   /**
    * The directory where the module can be found. Should not include 'name'.
-   * 
+   *
    * @default - modules
    */
   readonly rootPath?: string;

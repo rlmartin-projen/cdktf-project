@@ -2609,6 +2609,7 @@ const terraformModuleOptions: TerraformModuleOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions.property.name">name</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions.property.version">version</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions.property.nameOverride">nameOverride</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions.property.submodule">submodule</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions">TerraformSubmoduleOptions</a></code> | *No description.* |
 
 ---
 
@@ -2649,6 +2650,60 @@ public readonly nameOverride: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `submodule`<sup>Optional</sup> <a name="submodule" id="@rlmartin-projen/cdktf-project.TerraformModuleOptions.property.submodule"></a>
+
+```typescript
+public readonly submodule: TerraformSubmoduleOptions;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions">TerraformSubmoduleOptions</a>
+
+---
+
+### TerraformSubmoduleOptions <a name="TerraformSubmoduleOptions" id="@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions.Initializer"></a>
+
+```typescript
+import { TerraformSubmoduleOptions } from '@rlmartin-projen/cdktf-project'
+
+const terraformSubmoduleOptions: TerraformSubmoduleOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions.property.rootPath">rootPath</a></code> | <code>string</code> | The directory where the module can be found. |
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `rootPath`<sup>Optional</sup> <a name="rootPath" id="@rlmartin-projen/cdktf-project.TerraformSubmoduleOptions.property.rootPath"></a>
+
+```typescript
+public readonly rootPath: string;
+```
+
+- *Type:* string
+- *Default:* modules
+
+The directory where the module can be found.
+
+Should not include 'name'.
 
 ---
 
