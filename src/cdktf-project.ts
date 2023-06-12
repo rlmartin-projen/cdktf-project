@@ -358,7 +358,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
 
       let tfModule = {
         name: (module.nameOverride) ? module.nameOverride : module.name + `${module.submodule ? '-' + module.submodule.name : ''}`,
-        source: `git::${sourceBase}/${module.name}${module.submodule ? '//' + module.submodule.rootPath ?? 'modules' + module.submodule.name : ''}?ref=${module.version}`,
+        source: `git::${sourceBase}/${module.name}${module.submodule ? '//' + (module.submodule.rootPath ?? 'modules') + '/' + module.submodule.name : ''}?ref=${module.version}`,
       };
       tfModules.push(tfModule);
     });
