@@ -480,7 +480,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         };
         awsCredsStep = {
           name: 'Configure AWS Credentials',
-          uses: 'aws-actions/configure-aws-credentials@v1',
+          uses: 'aws-actions/configure-aws-credentials@v2',
           with: {
             'aws-region': region,
             // TODO: Move this into environment-level variables once this Settings App is implemented:
