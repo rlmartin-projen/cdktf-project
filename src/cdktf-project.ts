@@ -2,6 +2,7 @@ import * as path from 'path';
 import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { cleanArray, isGitHubTeam } from './helpers';
+import { Step } from 'projen/lib/github/workflows-model';
 
 export const sharedDeps = [
   'cdktf@~0',
@@ -252,8 +253,8 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * Optional steps to include in the GitHub workflow.
    */
   readonly workflowSteps?: {
-    readonly preBuild?: object[];
-    readonly postBuild?: object[];
+    readonly preBuild?: Step[];
+    readonly postBuild?: Step[];
   }
 }
 
