@@ -247,6 +247,14 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * @default - latest
    */
   readonly terraformVersion?: string;
+
+  /**
+   * Optional steps to include in the GitHub workflow.
+   */
+  readonly workflowSteps?: {
+    readonly preBuild?: object[];
+    readonly postBuild?: object[];
+  }
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
@@ -270,6 +278,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformVars = [],
       terraformVersion = 'latest',
       workflowNodeVersion = nodeMajorVersion,
+      workflowSteps = {},
     } = options;
     const tempOptions = {
       ...options,
@@ -530,6 +539,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Install dependencies',
                   run: 'yarn install',
                 },
+                ...(workflowSteps.preBuild ?? []),
                 ...this.embeddedPackageNames.library.map(name => {
                   return {
                     name: `Build + package ${name}`,
@@ -573,6 +583,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   id: 'git_remote',
                   run: 'echo "latest_commit=$(git ls-remote origin -h ${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT',
                 },
+                ...(workflowSteps.postBuild ?? []),
                 {
                   'name': 'Backup artifact permissions',
                   'if': '\${{ steps.git_remote.outputs.latest_commit == github.sha }}',
