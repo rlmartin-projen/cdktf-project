@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
-import { cleanArray, isGitHubTeam } from './helpers';
 import { Step } from 'projen/lib/github/workflows-model';
+import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
   'cdktf@~0',
@@ -141,6 +141,11 @@ export interface TerraformModuleOptions {
   readonly version: string;
 }
 
+export interface WorkflowSteps {
+  readonly preBuild?: Step[];
+  readonly postBuild?: Step[];
+}
+
 export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions {
   /**
    * Configurable folder for artifacts to package when transitioning from plan to apply.
@@ -252,10 +257,7 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   /**
    * Optional steps to include in the GitHub workflow.
    */
-  readonly workflowSteps?: {
-    readonly preBuild?: Step[];
-    readonly postBuild?: Step[];
-  }
+  readonly workflowSteps?: WorkflowSteps;
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
