@@ -187,6 +187,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowSteps">workflowSteps</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps">WorkflowSteps</a></code> | Optional steps to include in the GitHub workflow. |
 
 ---
 
@@ -2338,6 +2339,18 @@ The Terraform version to use in the build pipelines.
 
 ---
 
+##### `workflowSteps`<sup>Optional</sup> <a name="workflowSteps" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowSteps"></a>
+
+```typescript
+public readonly workflowSteps: WorkflowSteps;
+```
+
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.WorkflowSteps">WorkflowSteps</a>
+
+Optional steps to include in the GitHub workflow.
+
+---
+
 ### DeploymentEnvironment <a name="DeploymentEnvironment" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment"></a>
 
 #### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.DeploymentEnvironment.Initializer"></a>
@@ -2704,6 +2717,45 @@ public readonly rootPath: string;
 The directory where the module can be found.
 
 Should not include 'name'.
+
+---
+
+### WorkflowSteps <a name="WorkflowSteps" id="@rlmartin-projen/cdktf-project.WorkflowSteps"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.WorkflowSteps.Initializer"></a>
+
+```typescript
+import { WorkflowSteps } from '@rlmartin-projen/cdktf-project'
+
+const workflowSteps: WorkflowSteps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postBuild">postBuild</a></code> | <code>projen.github.workflows.Step[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild">preBuild</a></code> | <code>projen.github.workflows.Step[]</code> | *No description.* |
+
+---
+
+##### `postBuild`<sup>Optional</sup> <a name="postBuild" id="@rlmartin-projen/cdktf-project.WorkflowSteps.property.postBuild"></a>
+
+```typescript
+public readonly postBuild: Step[];
+```
+
+- *Type:* projen.github.workflows.Step[]
+
+---
+
+##### `preBuild`<sup>Optional</sup> <a name="preBuild" id="@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild"></a>
+
+```typescript
+public readonly preBuild: Step[];
+```
+
+- *Type:* projen.github.workflows.Step[]
 
 ---
 

@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
+import { Step } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
@@ -140,6 +141,11 @@ export interface TerraformModuleOptions {
   readonly version: string;
 }
 
+export interface WorkflowSteps {
+  readonly preBuild?: Step[];
+  readonly postBuild?: Step[];
+}
+
 export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions {
   /**
    * Configurable folder for artifacts to package when transitioning from plan to apply.
@@ -247,6 +253,11 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * @default - latest
    */
   readonly terraformVersion?: string;
+
+  /**
+   * Optional steps to include in the GitHub workflow.
+   */
+  readonly workflowSteps?: WorkflowSteps;
 }
 
 export class CdktfProject extends typescript.TypeScriptProject {
@@ -270,6 +281,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformVars = [],
       terraformVersion = 'latest',
       workflowNodeVersion = nodeMajorVersion,
+      workflowSteps = {},
     } = options;
     const tempOptions = {
       ...options,
@@ -530,6 +542,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   name: 'Install dependencies',
                   run: 'yarn install',
                 },
+                ...(workflowSteps.preBuild ?? []),
                 ...this.embeddedPackageNames.library.map(name => {
                   return {
                     name: `Build + package ${name}`,
@@ -573,6 +586,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   id: 'git_remote',
                   run: 'echo "latest_commit=$(git ls-remote origin -h ${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT',
                 },
+                ...(workflowSteps.postBuild ?? []),
                 {
                   'name': 'Backup artifact permissions',
                   'if': '\${{ steps.git_remote.outputs.latest_commit == github.sha }}',
