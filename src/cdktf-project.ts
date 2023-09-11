@@ -664,7 +664,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       if (terraformManualWorkflow) {
         new YamlFile(this, `.github/workflows/terraform-manual-${env}.yml`, {
           obj: {
-            name: `plan-apply-${env}`,
+            name: `terraform-manual-${env}`,
             on: {
               workflow_dispatch: {
                 inputs: {
@@ -680,7 +680,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'cancel-in-progress': true,
             },
             jobs: {
-              plan: {
+              manual: {
                 'runs-on': 'ubuntu-latest',
                 'environment': `${env}-plan`,
                 'permissions': oidcPermissions,
