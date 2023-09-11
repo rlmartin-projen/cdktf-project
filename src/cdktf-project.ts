@@ -224,6 +224,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly terraformProviders?: string[];
 
   /**
+   * Set this to turn on a GitHub workflow that can be used to
+   * run manual Terraform commands within the environment. This
+   * is helpful for debugging and managing complicated state changes.
+   */
+  readonly terraformManualWorkflow?: boolean;
+
+  /**
    * Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org.
    *
    * @default - []
@@ -277,6 +284,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       repoAdmins = {},
       terraformModules = [],
       terraformProviders = [],
+      terraformManualWorkflow = false,
       terraformModulesSsh = false,
       terraformVars = [],
       terraformVersion = 'latest',
@@ -507,6 +515,47 @@ export class CdktfProject extends typescript.TypeScriptProject {
           AWS_SECRET_ACCESS_KEY: `\${{ secrets.${env.toUpperCase()}_AWS_SECRET_ACCESS_KEY }}`,
         };
       }
+      const tfSetupSteps: (Step | undefined)[] = [
+        {
+          name: 'Checkout code',
+          uses: 'actions/checkout@v3',
+        },
+        setupNodeStep,
+        npmrcStep,
+        {
+          uses: 'hashicorp/setup-terraform@v2',
+          with: {
+            terraform_version: terraformVersion,
+            terraform_wrapper: false,
+          },
+        },
+        {
+          name: 'Install dependencies',
+          run: 'yarn install',
+        },
+        ...(workflowSteps.preBuild ?? []),
+        ...this.embeddedPackageNames.library.map(name => {
+          return {
+            name: `Build + package ${name}`,
+            run: `yarn workspace ${name} package`,
+          };
+        }),
+        ...this.embeddedPackageNames.function.map(name => {
+          return {
+            name: `Build + package ${name}`,
+            run: `yarn workspace ${name} package`,
+          };
+        }),
+        {
+          name: 'Build',
+          run: 'yarn cdktf-build',
+        },
+        {
+          name: 'Generate Terraform',
+          run: 'yarn cdktf-synth',
+        },
+        awsCredsStep,
+      ].filter(x => x);
       Object.assign(on, { pull_request: { } });
       new YamlFile(this, `.github/workflows/plan-apply-${env}.yml`, {
         obj: {
@@ -525,45 +574,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 latest_commit: '${{ steps.git_remote.outputs.latest_commit }}',
               },
               'steps': [
-                {
-                  name: 'Checkout code',
-                  uses: 'actions/checkout@v3',
-                },
-                setupNodeStep,
-                npmrcStep,
-                {
-                  uses: 'hashicorp/setup-terraform@v2',
-                  with: {
-                    terraform_version: terraformVersion,
-                    terraform_wrapper: false,
-                  },
-                },
-                {
-                  name: 'Install dependencies',
-                  run: 'yarn install',
-                },
-                ...(workflowSteps.preBuild ?? []),
-                ...this.embeddedPackageNames.library.map(name => {
-                  return {
-                    name: `Build + package ${name}`,
-                    run: `yarn workspace ${name} package`,
-                  };
-                }),
-                ...this.embeddedPackageNames.function.map(name => {
-                  return {
-                    name: `Build + package ${name}`,
-                    run: `yarn workspace ${name} package`,
-                  };
-                }),
-                {
-                  name: 'Build',
-                  run: 'yarn cdktf-build',
-                },
-                {
-                  name: 'Generate Terraform',
-                  run: 'yarn cdktf-synth',
-                },
-                awsCredsStep,
+                ...tfSetupSteps,
                 {
                   name: 'Terraform plan',
                   env: {
@@ -650,6 +661,48 @@ export class CdktfProject extends typescript.TypeScriptProject {
           },
         },
       });
+      if (terraformManualWorkflow) {
+        new YamlFile(this, `.github/workflows/terraform-manual-${env}.yml`, {
+          obj: {
+            name: `plan-apply-${env}`,
+            on: {
+              workflow_dispatch: {
+                inputs: {
+                  command: {
+                    description: 'The Terraform command to execute, not including the \'terraform\' keyword',
+                    required: true,
+                  },
+                },
+              },
+            },
+            concurrency: {
+              'group': `\${{ github.repository }}-${env}`,
+              'cancel-in-progress': true,
+            },
+            jobs: {
+              plan: {
+                'runs-on': 'ubuntu-latest',
+                'environment': `${env}-plan`,
+                'permissions': oidcPermissions,
+                'steps': [
+                  ...tfSetupSteps,
+                  {
+                    name: 'Run Terraform command',
+                    env: {
+                      ...tfVars,
+                      ...awsCredsEnvVars,
+                    },
+                    run: [
+                      `terraform -chdir=cdktf.out/stacks/${env} init`,
+                      `terraform -chdir=cdktf.out/stacks/${env} \${{ github.event.inputs.command }}`,
+                    ].join('\n'),
+                  },
+                ],
+              },
+            },
+          },
+        });
+      }
     });
 
     // https://github.com/apps/settings
