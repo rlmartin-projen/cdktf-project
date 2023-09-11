@@ -671,8 +671,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   command: {
                     description: 'The Terraform command to execute, not including the \'terraform\' keyword',
                     required: true,
-                  }
-                }
+                  },
+                },
               },
             },
             concurrency: {

@@ -182,6 +182,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformManualWorkflow">terraformManualWorkflow</a></code> | <code>boolean</code> | Set this to turn on a GitHub workflow that can be used to run manual Terraform commands within the environment. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModules">terraformModules</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions">TerraformModuleOptions</a>[]</code> | Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
@@ -2267,6 +2268,21 @@ public readonly terraformBackend: TerraformBackend;
 - *Default:* S3Backend
 
 Terraform backend configuration.
+
+---
+
+##### `terraformManualWorkflow`<sup>Optional</sup> <a name="terraformManualWorkflow" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformManualWorkflow"></a>
+
+```typescript
+public readonly terraformManualWorkflow: boolean;
+```
+
+- *Type:* boolean
+
+Set this to turn on a GitHub workflow that can be used to run manual Terraform commands within the environment.
+
+This
+is helpful for debugging and managing complicated state changes.
 
 ---
 
