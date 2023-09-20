@@ -123,12 +123,12 @@
     },
     {
       "name": "@cdktf/provider-archive",
-      "version": "~6",
+      "version": "~8",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-aws",
-      "version": "~14",
+      "version": "~17",
       "type": "runtime"
     },
     {
