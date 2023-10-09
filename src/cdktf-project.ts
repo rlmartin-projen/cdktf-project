@@ -674,7 +674,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   },
                   tf_log: {
                     description: 'Set to any log level to see Terraform log output',
-                    required: true,
+                    required: false,
                     type: 'choice',
                     options: [
                       '',
