@@ -672,6 +672,20 @@ export class CdktfProject extends typescript.TypeScriptProject {
                     description: 'The Terraform command to execute, not including the \'terraform\' keyword',
                     required: true,
                   },
+                  tf_log: {
+                    description: 'Set to any log level to see Terraform log output',
+                    required: true,
+                    type: 'choice',
+                    options: [
+                      '',
+                      'JSON',
+                      'TRACE',
+                      'DEBUG',
+                      'INFO',
+                      'WARN',
+                      'ERROR',
+                    ],
+                  },
                 },
               },
             },
@@ -691,6 +705,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                     env: {
                       ...tfVars,
                       ...awsCredsEnvVars,
+                      TF_LOG: '${{ github.event.inputs.tf_log }}',
                     },
                     run: [
                       `terraform -chdir=cdktf.out/stacks/${env} init`,
