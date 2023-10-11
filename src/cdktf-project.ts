@@ -320,13 +320,16 @@ export class CdktfProject extends typescript.TypeScriptProject {
         ...options.tsconfig,
         compilerOptions: {
           rootDir: '.',
-          outDir: '.',
+          outDir: artifactsFolder,
           declaration: true,
           noEmitOnError: true,
           ...options.tsconfig?.compilerOptions,
           lib: mergeUnique(options.tsconfig?.compilerOptions?.lib || [], ['esnext']),
         },
-        include: mergeUnique(options.tsconfig?.include || [], ['**/*.ts']),
+        include: mergeUnique(
+          options.tsconfig?.include || [],
+          [`${options.tsconfig?.compilerOptions?.rootDir ? options.tsconfig?.compilerOptions?.rootDir + '/' : ''}**/*.ts`]
+        ),
       },
       workflowNodeVersion,
       terraformBackend: {
