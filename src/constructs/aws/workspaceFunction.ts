@@ -78,7 +78,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   readonly nameSuffix?: string;
   /**
    * The runtime to use for the Lambda function.
-   * Optional, defaults to NODEJS_16_X
+   * Optional, defaults to NODEJS_18_X
    */
   readonly runtime?: LambdaRuntime;
   /**
@@ -128,7 +128,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       nameOverride,
       nameSuffix,
       networking,
-      runtime = LambdaRuntime.NODEJS_16_X,
+      runtime = LambdaRuntime.NODEJS_18_X,
       secret: secretConfig,
       tags,
       triggers = {},
