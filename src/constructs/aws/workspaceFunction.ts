@@ -41,6 +41,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly envVars?: { [key: string]: string };
   /**
+   * Ephemeral storage (in MB) allocated for the function.
+   * @default - Lambda default (512)
+   */
+  readonly ephemeralStorage?: number;
+  /**
    * The name of the handler to use in the Lambda function.
    * Optional, defaults to index.handler
    */
@@ -50,6 +55,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    * Optional, defaults to 7
    */
   readonly logRetentionDays?: number;
+  /**
+   * Amount of memory (in MB) allocated for the Lambda function.
+   * @default - Lambda default (128)
+   */
+  readonly memory?: number;
   /**
    * Used to namespace this function to avoid naming collisions
    */
@@ -121,9 +131,11 @@ export class WorkspaceFunction extends TaggedConstruct {
     const {
       additionalPermissions = [],
       dlqArn,
+      ephemeralStorage,
       envVars = {},
       handler = 'index.handler',
       logRetentionDays = 7,
+      memory,
       namespace,
       nameOverride,
       nameSuffix,
@@ -235,6 +247,10 @@ export class WorkspaceFunction extends TaggedConstruct {
         targetArn: dlqArn,
       } : undefined,
       dependsOn: [assetFile],
+      ephemeralStorage: {
+        size: ephemeralStorage,
+      },
+      memorySize: memory,
       timeout: 30,
       tags,
       vpcConfig: networking,
