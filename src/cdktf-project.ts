@@ -319,12 +319,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
       tsconfig: {
         ...options.tsconfig,
         compilerOptions: {
-          ...options.tsconfig?.compilerOptions,
           rootDir: '.',
           outDir: '.',
           declaration: true,
-          lib: mergeUnique(options.tsconfig?.compilerOptions?.lib || [], ['esnext']),
           noEmitOnError: true,
+          ...options.tsconfig?.compilerOptions,
+          lib: mergeUnique(options.tsconfig?.compilerOptions?.lib || [], ['esnext']),
         },
         include: mergeUnique(options.tsconfig?.include || [], ['**/*.ts']),
       },
