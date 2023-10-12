@@ -41,6 +41,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly envVars?: { [key: string]: string };
   /**
+   * Ephemeral storage (in MB) allocated for the function.
+   * @default - Lambda default (512)
+   */
+  readonly ephemeralStorage?: number;
+  /**
    * The name of the handler to use in the Lambda function.
    * Optional, defaults to index.handler
    */
@@ -50,6 +55,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    * Optional, defaults to 7
    */
   readonly logRetentionDays?: number;
+  /**
+   * Amount of memory (in MB) allocated for the Lambda function.
+   * @default - Lambda default (128)
+   */
+  readonly memory?: number;
   /**
    * Used to namespace this function to avoid naming collisions
    */
@@ -78,7 +88,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   readonly nameSuffix?: string;
   /**
    * The runtime to use for the Lambda function.
-   * Optional, defaults to NODEJS_16_X
+   * Optional, defaults to NODEJS_18_X
    */
   readonly runtime?: LambdaRuntime;
   /**
@@ -95,6 +105,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
      */
     readonly ignoreChanges?: boolean;
   };
+  /**
+   * The maximum number of seconds the function can run for.
+   * @default 30
+   */
+  readonly timeout?: number;
   /**
    * Set of triggers for the function
    *
@@ -121,16 +136,19 @@ export class WorkspaceFunction extends TaggedConstruct {
     const {
       additionalPermissions = [],
       dlqArn,
+      ephemeralStorage,
       envVars = {},
       handler = 'index.handler',
       logRetentionDays = 7,
+      memory,
       namespace,
       nameOverride,
       nameSuffix,
       networking,
-      runtime = LambdaRuntime.NODEJS_16_X,
+      runtime = LambdaRuntime.NODEJS_18_X,
       secret: secretConfig,
       tags,
+      timeout = 30,
       triggers = {},
       workspacePath,
     } = config;
@@ -235,7 +253,11 @@ export class WorkspaceFunction extends TaggedConstruct {
         targetArn: dlqArn,
       } : undefined,
       dependsOn: [assetFile],
-      timeout: 30,
+      ephemeralStorage: {
+        size: ephemeralStorage,
+      },
+      memorySize: memory,
+      timeout,
       tags,
       vpcConfig: networking,
     });
