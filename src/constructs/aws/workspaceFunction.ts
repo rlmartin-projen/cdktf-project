@@ -106,6 +106,11 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
     readonly ignoreChanges?: boolean;
   };
   /**
+   * The maximum number of seconds the function can run for.
+   * @default 30
+   */
+  readonly timeout?: number;
+  /**
    * Set of triggers for the function
    *
    * @default - {}
@@ -143,6 +148,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       runtime = LambdaRuntime.NODEJS_18_X,
       secret: secretConfig,
       tags,
+      timeout = 30,
       triggers = {},
       workspacePath,
     } = config;
@@ -251,7 +257,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         size: ephemeralStorage,
       },
       memorySize: memory,
-      timeout: 30,
+      timeout,
       tags,
       vpcConfig: networking,
     });
