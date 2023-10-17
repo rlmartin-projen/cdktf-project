@@ -190,6 +190,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowInputs">workflowInputs</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions">WorkflowInputOptions</a>}</code> | Optional inputs (map of name => options) to inject into the workflow_dispatch. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowSteps">workflowSteps</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps">WorkflowSteps</a></code> | Optional steps to include in the GitHub workflow. |
 
 ---
@@ -2382,6 +2383,18 @@ The Terraform version to use in the build pipelines.
 
 ---
 
+##### `workflowInputs`<sup>Optional</sup> <a name="workflowInputs" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowInputs"></a>
+
+```typescript
+public readonly workflowInputs: {[ key: string ]: WorkflowInputOptions};
+```
+
+- *Type:* {[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions">WorkflowInputOptions</a>}
+
+Optional inputs (map of name => options) to inject into the workflow_dispatch.
+
+---
+
 ##### `workflowSteps`<sup>Optional</sup> <a name="workflowSteps" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowSteps"></a>
 
 ```typescript
@@ -2760,6 +2773,78 @@ public readonly rootPath: string;
 The directory where the module can be found.
 
 Should not include 'name'.
+
+---
+
+### WorkflowInputOptions <a name="WorkflowInputOptions" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.Initializer"></a>
+
+```typescript
+import { WorkflowInputOptions } from '@rlmartin-projen/cdktf-project'
+
+const workflowInputOptions: WorkflowInputOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.default">default</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.options">options</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.required">required</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.type">type</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `default`<sup>Optional</sup> <a name="default" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.default"></a>
+
+```typescript
+public readonly default: string;
+```
+
+- *Type:* string
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `options`<sup>Optional</sup> <a name="options" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.options"></a>
+
+```typescript
+public readonly options: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `required`<sup>Optional</sup> <a name="required" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.required"></a>
+
+```typescript
+public readonly required: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `type`<sup>Optional</sup> <a name="type" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
 
 ---
 
