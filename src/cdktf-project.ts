@@ -141,6 +141,16 @@ export interface TerraformModuleOptions {
   readonly version: string;
 }
 
+export type WorkflowInputType = 'boolean' | 'choice' | 'number' | 'string';
+
+export interface WorkflowInputOptions {
+  readonly default?: string;
+  readonly description?: string;
+  readonly options?: string[];
+  readonly required?: boolean;
+  readonly type?: WorkflowInputType;
+}
+
 export interface WorkflowSteps {
   readonly preBuild?: Step[];
   readonly postBuild?: Step[];
@@ -262,6 +272,10 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly terraformVersion?: string;
 
   /**
+   * Optional inputs (map of name => options) to inject into the workflow_dispatch.
+   */
+  readonly workflowInputs?: { [key: string]: WorkflowInputOptions };
+  /**
    * Optional steps to include in the GitHub workflow.
    */
   readonly workflowSteps?: WorkflowSteps;
@@ -289,6 +303,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformVars = [],
       terraformVersion = 'latest',
       workflowNodeVersion = nodeMajorVersion,
+      workflowInputs,
       workflowSteps = {},
     } = options;
     const tempOptions = {
@@ -489,7 +504,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         applyStepConditional.push(`github.ref == 'refs/heads/${defaultReleaseBranch}'`);
       }
       const on = {
-        workflow_dispatch: {},
+        workflow_dispatch: workflowInputs ? { inputs: workflowInputs } : {},
         pull_request: { },
         push: { branches: [defaultReleaseBranch] },
       };
@@ -689,6 +704,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                       'ERROR',
                     ],
                   },
+                  ...workflowInputs,
                 },
               },
             },
