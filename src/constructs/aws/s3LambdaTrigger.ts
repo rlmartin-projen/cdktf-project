@@ -37,6 +37,10 @@ export interface S3LambdaTriggerConfig extends TaggedConstructConfig {
    */
   readonly matchers: S3ObjectMatcher[];
   /**
+   * Used when naming internal resources.
+   */
+  readonly namePrefix: string;
+  /**
    * Assume that the EventBridge flag is already turned on for all triggering buckets.
    * @default - false
    */
@@ -47,7 +51,7 @@ export class S3LambdaTrigger extends TaggedConstruct {
   constructor(scope: Construct, id: string, config: S3LambdaTriggerConfig) {
     super(scope, id, config);
 
-    const { functionArn, functionName, matchers, tags } = config;
+    const { functionArn, functionName, matchers, namePrefix, tags } = config;
 
     if (!config.assumeEventBridgeOn) {
       [...new Set(matchers.map(matcher => matcher.s3Bucket))].forEach(s3Bucket =>
@@ -75,7 +79,7 @@ export class S3LambdaTrigger extends TaggedConstruct {
         },
       };
       const eventRule = new CloudwatchEventRule(this, `${prefix}rule`, {
-        namePrefix: 'data-sharing-trigger',
+        namePrefix,
         eventPattern: JSON.stringify(eventPattern),
         tags,
       });

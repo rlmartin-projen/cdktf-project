@@ -267,6 +267,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         functionArn: this.func.arn,
         functionName: this.functionName,
         matchers: triggers.s3Buckets.map(name => { return { s3Bucket: name };}),
+        namePrefix: this.functionName,
         assumeEventBridgeOn: true,
       });
     }
