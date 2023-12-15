@@ -1622,6 +1622,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.scopedPackagesOptions">scopedPackagesOptions</a></code> | <code>projen.javascript.ScopedPackagesOptions[]</code> | Options for privately hosted scoped packages. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.scripts">scripts</a></code> | <code>{[ key: string ]: string}</code> | npm scripts to include. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.stability">stability</a></code> | <code>string</code> | Package's Stability. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.yarnBerryOptions">yarnBerryOptions</a></code> | <code>projen.javascript.YarnBerryOptions</code> | Options for Yarn Berry. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.jsiiReleaseVersion">jsiiReleaseVersion</a></code> | <code>string</code> | Version requirement of `publib` which is used to publish modules to npm. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.majorVersion">majorVersion</a></code> | <code>number</code> | Major version to release from the default branch. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.minMajorVersion">minMajorVersion</a></code> | <code>number</code> | Minimal Major version to release. |
@@ -2656,6 +2657,19 @@ public readonly stability: string;
 - *Type:* string
 
 Package's Stability.
+
+---
+
+##### `yarnBerryOptions`<sup>Optional</sup> <a name="yarnBerryOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.yarnBerryOptions"></a>
+
+```typescript
+public readonly yarnBerryOptions: YarnBerryOptions;
+```
+
+- *Type:* projen.javascript.YarnBerryOptions
+- *Default:* Yarn Berry v4 with all default options
+
+Options for Yarn Berry.
 
 ---
 
