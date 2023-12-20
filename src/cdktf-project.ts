@@ -583,6 +583,9 @@ export class CdktfProject extends typescript.TypeScriptProject {
             'group': `\${{ github.repository }}-${env}`,
             'cancel-in-progress': true,
           },
+          env: {
+            ENV: env,
+          },
           jobs: {
             plan: {
               'runs-on': 'ubuntu-latest',
@@ -711,6 +714,9 @@ export class CdktfProject extends typescript.TypeScriptProject {
             concurrency: {
               'group': `\${{ github.repository }}-${env}`,
               'cancel-in-progress': true,
+            },
+            env: {
+              ENV: env,
             },
             jobs: {
               manual: {
