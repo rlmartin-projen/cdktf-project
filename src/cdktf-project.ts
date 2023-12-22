@@ -272,6 +272,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly terraformVersion?: string;
 
   /**
+   * Optional list of env vars to load from GitHub Secrets/Variables into
+   * workflow-level env variables.
+   *
+   * @default - []
+   */
+  readonly workflowEnvVars?: string[];
+  /**
    * Optional inputs (map of name => options) to inject into the workflow_dispatch.
    */
   readonly workflowInputs?: { [key: string]: WorkflowInputOptions };
@@ -303,6 +310,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformVars = [],
       terraformVersion = 'latest',
       workflowNodeVersion = nodeMajorVersion,
+      workflowEnvVars = [],
       workflowInputs,
       workflowSteps = {},
     } = options;
@@ -508,6 +516,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
         pull_request: { },
         push: { branches: [defaultReleaseBranch] },
       };
+      const workflowEnv = {
+        ...workflowEnvVars.reduce((all, current) => {
+          all[current] = `$${current}`;
+          return all;
+        }, Object.assign({})),
+        ENV: env,
+      };
       var awsCredsEnvVars = undefined;
       var awsCredsStep = undefined;
       var oidcPermissions = undefined;
@@ -583,9 +598,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
             'group': `\${{ github.repository }}-${env}`,
             'cancel-in-progress': true,
           },
-          env: {
-            ENV: env,
-          },
+          env: workflowEnv,
           jobs: {
             plan: {
               'runs-on': 'ubuntu-latest',
@@ -715,9 +728,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'group': `\${{ github.repository }}-${env}`,
               'cancel-in-progress': true,
             },
-            env: {
-              ENV: env,
-            },
+            env: workflowEnv,
             jobs: {
               manual: {
                 'runs-on': 'ubuntu-latest',
