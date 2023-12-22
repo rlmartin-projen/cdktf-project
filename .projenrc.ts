@@ -3,7 +3,7 @@ import { NpmAccess } from 'projen/lib/javascript';
 import { sharedDeps } from './src/cdktf-project';
 
 const majorVersion = 3;
-const nodeVersion = '16';
+const nodeVersion = '18';
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
