@@ -119,12 +119,12 @@
     },
     {
       "name": "@cdktf/provider-archive",
-      "version": "~8",
+      "version": "~9",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-aws",
-      "version": "~17",
+      "version": "~18",
       "type": "runtime"
     },
     {

@@ -295,15 +295,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cdktf/provider-archive@~8":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@cdktf/provider-archive/-/provider-archive-8.0.0.tgz#108d82b3d0a0e9e44db2a74e7bba8512132bff6a"
-  integrity sha512-YUro3fq8LoHpA8slN8VlUbzH55QRxAyzloWkJ2Vr5+SZQtATKa2FYi6S83kPtJm6EceaYq93Q/tzGukWWSs3VQ==
+"@cdktf/provider-archive@~9":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@cdktf/provider-archive/-/provider-archive-9.0.1.tgz#31d6e4f269cb08c2feae72885e75275245993fac"
+  integrity sha512-NEFw9c6PE3VDptYFCoaCY9aVL3841NpT0kBGc4XRsU6wACvqnPxqLL/xUzFYZz4PtBagpGPVQTCIdUdalsEb7g==
 
-"@cdktf/provider-aws@~17":
-  version "17.0.11"
-  resolved "https://registry.yarnpkg.com/@cdktf/provider-aws/-/provider-aws-17.0.11.tgz#80346224fc765c388dea73f4397749f6829ac657"
-  integrity sha512-J18AuzpMMASxPRMenneHoX5huAcUNwaDyfPss2r92T89ETeRszE2+zKeeK+GFzz14vJ2pVPKSkJJjKBh4nSu8w==
+"@cdktf/provider-aws@~18":
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/@cdktf/provider-aws/-/provider-aws-18.2.0.tgz#ef1c6088111754fff0f9712d85811a7e4d891821"
+  integrity sha512-Dm+ORqd9ttGH8PqdDe4q72QHoHO0BfgBEMDasagcP4b0lhYV3oiYxJtHsqdOJEKiv6EvHZT3/iftXwU2uOjnlA==
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
