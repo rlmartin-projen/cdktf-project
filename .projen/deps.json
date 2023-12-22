@@ -96,7 +96,7 @@
     },
     {
       "name": "@rlmartin-projen/projen-project",
-      "version": "0.0.28-dev.2",
+      "version": "~0",
       "type": "peer"
     },
     {
@@ -116,7 +116,7 @@
     },
     {
       "name": "@rlmartin-projen/projen-project",
-      "version": "0.0.28-dev.2",
+      "version": "~0",
       "type": "runtime"
     },
     {
