@@ -18,7 +18,7 @@ function mergeUnique<T>(arr1: T[], arr2: T[]): T[] {
   return [...new Set(arr1.concat(arr2))];
 }
 
-export type NodeVersion = '19.0.0' | '16.3.0' | '18.0.0'
+export type NodeVersion = '20.0.0' | '19.0.0' | '18.0.0'
 
 export interface DeploymentEnvironment {
   /**
@@ -285,7 +285,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
   private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
-    const { nodeVersion = '18.0.0' } = options;
+    const { nodeVersion = '20.0.0' } = options;
     const nodeMajorVersion = nodeVersion.split('.')[0];
     const {
       artifactsFolder = 'dist',
