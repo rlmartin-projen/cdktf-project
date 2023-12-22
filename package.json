@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27",
-    "@types/node": "^16",
+    "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
     "constructs": "^10.0.0",
@@ -45,12 +45,12 @@
     "eslint-plugin-import": "^2.29.1",
     "jest": "^27",
     "jest-junit": "^15",
-    "jsii": "1.x",
+    "jsii": "~5",
     "jsii-diff": "^1.93.0",
     "jsii-docgen": "^7.2.9",
     "jsii-pacmak": "^1.93.0",
-    "jsii-rosetta": "1.x",
-    "projen": "^0.65.28",
+    "jsii-rosetta": "~5",
+    "projen": "~0",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.2",
@@ -61,23 +61,19 @@
     "projen": "~0"
   },
   "dependencies": {
-    "@cdktf/provider-archive": "~8",
-    "@cdktf/provider-aws": "~17",
+    "@cdktf/provider-archive": "~9",
+    "@cdktf/provider-aws": "~18",
     "@rlmartin-projen/projen-project": "~0",
     "cdktf": "~0",
     "constructs": "~10",
-    "liquidjs": "~9",
+    "liquidjs": "~10",
     "projen": "~0"
   },
   "bundledDependencies": [
     "liquidjs"
   ],
-  "resolutions": {
-    "@types/babel__traverse": "7.18.2",
-    "@types/prettier": "2.6.0"
-  },
   "engines": {
-    "node": ">= 16.0.0"
+    "node": ">= 20.0.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
