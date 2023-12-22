@@ -7,10 +7,10 @@ import { cleanArray, isGitHubTeam } from './helpers';
 export const sharedDeps = [
   'cdktf@~0',
   'constructs@~10',
+  'projen@~0',
 ];
 
 const deps = [
-  'projen@~0',
   'cdktf-cli@~0',
   ...sharedDeps,
 ];

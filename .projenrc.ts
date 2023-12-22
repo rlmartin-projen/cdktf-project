@@ -3,7 +3,6 @@ import { NpmAccess } from 'projen/lib/javascript';
 import { sharedDeps } from './src/cdktf-project';
 
 const majorVersion = 3;
-const nodeVersion = '18';
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
@@ -13,14 +12,12 @@ const project = new ProjenProject({
     '@cdktf/provider-aws@~18',
     ...sharedDeps,
   ],
-  devDeps: ['@rlmartin-projen/projen-project@~0'],
+  devDeps: ['@rlmartin-projen/projen-project@0.0.28-dev.2'],
   name: '@rlmartin-projen/cdktf-project',
   projenrcTs: true,
   repositoryUrl: 'git@github.com:rlmartin-projen/cdktf-project.git',
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
-  minNodeVersion: `${nodeVersion}.0.0`,
-  workflowNodeVersion: nodeVersion,
   majorVersion,
   releaseBranches: {
     dev: { prerelease: 'dev', npmDistTag: 'dev', majorVersion },
