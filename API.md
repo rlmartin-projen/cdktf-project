@@ -1715,7 +1715,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowEnvVars">workflowEnvVars</a></code> | <code>string[]</code> | Optional list of env vars to load from GitHub Secrets/Variables into workflow-level env variables. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowEnvVars">workflowEnvVars</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.EnvVars">EnvVars</a></code> | Optional list of env vars to load from GitHub Secrets/Variables into workflow-level env variables. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowInputs">workflowInputs</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions">WorkflowInputOptions</a>}</code> | Optional inputs (map of name => options) to inject into the workflow_dispatch. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowSteps">workflowSteps</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps">WorkflowSteps</a></code> | Optional steps to include in the GitHub workflow. |
 
@@ -3940,11 +3940,11 @@ The Terraform version to use in the build pipelines.
 ##### `workflowEnvVars`<sup>Optional</sup> <a name="workflowEnvVars" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowEnvVars"></a>
 
 ```typescript
-public readonly workflowEnvVars: string[];
+public readonly workflowEnvVars: EnvVars;
 ```
 
-- *Type:* string[]
-- *Default:* []
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.EnvVars">EnvVars</a>
+- *Default:* {}
 
 Optional list of env vars to load from GitHub Secrets/Variables into workflow-level env variables.
 
@@ -4139,6 +4139,45 @@ public readonly localDeps: string[];
 - *Default:* []
 
 Local dependencies on other embedded packages.
+
+---
+
+### EnvVars <a name="EnvVars" id="@rlmartin-projen/cdktf-project.EnvVars"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.EnvVars.Initializer"></a>
+
+```typescript
+import { EnvVars } from '@rlmartin-projen/cdktf-project'
+
+const envVars: EnvVars = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.secrets">secrets</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.vars">vars</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `secrets`<sup>Optional</sup> <a name="secrets" id="@rlmartin-projen/cdktf-project.EnvVars.property.secrets"></a>
+
+```typescript
+public readonly secrets: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `vars`<sup>Optional</sup> <a name="vars" id="@rlmartin-projen/cdktf-project.EnvVars.property.vars"></a>
+
+```typescript
+public readonly vars: string[];
+```
+
+- *Type:* string[]
 
 ---
 

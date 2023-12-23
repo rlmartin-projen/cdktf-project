@@ -156,6 +156,11 @@ export interface WorkflowSteps {
   readonly postBuild?: Step[];
 }
 
+export interface EnvVars {
+  readonly secrets?: string[];
+  readonly vars?: string[];
+}
+
 export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions {
   /**
    * Configurable folder for artifacts to package when transitioning from plan to apply.
@@ -275,9 +280,9 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
    * Optional list of env vars to load from GitHub Secrets/Variables into
    * workflow-level env variables.
    *
-   * @default - []
+   * @default - {}
    */
-  readonly workflowEnvVars?: string[];
+  readonly workflowEnvVars?: EnvVars;
   /**
    * Optional inputs (map of name => options) to inject into the workflow_dispatch.
    */
@@ -310,7 +315,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformVars = [],
       terraformVersion = 'latest',
       workflowNodeVersion = nodeMajorVersion,
-      workflowEnvVars = [],
+      workflowEnvVars = {},
       workflowInputs,
       workflowSteps = {},
     } = options;
@@ -517,8 +522,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
         push: { branches: [defaultReleaseBranch] },
       };
       const workflowEnv = {
-        ...workflowEnvVars.reduce((all, current) => {
-          all[current] = `$${current}`;
+        ...workflowEnvVars?.secrets?.reduce((all, current) => {
+          all[current] = `\${{ secrets.${current} }}`;
+          return all;
+        }, Object.assign({})),
+        ...workflowEnvVars?.vars?.reduce((all, current) => {
+          all[current] = `\${{ vars.${current} }}`;
           return all;
         }, Object.assign({})),
         ENV: env,
