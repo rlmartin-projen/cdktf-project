@@ -49,7 +49,7 @@ new CdktfProject(options: CdktfProjectOptions)
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addExcludeFromCleanup">addExcludeFromCleanup</a></code> | Exclude the matching files from pre-synth cleanup. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addGitIgnore">addGitIgnore</a></code> | Adds a .gitignore pattern. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addPackageIgnore">addPackageIgnore</a></code> | Exclude these files from the bundled package. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addPackageIgnore">addPackageIgnore</a></code> | Adds patterns to be ignored by npm. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addTask">addTask</a></code> | Adds a new task to this project. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.addTip">addTip</a></code> | Prints a "tip" message during synthesis. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.annotateGenerated">annotateGenerated</a></code> | Marks the provided file(s) as being generated. |
@@ -129,14 +129,13 @@ The glob pattern to ignore.
 public addPackageIgnore(pattern: string): void
 ```
 
-Exclude these files from the bundled package.
-
-Implemented by project types based on the
-packaging mechanism. For example, `NodeProject` delegates this to `.npmignore`.
+Adds patterns to be ignored by npm.
 
 ###### `pattern`<sup>Required</sup> <a name="pattern" id="@rlmartin-projen/cdktf-project.CdktfProject.addPackageIgnore.parameter.pattern"></a>
 
 - *Type:* string
+
+The pattern to ignore.
 
 ---
 
@@ -1524,6 +1523,7 @@ public readonly tsconfigEslint: TypescriptConfig;
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.DEFAULT_TASK">DEFAULT_TASK</a></code> | <code>string</code> | The name of the default task (the task executed when `projen` is run without arguments). |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProject.property.DEFAULT_TS_JEST_TRANFORM_PATTERN">DEFAULT_TS_JEST_TRANFORM_PATTERN</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -1539,6 +1539,16 @@ The name of the default task (the task executed when `projen` is run without arg
 
 Normally
 this task should synthesize the project files.
+
+---
+
+##### `DEFAULT_TS_JEST_TRANFORM_PATTERN`<sup>Required</sup> <a name="DEFAULT_TS_JEST_TRANFORM_PATTERN" id="@rlmartin-projen/cdktf-project.CdktfProject.property.DEFAULT_TS_JEST_TRANFORM_PATTERN"></a>
+
+```typescript
+public readonly DEFAULT_TS_JEST_TRANFORM_PATTERN: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1699,13 +1709,14 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfig">tsconfig</a></code> | <code>projen.javascript.TypescriptConfigOptions</code> | Custom TSConfig. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDev">tsconfigDev</a></code> | <code>projen.javascript.TypescriptConfigOptions</code> | Custom tsconfig options for the development tsconfig.json file (used for testing). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsconfigDevFile">tsconfigDevFile</a></code> | <code>string</code> | The name of the development tsconfig.json file. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsJestOptions">tsJestOptions</a></code> | <code>projen.typescript.TsJestOptions</code> | Options for ts-jest. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion">typescriptVersion</a></code> | <code>string</code> | TypeScript version to use. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsFolder">artifactsFolder</a></code> | <code>string</code> | Configurable folder for artifacts to package when transitioning from plan to apply. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deploymentEnvironments">deploymentEnvironments</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.DeploymentEnvironment">DeploymentEnvironment</a>}</code> | Add GitHub Wokflows for enabled environments. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedNamespace">embeddedNamespace</a></code> | <code>string</code> | Used to scope the embedded packages to avoid naming collisions. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.embeddedPackages">embeddedPackages</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.EmbeddedPackage">EmbeddedPackage</a>}</code> | Small functions to be deployed with the other resources in the repo. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeScripts">nodeScripts</a></code> | <code>{[ key: string ]: string}</code> | A set of scripts to be added to package.json but not wrapped by projen. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion">nodeVersion</a></code> | <code>string</code> | The Node.js version to use when building. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion">nodeVersion</a></code> | <code>number</code> | The Node.js version to use when building. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
@@ -2922,7 +2933,7 @@ public readonly releaseWorkflowName: string;
 ```
 
 - *Type:* string
-- *Default:* "Release"
+- *Default:* "release"
 
 The name of the default release workflow.
 
@@ -3713,6 +3724,18 @@ The name of the development tsconfig.json file.
 
 ---
 
+##### `tsJestOptions`<sup>Optional</sup> <a name="tsJestOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.tsJestOptions"></a>
+
+```typescript
+public readonly tsJestOptions: TsJestOptions;
+```
+
+- *Type:* projen.typescript.TsJestOptions
+
+Options for ts-jest.
+
+---
+
 ##### `typescriptVersion`<sup>Optional</sup> <a name="typescriptVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.typescriptVersion"></a>
 
 ```typescript
@@ -3800,11 +3823,11 @@ A set of scripts to be added to package.json but not wrapped by projen.
 ##### `nodeVersion`<sup>Optional</sup> <a name="nodeVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion"></a>
 
 ```typescript
-public readonly nodeVersion: string;
+public readonly nodeVersion: number;
 ```
 
-- *Type:* string
-- *Default:* 18.0.0
+- *Type:* number
+- *Default:* 20
 
 The Node.js version to use when building.
 
