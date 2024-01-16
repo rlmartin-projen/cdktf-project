@@ -154,9 +154,10 @@ export interface WorkflowSteps {
   readonly postBuild?: Step[];
 }
 
+export type EnvNameInclusion = 'none' | 'prefix' | 'suffix';
 export interface EnvVars {
-  readonly secrets?: string[];
-  readonly vars?: string[];
+  readonly secrets?: string[] | { [key: string]: EnvNameInclusion };
+  readonly vars?: string[] | { [key: string]: EnvNameInclusion };
 }
 
 export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions {
@@ -517,14 +518,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
         push: { branches: [defaultReleaseBranch] },
       };
       const workflowEnv = {
-        ...workflowEnvVars?.secrets?.reduce((all, current) => {
-          all[current] = `\${{ secrets.${current} }}`;
-          return all;
-        }, Object.assign({})),
-        ...workflowEnvVars?.vars?.reduce((all, current) => {
-          all[current] = `\${{ vars.${current} }}`;
-          return all;
-        }, Object.assign({})),
+        ...envVarListToGithubEnv(workflowEnvVars?.secrets, env, 'secrets'),
+        ...envVarListToGithubEnv(workflowEnvVars?.vars, env, 'vars'),
         ENV: env,
       };
       var awsCredsEnvVars = undefined;
@@ -896,4 +891,19 @@ export class CdktfProject extends typescript.TypeScriptProject {
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
     this.embeddedPackageNames[packageType].push(`${npmScope}${cleanName}`);
   }
+}
+
+function envVarListToGithubEnv(
+  list: string[] | { [key: string]: EnvNameInclusion} | undefined,
+  env: string,
+  varType: 'secrets' | 'vars',
+): object {
+  const varMap = Array.isArray(list)
+    ? list.reduce((all, varName) => { all[varName] = 'none'; return all; }, Object.assign({}) as { [key: string]: EnvNameInclusion})
+    : list ?? {}
+  ;
+  return Object.entries(varMap).reduce((all, [varName, inclusionType]) => {
+    all[varName] = `\${{ ${varType}.${inclusionType == 'prefix' ? env.toUpperCase() + '_' : ''}${varName}${inclusionType == 'suffix' ? '_' + env.toUpperCase() : ''} }}`;
+    return all;
+  }, Object.assign({}));
 }
