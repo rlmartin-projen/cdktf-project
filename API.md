@@ -4179,28 +4179,28 @@ const envVars: EnvVars = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.secrets">secrets</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.vars">vars</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.secrets">secrets</a></code> | <code>string[] \| {[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.EnvVars.property.vars">vars</a></code> | <code>string[] \| {[ key: string ]: string}</code> | *No description.* |
 
 ---
 
 ##### `secrets`<sup>Optional</sup> <a name="secrets" id="@rlmartin-projen/cdktf-project.EnvVars.property.secrets"></a>
 
 ```typescript
-public readonly secrets: string[];
+public readonly secrets: string[] | {[ key: string ]: string};
 ```
 
-- *Type:* string[]
+- *Type:* string[] | {[ key: string ]: string}
 
 ---
 
 ##### `vars`<sup>Optional</sup> <a name="vars" id="@rlmartin-projen/cdktf-project.EnvVars.property.vars"></a>
 
 ```typescript
-public readonly vars: string[];
+public readonly vars: string[] | {[ key: string ]: string};
 ```
 
-- *Type:* string[]
+- *Type:* string[] | {[ key: string ]: string}
 
 ---
 
