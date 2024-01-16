@@ -1,11 +1,11 @@
 import * as path from 'path';
-import { addFiles, allCases, kebabCase, loadSettings, squashPackages } from '@rlmartin-projen/projen-project';
+import { NodeVersion, addFiles, allCases, kebabCase, loadSettings, sharedOptions, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
 import { Step } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
-  'cdktf@~0',
+  'cdktf@~0.19',
   'constructs@~10',
   'projen@~0',
 ];
@@ -17,8 +17,6 @@ const deps = [
 function mergeUnique<T>(arr1: T[], arr2: T[]): T[] {
   return [...new Set(arr1.concat(arr2))];
 }
-
-export type NodeVersion = '20.0.0' | '19.0.0' | '18.0.0'
 
 export interface DeploymentEnvironment {
   /**
@@ -156,9 +154,10 @@ export interface WorkflowSteps {
   readonly postBuild?: Step[];
 }
 
+export type EnvNameInclusion = 'none' | 'prefix' | 'suffix';
 export interface EnvVars {
-  readonly secrets?: string[];
-  readonly vars?: string[];
+  readonly secrets?: string[] | { [key: string]: EnvNameInclusion };
+  readonly vars?: string[] | { [key: string]: EnvNameInclusion };
 }
 
 export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions {
@@ -202,7 +201,7 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   /**
    * The Node.js version to use when building.
    *
-   * @default - 18.0.0
+   * @default - 20
    */
   readonly nodeVersion?: NodeVersion;
 
@@ -297,15 +296,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
   private embeddedPackageNames: Record<EmbeddedPackageType, string[]>;
 
   constructor(options: CdktfProjectOptions) {
-    const { nodeVersion = '20.0.0' } = options;
-    const nodeMajorVersion = nodeVersion.split('.')[0];
+    const { nodeVersion = sharedOptions.nodeVersion } = options;
     const {
       artifactsFolder = 'dist',
       defaultReleaseBranch,
       deploymentEnvironments = {},
       majorVersion = 0,
-      maxNodeVersion = nodeMajorVersion,
-      minNodeVersion = nodeVersion,
+      minNodeVersion = `${nodeVersion}.0.0`,
       npmrc = [],
       repoAdmins = {},
       terraformModules = [],
@@ -314,7 +311,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformModulesSsh = false,
       terraformVars = [],
       terraformVersion = 'latest',
-      workflowNodeVersion = nodeMajorVersion,
+      workflowNodeVersion = nodeVersion.toString(),
       workflowEnvVars = {},
       workflowInputs,
       workflowSteps = {},
@@ -325,7 +322,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
       depsUpgrade: false,
       entrypoint: `${artifactsFolder}/index.js`,
       licensed: false,
-      maxNodeVersion,
       majorVersion,
       mergify: false,
       minNodeVersion,
@@ -522,14 +518,8 @@ export class CdktfProject extends typescript.TypeScriptProject {
         push: { branches: [defaultReleaseBranch] },
       };
       const workflowEnv = {
-        ...workflowEnvVars?.secrets?.reduce((all, current) => {
-          all[current] = `\${{ secrets.${current} }}`;
-          return all;
-        }, Object.assign({})),
-        ...workflowEnvVars?.vars?.reduce((all, current) => {
-          all[current] = `\${{ vars.${current} }}`;
-          return all;
-        }, Object.assign({})),
+        ...envVarListToGithubEnv(workflowEnvVars?.secrets, env, 'secrets'),
+        ...envVarListToGithubEnv(workflowEnvVars?.vars, env, 'vars'),
         ENV: env,
       };
       var awsCredsEnvVars = undefined;
@@ -901,4 +891,19 @@ export class CdktfProject extends typescript.TypeScriptProject {
     }).forEach(([embeddedFuncName, script]) => embedded.setScript(embeddedFuncName, script));
     this.embeddedPackageNames[packageType].push(`${npmScope}${cleanName}`);
   }
+}
+
+function envVarListToGithubEnv(
+  list: string[] | { [key: string]: EnvNameInclusion} | undefined,
+  env: string,
+  varType: 'secrets' | 'vars',
+): object {
+  const varMap = Array.isArray(list)
+    ? list.reduce((all, varName) => { all[varName] = 'none'; return all; }, Object.assign({}) as { [key: string]: EnvNameInclusion})
+    : list ?? {}
+  ;
+  return Object.entries(varMap).reduce((all, [varName, inclusionType]) => {
+    all[varName] = `\${{ ${varType}.${inclusionType == 'prefix' ? env.toUpperCase() + '_' : ''}${varName}${inclusionType == 'suffix' ? '_' + env.toUpperCase() : ''} }}`;
+    return all;
+  }, Object.assign({}));
 }
