@@ -747,6 +747,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                       `terraform -chdir=cdktf.out/stacks/${env} \${{ github.event.inputs.command }}`,
                     ].join('\n'),
                   },
+                  ...(workflowSteps.postBuild ?? []),
                 ],
               },
             },
