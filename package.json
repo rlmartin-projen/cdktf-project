@@ -61,10 +61,10 @@
     "projen": "~0"
   },
   "dependencies": {
-    "@cdktf/provider-archive": "~9",
-    "@cdktf/provider-aws": "~18",
+    "@cdktf/provider-archive": "~10",
+    "@cdktf/provider-aws": "~19",
     "@rlmartin-projen/projen-project": "~0",
-    "cdktf": "~0.19",
+    "cdktf": "~0",
     "constructs": "~10",
     "liquidjs": "~10",
     "projen": "~0"

@@ -5,7 +5,7 @@ import { JobStep } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
-  'cdktf@~0.19',
+  'cdktf@~0',
   'constructs@~10',
   'projen@~0',
 ];
