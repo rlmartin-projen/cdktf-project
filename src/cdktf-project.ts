@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { NodeVersion, addFiles, allCases, kebabCase, loadSettings, sharedOptions, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
-import { Step } from 'projen/lib/github/workflows-model';
+import { JobStep } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
@@ -150,8 +150,8 @@ export interface WorkflowInputOptions {
 }
 
 export interface WorkflowSteps {
-  readonly preBuild?: Step[];
-  readonly postBuild?: Step[];
+  readonly preBuild?: JobStep[];
+  readonly postBuild?: JobStep[];
 }
 
 export type EnvNameInclusion = 'none' | 'prefix' | 'suffix';
@@ -547,7 +547,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           AWS_SECRET_ACCESS_KEY: `\${{ secrets.${env.toUpperCase()}_AWS_SECRET_ACCESS_KEY }}`,
         };
       }
-      const tfSetupSteps: (Step | undefined)[] = [
+      const tfSetupSteps: (JobStep | undefined)[] = [
         {
           name: 'Checkout code',
           uses: 'actions/checkout@v3',
