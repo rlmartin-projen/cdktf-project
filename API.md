@@ -4514,7 +4514,9 @@ const workflowSteps: WorkflowSteps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postBuild">postBuild</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postDeploy">postDeploy</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
 | <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild">preBuild</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preDeploy">preDeploy</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
 
 ---
 
@@ -4528,10 +4530,30 @@ public readonly postBuild: JobStep[];
 
 ---
 
+##### `postDeploy`<sup>Optional</sup> <a name="postDeploy" id="@rlmartin-projen/cdktf-project.WorkflowSteps.property.postDeploy"></a>
+
+```typescript
+public readonly postDeploy: JobStep[];
+```
+
+- *Type:* projen.github.workflows.JobStep[]
+
+---
+
 ##### `preBuild`<sup>Optional</sup> <a name="preBuild" id="@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild"></a>
 
 ```typescript
 public readonly preBuild: JobStep[];
+```
+
+- *Type:* projen.github.workflows.JobStep[]
+
+---
+
+##### `preDeploy`<sup>Optional</sup> <a name="preDeploy" id="@rlmartin-projen/cdktf-project.WorkflowSteps.property.preDeploy"></a>
+
+```typescript
+public readonly preDeploy: JobStep[];
 ```
 
 - *Type:* projen.github.workflows.JobStep[]
