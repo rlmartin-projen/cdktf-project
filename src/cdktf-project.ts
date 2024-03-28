@@ -152,6 +152,8 @@ export interface WorkflowInputOptions {
 export interface WorkflowSteps {
   readonly preBuild?: JobStep[];
   readonly postBuild?: JobStep[];
+  readonly preDeploy?: JobStep[];
+  readonly postDeploy?: JobStep[];
 }
 
 export type EnvNameInclusion = 'none' | 'prefix' | 'suffix';
@@ -684,11 +686,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   'continue-on-error': true,
                 },
                 awsCredsStep,
+                ...(workflowSteps.preDeploy ?? []),
                 {
                   name: 'Terraform apply',
                   env: awsCredsEnvVars,
                   run: `cd ${artifactsFolder} && terraform apply ${env}.tfplan`,
                 },
+                ...(workflowSteps.postDeploy ?? []),
               ],
             },
           },
