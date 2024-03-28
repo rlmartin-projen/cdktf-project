@@ -1619,6 +1619,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.maxNodeVersion">maxNodeVersion</a></code> | <code>string</code> | Minimum node.js version to require via `engines` (inclusive). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.minNodeVersion">minNodeVersion</a></code> | <code>string</code> | Minimum Node.js version to require via package.json `engines` (inclusive). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmAccess">npmAccess</a></code> | <code>projen.javascript.NpmAccess</code> | Access level of the npm package. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmProvenance">npmProvenance</a></code> | <code>boolean</code> | Should provenance statements be generated when the package is published. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmRegistry">npmRegistry</a></code> | <code>string</code> | The host name of the npm registry to publish to. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmRegistryUrl">npmRegistryUrl</a></code> | <code>string</code> | The base URL of the npm package registry. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmTokenSecret">npmTokenSecret</a></code> | <code>string</code> | GitHub secret which contains the NPM token to use when publishing packages. |
@@ -2478,6 +2479,27 @@ public readonly npmAccess: NpmAccess;
 - *Default:* for scoped packages (e.g. `foo@bar`), the default is `NpmAccess.RESTRICTED`, for non-scoped packages, the default is `NpmAccess.PUBLIC`.
 
 Access level of the npm package.
+
+---
+
+##### `npmProvenance`<sup>Optional</sup> <a name="npmProvenance" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmProvenance"></a>
+
+```typescript
+public readonly npmProvenance: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true for public packages, false otherwise
+
+Should provenance statements be generated when the package is published.
+
+A supported package manager is required to publish a package with npm provenance statements and
+you will need to use a supported CI/CD provider.
+
+Note that the projen `Release` and `Publisher` components are using `publib` to publish packages,
+which is using npm internally and supports provenance statements independently of the package manager used.
+
+> [https://docs.npmjs.com/generating-provenance-statements](https://docs.npmjs.com/generating-provenance-statements)
 
 ---
 
