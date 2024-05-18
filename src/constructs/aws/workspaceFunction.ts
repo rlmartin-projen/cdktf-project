@@ -7,7 +7,7 @@ import { IamRolePolicy } from '@cdktf/provider-aws/lib/iam-role-policy';
 import { LambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import { SecretsmanagerSecret } from '@cdktf/provider-aws/lib/secretsmanager-secret';
 import { SecretsmanagerSecretVersion } from '@cdktf/provider-aws/lib/secretsmanager-secret-version';
-import { TerraformAsset } from 'cdktf';
+import { ITerraformDependable, TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
@@ -271,6 +271,13 @@ export class WorkspaceFunction extends TaggedConstruct {
         assumeEventBridgeOn: true,
       });
     }
+  }
+
+  // To use if need to force dependency mapping
+  get dependsOn(): ITerraformDependable[] {
+    return [
+      this.func,
+    ];
   }
 
   get functionArn() {
