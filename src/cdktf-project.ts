@@ -671,7 +671,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 },
                 {
                   name: 'Download build artifacts',
-                  uses: 'actions/download-artifact@v3',
+                  uses: 'actions/download-artifact@v4',
                   with: {
                     name: `${artifactsFolder}.zip`,
                   },
