@@ -646,7 +646,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 {
                   name: 'Upload artifact',
                   if: '\${{ steps.git_remote.outputs.latest_commit == github.sha }}',
-                  uses: 'actions/upload-artifact@v3',
+                  uses: 'actions/upload-artifact@v4',
                   with: {
                     name: `${artifactsFolder}.zip`,
                     path: `${artifactsFolder}.zip`,
