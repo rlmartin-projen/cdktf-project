@@ -2,7 +2,7 @@
   "name": "@rlmartin-projen/cdktf-project",
   "repository": {
     "type": "git",
-    "url": "git@github.com:rlmartin-projen/cdktf-project.git"
+    "url": "https://github.com/rlmartin-projen/cdktf-project"
   },
   "scripts": {
     "build": "npx projen build",

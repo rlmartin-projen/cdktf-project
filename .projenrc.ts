@@ -15,7 +15,7 @@ const project = new ProjenProject({
   devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',
   projenrcTs: true,
-  repositoryUrl: 'git@github.com:rlmartin-projen/cdktf-project.git',
+  repositoryUrl: 'https://github.com/rlmartin-projen/cdktf-project',
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
   majorVersion,
