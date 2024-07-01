@@ -362,7 +362,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         },
         include: mergeUnique(
           options.tsconfig?.include || [],
-          [`${options.tsconfig?.compilerOptions?.rootDir ? options.tsconfig?.compilerOptions?.rootDir + '/' : ''}**/*.ts`],
+          [`${options.tsconfig?.compilerOptions?.rootDir ?? rootDir + '/'}**/*.ts`],
         ),
       },
       workflowNodeVersion,
