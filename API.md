@@ -600,7 +600,7 @@ The command to execute.
 ##### `addEmbeddedPackage` <a name="addEmbeddedPackage" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage"></a>
 
 ```typescript
-public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, namespaceOpt?: string): void
+public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, rootDir?: string, namespaceOpt?: string): void
 ```
 
 ###### `name`<sup>Required</sup> <a name="name" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.name"></a>
@@ -618,6 +618,12 @@ public addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: n
 ###### `majorVersion`<sup>Required</sup> <a name="majorVersion" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.majorVersion"></a>
 
 - *Type:* number
+
+---
+
+###### `rootDir`<sup>Optional</sup> <a name="rootDir" id="@rlmartin-projen/cdktf-project.CdktfProject.addEmbeddedPackage.parameter.rootDir"></a>
+
+- *Type:* string
 
 ---
 
@@ -1721,6 +1727,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.nodeVersion">nodeVersion</a></code> | <code>number</code> | The Node.js version to use when building. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmrc">npmrc</a></code> | <code>string[]</code> | Raw lines to drop into the workflow's .npmrc file, to access private package. Empty implies no .npmrc required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.repoAdmins">repoAdmins</a></code> | <code>{[ key: string ]: number}</code> | The GitHub Team slug (including the org_name/ prefix) or GitHub username for the teams/people who maintain infrastructure. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.rootDir">rootDir</a></code> | <code>string</code> | Root directory where code lives. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformBackend">terraformBackend</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformBackend">TerraformBackend</a></code> | Terraform backend configuration. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformManualWorkflow">terraformManualWorkflow</a></code> | <code>boolean</code> | Set this to turn on a GitHub workflow that can be used to run manual Terraform commands within the environment. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModules">terraformModules</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions">TerraformModuleOptions</a>[]</code> | Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org. |
@@ -3899,6 +3906,19 @@ The GitHub Team slug (including the org_name/ prefix) or GitHub username for the
 As a hack, and to avoid async fetching from the GitHub API to lookup ids, this is a map of
 username => GitHub id (which will need to be looked up manually). In the future it would be
 nice to make this a simple string[] (list of usernames) and automatically lookup the ids.
+
+---
+
+##### `rootDir`<sup>Optional</sup> <a name="rootDir" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.rootDir"></a>
+
+```typescript
+public readonly rootDir: string;
+```
+
+- *Type:* string
+- *Default:* 'src'
+
+Root directory where code lives.
 
 ---
 
