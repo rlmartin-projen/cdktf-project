@@ -226,6 +226,13 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly repoAdmins?: { [key: string]: number };
 
   /**
+   * Root directory where code lives.
+   *
+   * @default 'src'
+   */
+  readonly rootDir?: string;
+
+  /**
    * Terraform backend configuration.
    *
    * @default - S3Backend
@@ -307,6 +314,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       minNodeVersion = `${nodeVersion}.0.0`,
       npmrc = [],
       repoAdmins = {},
+      rootDir = 'src',
       terraformModules = [],
       terraformProviders = [],
       terraformManualWorkflow = false,
@@ -345,7 +353,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       tsconfig: {
         ...options.tsconfig,
         compilerOptions: {
-          rootDir: '.',
+          rootDir,
           outDir: artifactsFolder,
           declaration: true,
           noEmitOnError: true,
@@ -416,7 +424,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       {
         language: 'typescript',
         app: `tsc && node ${artifactsFolder}/index.js`,
-        codeMakerOutput: 'src/.gen',
+        codeMakerOutput: `${rootDir}/.gen`,
         terraformProviders: terraformProviders,
         terraformModules: tfModules,
         context: {
@@ -433,7 +441,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       function: [],
     };
     Object.entries(options.embeddedPackages ?? {}).forEach(([name, funcConfig]) => {
-      this.addEmbeddedPackage(name, funcConfig, majorVersion, options.embeddedNamespace);
+      this.addEmbeddedPackage(name, funcConfig, majorVersion, rootDir, options.embeddedNamespace);
     });
     if (Object.entries(options.embeddedPackages ?? {}).length > 0) {
       this.addFields({
@@ -810,7 +818,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       },
     });
 
-    new TextFile(this, 'src/environments.ts', {
+    new TextFile(this, `${rootDir}/environments.ts`, {
       lines: [
         'export interface Environments<T> {',
         ...Object.keys(deploymentEnvironments).map(env => `  readonly ${env}: T;`),
@@ -820,9 +828,9 @@ export class CdktfProject extends typescript.TypeScriptProject {
         '',
       ],
     });
-    this.eslint?.addIgnorePattern('src/environments.ts');
+    this.eslint?.addIgnorePattern(`${rootDir}/environments.ts`);
 
-    new SampleFile(this, 'src/stack.ts', {
+    new SampleFile(this, `${rootDir}/stack.ts`, {
       contents: [
         'import { Construct } from \'constructs\';',
         'import { Environments } from \'./environments\';',
@@ -838,7 +846,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
   }
 
-  addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, namespaceOpt?: string) {
+  addEmbeddedPackage(name: string, config: EmbeddedPackage, majorVersion: number, rootDir?: string, namespaceOpt?: string) {
     const { deps: embeddedDeps, devDeps: embeddedDevDeps, localDeps = [], type: packageType } = config;
     const suffixes: Record<EmbeddedPackageType, string> = {
       function: '-function',
@@ -866,6 +874,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         compilerOptions: {
           ...this.tsconfig?.compilerOptions,
           declaration: packageType === 'library',
+          rootDir,
         },
         fileName: this.tsconfig?.fileName ?? 'tsconfig.json',
       },
@@ -874,6 +883,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         compilerOptions: {
           ...this.tsconfigDev?.compilerOptions,
           declaration: packageType === 'library',
+          rootDir,
         },
         fileName: this.tsconfigDev?.fileName ?? 'tsconfig.dev.json',
       },
@@ -888,7 +898,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
     Object.entries({
       build: 'tsc --build',
-      eslint: 'eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test',
+      eslint: `eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern ${rootDir} test`,
       test: 'jest --passWithNoTests --updateSnapshot',
       prepackage: '$npm_execpath run test && $npm_execpath run eslint',
       package: '$npm_execpath run build',
