@@ -356,7 +356,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           rootDir,
           outDir: artifactsFolder,
           declaration: true,
-          noEmitOnError: true,
+          noEmitOnError: false,
           ...options.tsconfig?.compilerOptions,
           lib: mergeUnique(options.tsconfig?.compilerOptions?.lib || [], ['esnext']),
         },
