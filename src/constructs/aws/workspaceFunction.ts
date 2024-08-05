@@ -1,5 +1,4 @@
 import * as path from 'path';
-import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import { CloudwatchLogGroup } from '@cdktf/provider-aws/lib/cloudwatch-log-group';
 import { DataAwsIamPolicyDocument, DataAwsIamPolicyDocumentStatement } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { IamRole } from '@cdktf/provider-aws/lib/iam-role';
@@ -7,11 +6,12 @@ import { IamRolePolicy } from '@cdktf/provider-aws/lib/iam-role-policy';
 import { LambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import { SecretsmanagerSecret } from '@cdktf/provider-aws/lib/secretsmanager-secret';
 import { SecretsmanagerSecretVersion } from '@cdktf/provider-aws/lib/secretsmanager-secret-version';
-import { ITerraformDependable, TerraformAsset } from 'cdktf';
+import { ITerraformDependable } from 'cdktf';
 import { Construct } from 'constructs';
 import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
+import { WorkspaceDist } from './workspaceDist';
 
 const IAM_ROLE_MAX_LENGTH = 64;
 
@@ -117,10 +117,30 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    */
   readonly triggers?: EventTriggers;
   /**
+   * The absolute path to the zip file in the assets directory where the function
+   * code can be found. Assume use of TerraformAsset to ensure that the file
+   * is automatically placed in the correct location for CDKTF.
+   *
+   * Use this option when optimizing the overall stack file size for stacks
+   * with many functions that all use the same workspacePath. NB: many (30+)
+   * uses of the same workspace function may result in very large (5+ GB) stack
+   * sizes, which will lead to GitHub Actions running out of memory and killing
+   * the process. If this happens, pull the asset management outside of this
+   * construct (using the accompanying WorkspaceAsset construct), and instead
+   * pass in this value with the output of that construct.
+   *
+   * This option is mutually-exclusive from workspacePath below, with exactly one
+   * of the two required.
+   */
+  readonly workspaceDist?: WorkspaceDist;
+  /**
    * The absolute path to the workspace where the code is. Assumes a 'dist'
    * subdirectory that includes compiled code to zip.
+   *
+   * This option is mutually-exclusive from workspaceDist above, with exactly one
+   * of the two required.
    */
-  readonly workspacePath: string;
+  readonly workspacePath?: string;
 }
 
 /**
@@ -150,9 +170,13 @@ export class WorkspaceFunction extends TaggedConstruct {
       tags,
       timeout = 30,
       triggers = {},
+      workspaceDist,
       workspacePath,
     } = config;
-    this.functionName = nameOverride ?? `${namespace}-${path.parse(workspacePath).name}${nameSuffix ? '-' + nameSuffix : ''}`;
+    if (workspaceDist && workspacePath) throw new Error('Please specify only one of [workspaceDist, workspacePath');
+    if (!workspaceDist && !workspacePath) throw new Error('Please specify one of [workspaceDist, workspacePath');
+    const pathFileName = workspacePath ? path.parse(workspacePath).name : workspaceDist!.name;
+    this.functionName = nameOverride ?? `${namespace}-${pathFileName}${nameSuffix ? '-' + nameSuffix : ''}`;
 
     new CloudwatchLogGroup(this, 'log-group', {
       name: `/aws/lambda/${this.functionName}`,
@@ -231,28 +255,19 @@ export class WorkspaceFunction extends TaggedConstruct {
       });
     }
 
-    const assetDir = new TerraformAsset(this, 'code-directory', {
-      path: `${workspacePath}/dist`,
-    });
-    const assetFile = new DataArchiveFile(this, 'zip-file', {
-      sourceDir: assetDir.path,
-      outputPath: `${assetDir.path}/../dist.zip`,
-      type: 'zip',
-    });
-
+    const localWorkspaceDist = workspaceDist ?? new WorkspaceDist(this, 'file-dist', { workspacePath: workspacePath! });
     this.func = new LambdaFunction(this, 'function', {
       functionName: this.functionName,
       runtime: runtime.functionRuntime,
       role: role.arn,
       handler,
-      filename: `${assetDir.path}/../dist.zip`,
+      filename: localWorkspaceDist.filePath,
       environment: {
         variables: envVars,
       },
       deadLetterConfig: dlqArn ? {
         targetArn: dlqArn,
       } : undefined,
-      dependsOn: [assetFile],
       ephemeralStorage: {
         size: ephemeralStorage,
       },
