@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { NodeVersion, addFiles, allCases, kebabCase, loadSettings, sharedOptions, squashPackages } from '@rlmartin-projen/projen-project';
 import { JsonFile, SampleFile, TextFile, typescript, YamlFile } from 'projen';
-import { JobStep } from 'projen/lib/github/workflows-model';
+import { JobStep as GitHubJobStep } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
@@ -148,6 +148,12 @@ export interface WorkflowInputOptions {
   readonly required?: boolean;
   readonly type?: WorkflowInputType;
 }
+
+export type WorkflowType = 'main' | 'manual';
+export interface WorkflowExcludable {
+  readonly excludedWorkflows?: WorkflowType[];
+}
+export interface JobStep extends GitHubJobStep, WorkflowExcludable {};
 
 export interface WorkflowSteps {
   readonly preBuild?: JobStep[];
@@ -557,7 +563,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           AWS_SECRET_ACCESS_KEY: `\${{ secrets.${env.toUpperCase()}_AWS_SECRET_ACCESS_KEY }}`,
         };
       }
-      const tfSetupSteps: (JobStep | undefined)[] = [
+      const tfSetupSteps: JobStep[] = [
         {
           name: 'Checkout code',
           uses: 'actions/checkout@v3',
@@ -597,7 +603,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           run: 'yarn cdktf-synth',
         },
         awsCredsStep,
-      ].filter(x => x);
+      ].filter(x => x) as JobStep[];
       Object.assign(on, { pull_request: { } });
       new YamlFile(this, `.github/workflows/plan-apply-${env}.yml`, {
         obj: {
@@ -617,7 +623,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 latest_commit: '${{ steps.git_remote.outputs.latest_commit }}',
               },
               'steps': [
-                ...tfSetupSteps,
+                ...filterJobSteps(tfSetupSteps, 'main'),
                 {
                   name: 'Terraform plan',
                   env: {
@@ -640,7 +646,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   id: 'git_remote',
                   run: 'echo "latest_commit=$(git ls-remote origin -h ${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT',
                 },
-                ...(workflowSteps.postBuild ?? []),
+                ...filterJobSteps(workflowSteps.postBuild ?? [], 'main'),
                 {
                   'name': 'Backup artifact permissions',
                   'if': '\${{ steps.git_remote.outputs.latest_commit == github.sha }}',
@@ -694,13 +700,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
                   'continue-on-error': true,
                 },
                 awsCredsStep,
-                ...(workflowSteps.preDeploy ?? []),
+                ...filterJobSteps(workflowSteps.preDeploy ?? [], 'main'),
                 {
                   name: 'Terraform apply',
                   env: awsCredsEnvVars,
                   run: `cd ${artifactsFolder} && terraform apply ${env}.tfplan`,
                 },
-                ...(workflowSteps.postDeploy ?? []),
+                ...filterJobSteps(workflowSteps.postDeploy ?? [], 'main'),
               ],
             },
           },
@@ -746,7 +752,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                 'environment': `${env}-plan`,
                 'permissions': oidcPermissions,
                 'steps': [
-                  ...tfSetupSteps,
+                  ...filterJobSteps(tfSetupSteps, 'manual'),
                   {
                     name: 'Run Terraform command',
                     env: {
@@ -759,7 +765,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
                       `terraform -chdir=cdktf.out/stacks/${env} \${{ github.event.inputs.command }}`,
                     ].join('\n'),
                   },
-                  ...(workflowSteps.postBuild ?? []),
+                  ...filterJobSteps(workflowSteps.postBuild ?? [], 'manual'),
                 ],
               },
             },
@@ -921,4 +927,13 @@ function envVarListToGithubEnv(
     all[varName] = `\${{ ${varType}.${inclusionType == 'prefix' ? env.toUpperCase() + '_' : ''}${varName}${inclusionType == 'suffix' ? '_' + env.toUpperCase() : ''} }}`;
     return all;
   }, Object.assign({}));
+}
+
+function filterJobSteps(steps: JobStep[], workflowType: WorkflowType): GitHubJobStep[] {
+  return steps
+    .filter(step => !step.excludedWorkflows || !step.excludedWorkflows.includes(workflowType))
+    .map(step => {
+      const { excludedWorkflows, ...other } = step;
+      return other;
+    });
 }

@@ -4263,6 +4263,190 @@ public readonly vars: string[] | {[ key: string ]: string};
 
 ---
 
+### JobStep <a name="JobStep" id="@rlmartin-projen/cdktf-project.JobStep"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.JobStep.Initializer"></a>
+
+```typescript
+import { JobStep } from '@rlmartin-projen/cdktf-project'
+
+const jobStep: JobStep = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Sets environment variables for steps to use in the runner environment. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.id">id</a></code> | <code>string</code> | A unique identifier for the step. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.if">if</a></code> | <code>string</code> | You can use the if conditional to prevent a job from running unless a condition is met. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.name">name</a></code> | <code>string</code> | A name for your step to display on GitHub. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.workingDirectory">workingDirectory</a></code> | <code>string</code> | Specifies a working directory for a step. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.run">run</a></code> | <code>string</code> | Runs command-line programs using the operating system's shell. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.uses">uses</a></code> | <code>string</code> | Selects an action to run as part of a step in your job. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.with">with</a></code> | <code>{[ key: string ]: any}</code> | A map of the input parameters defined by the action. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.continueOnError">continueOnError</a></code> | <code>boolean</code> | Prevents a job from failing when a step fails. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.timeoutMinutes">timeoutMinutes</a></code> | <code>number</code> | The maximum number of minutes to run the step before killing the process. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.excludedWorkflows">excludedWorkflows</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@rlmartin-projen/cdktf-project.JobStep.property.env"></a>
+
+```typescript
+public readonly env: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Sets environment variables for steps to use in the runner environment.
+
+You can also set environment variables for the entire workflow or a job.
+
+---
+
+##### `id`<sup>Optional</sup> <a name="id" id="@rlmartin-projen/cdktf-project.JobStep.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+A unique identifier for the step.
+
+You can use the id to reference the
+step in contexts.
+
+---
+
+##### `if`<sup>Optional</sup> <a name="if" id="@rlmartin-projen/cdktf-project.JobStep.property.if"></a>
+
+```typescript
+public readonly if: string;
+```
+
+- *Type:* string
+
+You can use the if conditional to prevent a job from running unless a condition is met.
+
+You can use any supported context and expression to
+create a conditional.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@rlmartin-projen/cdktf-project.JobStep.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+A name for your step to display on GitHub.
+
+---
+
+##### `workingDirectory`<sup>Optional</sup> <a name="workingDirectory" id="@rlmartin-projen/cdktf-project.JobStep.property.workingDirectory"></a>
+
+```typescript
+public readonly workingDirectory: string;
+```
+
+- *Type:* string
+
+Specifies a working directory for a step.
+
+Overrides a job's working directory.
+
+---
+
+##### `run`<sup>Optional</sup> <a name="run" id="@rlmartin-projen/cdktf-project.JobStep.property.run"></a>
+
+```typescript
+public readonly run: string;
+```
+
+- *Type:* string
+
+Runs command-line programs using the operating system's shell.
+
+If you do
+not provide a name, the step name will default to the text specified in
+the run command.
+
+---
+
+##### `uses`<sup>Optional</sup> <a name="uses" id="@rlmartin-projen/cdktf-project.JobStep.property.uses"></a>
+
+```typescript
+public readonly uses: string;
+```
+
+- *Type:* string
+
+Selects an action to run as part of a step in your job.
+
+An action is a
+reusable unit of code. You can use an action defined in the same
+repository as the workflow, a public repository, or in a published Docker
+container image.
+
+---
+
+##### `with`<sup>Optional</sup> <a name="with" id="@rlmartin-projen/cdktf-project.JobStep.property.with"></a>
+
+```typescript
+public readonly with: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+A map of the input parameters defined by the action.
+
+Each input parameter
+is a key/value pair. Input parameters are set as environment variables.
+The variable is prefixed with INPUT_ and converted to upper case.
+
+---
+
+##### `continueOnError`<sup>Optional</sup> <a name="continueOnError" id="@rlmartin-projen/cdktf-project.JobStep.property.continueOnError"></a>
+
+```typescript
+public readonly continueOnError: boolean;
+```
+
+- *Type:* boolean
+
+Prevents a job from failing when a step fails.
+
+Set to true to allow a job
+to pass when this step fails.
+
+---
+
+##### `timeoutMinutes`<sup>Optional</sup> <a name="timeoutMinutes" id="@rlmartin-projen/cdktf-project.JobStep.property.timeoutMinutes"></a>
+
+```typescript
+public readonly timeoutMinutes: number;
+```
+
+- *Type:* number
+
+The maximum number of minutes to run the step before killing the process.
+
+---
+
+##### `excludedWorkflows`<sup>Optional</sup> <a name="excludedWorkflows" id="@rlmartin-projen/cdktf-project.JobStep.property.excludedWorkflows"></a>
+
+```typescript
+public readonly excludedWorkflows: string[];
+```
+
+- *Type:* string[]
+
+---
+
 ### S3Backend <a name="S3Backend" id="@rlmartin-projen/cdktf-project.S3Backend"></a>
 
 #### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.S3Backend.Initializer"></a>
@@ -4464,6 +4648,34 @@ Should not include 'name'.
 
 ---
 
+### WorkflowExcludable <a name="WorkflowExcludable" id="@rlmartin-projen/cdktf-project.WorkflowExcludable"></a>
+
+#### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.WorkflowExcludable.Initializer"></a>
+
+```typescript
+import { WorkflowExcludable } from '@rlmartin-projen/cdktf-project'
+
+const workflowExcludable: WorkflowExcludable = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowExcludable.property.excludedWorkflows">excludedWorkflows</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `excludedWorkflows`<sup>Optional</sup> <a name="excludedWorkflows" id="@rlmartin-projen/cdktf-project.WorkflowExcludable.property.excludedWorkflows"></a>
+
+```typescript
+public readonly excludedWorkflows: string[];
+```
+
+- *Type:* string[]
+
+---
+
 ### WorkflowInputOptions <a name="WorkflowInputOptions" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions"></a>
 
 #### Initializer <a name="Initializer" id="@rlmartin-projen/cdktf-project.WorkflowInputOptions.Initializer"></a>
@@ -4550,10 +4762,10 @@ const workflowSteps: WorkflowSteps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postBuild">postBuild</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
-| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postDeploy">postDeploy</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
-| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild">preBuild</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
-| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preDeploy">preDeploy</a></code> | <code>projen.github.workflows.JobStep[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postBuild">postBuild</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.postDeploy">postDeploy</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preBuild">preBuild</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]</code> | *No description.* |
+| <code><a href="#@rlmartin-projen/cdktf-project.WorkflowSteps.property.preDeploy">preDeploy</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]</code> | *No description.* |
 
 ---
 
@@ -4563,7 +4775,7 @@ const workflowSteps: WorkflowSteps = { ... }
 public readonly postBuild: JobStep[];
 ```
 
-- *Type:* projen.github.workflows.JobStep[]
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]
 
 ---
 
@@ -4573,7 +4785,7 @@ public readonly postBuild: JobStep[];
 public readonly postDeploy: JobStep[];
 ```
 
-- *Type:* projen.github.workflows.JobStep[]
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]
 
 ---
 
@@ -4583,7 +4795,7 @@ public readonly postDeploy: JobStep[];
 public readonly preBuild: JobStep[];
 ```
 
-- *Type:* projen.github.workflows.JobStep[]
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]
 
 ---
 
@@ -4593,7 +4805,7 @@ public readonly preBuild: JobStep[];
 public readonly preDeploy: JobStep[];
 ```
 
-- *Type:* projen.github.workflows.JobStep[]
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.JobStep">JobStep</a>[]
 
 ---
 
