@@ -148,8 +148,10 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
  * TODO: if broken out into a separate library, add these as peer dependencies.
  */
 export class WorkspaceFunction extends TaggedConstruct {
+  private _additionalPermissionsCount = 0;
   private func: LambdaFunction;
   functionName: string;
+  private _role: IamRole;
 
   constructor(scope: Construct, id: string, config: WorkspaceFunctionConfig) {
     super(scope, id, config);
@@ -234,7 +236,7 @@ export class WorkspaceFunction extends TaggedConstruct {
     });
     const managedPolicies = ['AWSLambdaBasicExecutionRole'];
     if (networking) managedPolicies.push('AWSLambdaVPCAccessExecutionRole');
-    const role = new IamRole(this, 'lambda-role', {
+    this._role = new IamRole(this, 'lambda-role', {
       name: this.functionName.length > IAM_ROLE_MAX_LENGTH ? undefined : this.functionName,
       namePrefix: this.functionName.length > IAM_ROLE_MAX_LENGTH ? namespace : undefined,
       assumeRolePolicy: assumeRolePolicy.json,
@@ -251,7 +253,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       new IamRolePolicy(this, 'additional-policy', {
         name: `${this.functionName}-policy`,
         policy: additionalPolicyDocument.json,
-        role: role.name,
+        role: this._role.name,
       });
     }
 
@@ -259,7 +261,7 @@ export class WorkspaceFunction extends TaggedConstruct {
     this.func = new LambdaFunction(this, 'function', {
       functionName: this.functionName,
       runtime: runtime.functionRuntime,
-      role: role.arn,
+      role: this._role.arn,
       handler,
       filename: localWorkspaceDist.filePath,
       environment: {
@@ -286,6 +288,18 @@ export class WorkspaceFunction extends TaggedConstruct {
         assumeEventBridgeOn: true,
       });
     }
+  }
+
+  addPermissions(permissions: DataAwsIamPolicyDocumentStatement[]) {
+    this._additionalPermissionsCount++;
+    const policyDocument = new DataAwsIamPolicyDocument(this, `additional-policy-document-${this._additionalPermissionsCount}`, {
+      statement: permissions,
+    });
+    new IamRolePolicy(this, 'additional-policy', {
+      name: `${this.functionName}-policy-${this._additionalPermissionsCount}`,
+      policy: policyDocument.json,
+      role: this._role.name,
+    });
   }
 
   // To use if need to force dependency mapping
