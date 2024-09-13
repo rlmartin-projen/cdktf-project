@@ -1,21 +1,3 @@
-# cdktf-project
-This is a [projen](https://github.com/projen/projen) project template to manage CDKTF repositories. Please see the [API](./API.md) for documentation.
-
-## Requirements
-CDKTF supports only certain versions of Node (`^19.0.0`, `^16.3.0`, `^18.0.0`) and will show unexpected errors in other versions of Node. As such, make sure your local environment is using one of these versions when running projen. `18.0.0` has the farthest EOL at `2025-04-30`.
-
-## Usage
-```
-nvm use 18
-npx projen new \
-  --from @rlmartin-projen/cdktf-project@~0 \
-  --projenrc-ts
-```
-
-## Warnings
-### .github/settings.yml
-This template will generate configuration in `.github/settings.yml` to attempt to manage [protected branches](https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28) and [deployment environments](https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28). Both of these features are available to only _public repositories_ or _public and private repositories on paid plans_. If you are using this project template on a _free, private repository_, you should not expect the protected branch or deployment environment configuration in `.github/settings.yml` to have any effect.
-
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
@@ -1658,7 +1640,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseTrigger">releaseTrigger</a></code> | <code>projen.release.ReleaseTrigger</code> | The release trigger to use. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowName">releaseWorkflowName</a></code> | <code>string</code> | The name of the default release workflow. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowSetupSteps">releaseWorkflowSetupSteps</a></code> | <code>projen.github.workflows.JobStep[]</code> | A set of workflow steps to execute in order to setup the workflow container. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.versionrcOptions">versionrcOptions</a></code> | <code>{[ key: string ]: any}</code> | Custom configuration used when creating changelog with standard-version package. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.versionrcOptions">versionrcOptions</a></code> | <code>{[ key: string ]: any}</code> | Custom configuration used when creating changelog with commit-and-tag-version package. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowContainerImage">workflowContainerImage</a></code> | <code>string</code> | Container image to use for GitHub workflows. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowRunsOn">workflowRunsOn</a></code> | <code>string[]</code> | Github Runner selection labels. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowRunsOnGroup">workflowRunsOnGroup</a></code> | <code>projen.GroupRunnerOptions</code> | Github Runner Group selection options. |
@@ -2990,7 +2972,7 @@ public readonly versionrcOptions: {[ key: string ]: any};
 - *Type:* {[ key: string ]: any}
 - *Default:* standard configuration applicable for GitHub repositories
 
-Custom configuration used when creating changelog with standard-version package.
+Custom configuration used when creating changelog with commit-and-tag-version package.
 
 Given values either append to default configuration or overwrite values in it.
 
