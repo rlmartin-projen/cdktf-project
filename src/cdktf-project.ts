@@ -461,7 +461,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     const environments: GitHubEnvironment[] = [];
     const setupNodeStep = {
       name: 'Setup Node.js',
-      uses: 'actions/setup-node@v3',
+      uses: 'actions/setup-node@v4',
       with: {
         'node-version': workflowNodeVersion,
       },
@@ -548,7 +548,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
         };
         awsCredsStep = {
           name: 'Configure AWS Credentials',
-          uses: 'aws-actions/configure-aws-credentials@v2',
+          uses: 'aws-actions/configure-aws-credentials@v4',
           with: {
             'aws-region': region,
             // TODO: Move this into environment-level variables once this Settings App is implemented:
@@ -566,12 +566,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
       const tfSetupSteps: JobStep[] = [
         {
           name: 'Checkout code',
-          uses: 'actions/checkout@v3',
+          uses: 'actions/checkout@v4',
         },
         setupNodeStep,
         npmrcStep,
         {
-          uses: 'hashicorp/setup-terraform@v2',
+          uses: 'hashicorp/setup-terraform@v3',
           with: {
             terraform_version: terraformVersion,
             terraform_wrapper: false,
@@ -677,7 +677,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'steps': [
                 setupNodeStep,
                 {
-                  uses: 'hashicorp/setup-terraform@v2',
+                  uses: 'hashicorp/setup-terraform@v3',
                   with: {
                     terraform_version: terraformVersion,
                     terraform_wrapper: false,
