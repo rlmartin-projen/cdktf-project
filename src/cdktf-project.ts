@@ -904,7 +904,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
     });
     Object.entries({
       build: 'tsc --build',
-      eslint: `eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern ${rootDir} test`,
       test: 'jest --passWithNoTests --updateSnapshot',
       prepackage: '$npm_execpath run test && $npm_execpath run eslint',
       package: '$npm_execpath run build',
