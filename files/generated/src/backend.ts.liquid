@@ -8,6 +8,8 @@ export const pushBackend = <T>(scope: Construct, env: Environment<T>) => {
     key: `{{ _name.kebab }}/${env}/terraform.tfstate`,
     region: '{{ terraformBackend.aws.region }}',
     dynamodbTable: '{{ terraformBackend.aws.prefix }}-terraform-state',
-    roleArn: 'arn:aws:iam::{{ terraformBackend.aws.accountId }}:role/{{ terraformBackend.aws.prefix }}-terraform-state',
+    assumeRole: {
+      roleArn: 'arn:aws:iam::{{ terraformBackend.aws.accountId }}:role/{{ terraformBackend.aws.prefix }}-terraform-state',
+    },
   });
 };
