@@ -22,6 +22,13 @@ export interface EventTriggers {
   readonly s3Buckets?: string[];
 }
 
+interface ExternalSecret {
+  /**
+   * Set this to use a secret that is managed by other infra.
+   */
+  readonly arn: string;
+}
+
 export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   /**
    * Non-standard IAM policy statements to inject into the function's role.
@@ -104,7 +111,7 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
      * Set to true if the secret value will change outside of this infra.
      */
     readonly ignoreChanges?: boolean;
-  };
+  } | ExternalSecret;
   /**
    * The maximum number of seconds the function can run for.
    * @default 30
@@ -143,6 +150,10 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
   readonly workspacePath?: string;
 }
 
+export function isExternalSecret(obj: any): obj is ExternalSecret {
+  return (obj as ExternalSecret).arn !== undefined;
+}
+
 /**
  * Required providers: aws, archive
  * TODO: if broken out into a separate library, add these as peer dependencies.
@@ -152,6 +163,7 @@ export class WorkspaceFunction extends TaggedConstruct {
   private func: LambdaFunction;
   functionName: string;
   private _role: IamRole;
+  private _secretArn: string | undefined = undefined;
 
   constructor(scope: Construct, id: string, config: WorkspaceFunctionConfig) {
     super(scope, id, config);
@@ -188,22 +200,27 @@ export class WorkspaceFunction extends TaggedConstruct {
 
     const functionPermissions: DataAwsIamPolicyDocumentStatement[] = [];
     if (secretConfig) {
-      const secret = new SecretsmanagerSecret(this, 'secret', {
-        name: this.functionName,
-      });
+      if (isExternalSecret(secretConfig)) {
+        this._secretArn = secretConfig.arn;
+      } else {
+        const secret = new SecretsmanagerSecret(this, 'secret', {
+          name: this.functionName,
+        });
+        this._secretArn = secret.arn;
+        if (secretConfig.value) {
+          const lifecycle = secretConfig.ignoreChanges ? { ignoreChanges: ['secret_string'] } : undefined;
+          new SecretsmanagerSecretVersion(this, 'secret-value', {
+            secretId: secret.id,
+            secretString: secretConfig.value,
+            lifecycle,
+          });
+        }
+      }
       functionPermissions.push({
         effect: 'Allow',
         actions: ['secretsmanager:GetSecretValue'],
-        resources: [secret.arn],
+        resources: [this._secretArn],
       });
-      if (secretConfig.value) {
-        const lifecycle = secretConfig.ignoreChanges ? { ignoreChanges: ['secret_string'] } : undefined;
-        new SecretsmanagerSecretVersion(this, 'secret-value', {
-          secretId: secret.id,
-          secretString: secretConfig.value,
-          lifecycle,
-        });
-      }
     }
     if (triggers.s3Buckets && triggers.s3Buckets.length > 0) {
       functionPermissions.push({
@@ -311,5 +328,9 @@ export class WorkspaceFunction extends TaggedConstruct {
 
   get functionArn() {
     return this.func.arn;
+  }
+
+  get secretArn(): string | undefined {
+    return this._secretArn;
   }
 }
