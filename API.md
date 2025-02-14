@@ -1599,6 +1599,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bugsEmail">bugsEmail</a></code> | <code>string</code> | The email address to which issues should be reported. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bugsUrl">bugsUrl</a></code> | <code>string</code> | The url to your project's issue tracker. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bundledDeps">bundledDeps</a></code> | <code>string[]</code> | List of dependencies to bundle into this module. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bunVersion">bunVersion</a></code> | <code>string</code> | The version of Bun to use if using Bun as a package manager. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeArtifactOptions">codeArtifactOptions</a></code> | <code>projen.javascript.CodeArtifactOptions</code> | Options for npm packages using AWS CodeArtifact. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.deps">deps</a></code> | <code>string[]</code> | Runtime dependencies of this module. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.description">description</a></code> | <code>string</code> | The description is just a string that helps people understand the purpose of the package. |
@@ -2283,6 +2284,19 @@ this will be what you `package.json` will eventually include.
 
 ---
 
+##### `bunVersion`<sup>Optional</sup> <a name="bunVersion" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bunVersion"></a>
+
+```typescript
+public readonly bunVersion: string;
+```
+
+- *Type:* string
+- *Default:* "latest"
+
+The version of Bun to use if using Bun as a package manager.
+
+---
+
 ##### `codeArtifactOptions`<sup>Optional</sup> <a name="codeArtifactOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeArtifactOptions"></a>
 
 ```typescript
@@ -2631,7 +2645,7 @@ public readonly pnpmVersion: string;
 ```
 
 - *Type:* string
-- *Default:* "7"
+- *Default:* "9"
 
 The version of PNPM to use if using PNPM as a package manager.
 
