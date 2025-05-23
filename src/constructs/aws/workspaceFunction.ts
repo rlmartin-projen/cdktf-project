@@ -207,7 +207,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         const secretLookup = new DataAwsSecretsmanagerSecret(this, 'lookup-secret', {
           arn: secretConfig.arn,
         });
-        additionalEnvVars['SECRET_NAME'] = secretLookup.name;
+        additionalEnvVars.SECRET_NAME = secretLookup.name;
       } else {
         const secret = new SecretsmanagerSecret(this, 'secret', {
           name: this.functionName,
@@ -291,7 +291,7 @@ export class WorkspaceFunction extends TaggedConstruct {
         variables: {
           ...envVars,
           ...additionalEnvVars,
-        }
+        },
       },
       deadLetterConfig: dlqArn ? {
         targetArn: dlqArn,
