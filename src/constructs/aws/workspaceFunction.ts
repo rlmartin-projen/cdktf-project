@@ -12,6 +12,7 @@ import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 import { WorkspaceDist } from './workspaceDist';
+import { DataAwsSecretsmanagerSecret } from '@cdktf/provider-aws/lib/data-aws-secretsmanager-secret';
 
 const IAM_ROLE_MAX_LENGTH = 64;
 
@@ -191,6 +192,7 @@ export class WorkspaceFunction extends TaggedConstruct {
     if (!workspaceDist && !workspacePath) throw new Error('Please specify one of [workspaceDist, workspacePath');
     const pathFileName = workspacePath ? path.parse(workspacePath).name : workspaceDist!.name;
     this.functionName = nameOverride ?? `${namespace}-${pathFileName}${nameSuffix ? '-' + nameSuffix : ''}`;
+    const additionalEnvVars: { [key: string]: string } = {};
 
     new CloudwatchLogGroup(this, 'log-group', {
       name: `/aws/lambda/${this.functionName}`,
@@ -202,6 +204,10 @@ export class WorkspaceFunction extends TaggedConstruct {
     if (secretConfig) {
       if (isExternalSecret(secretConfig)) {
         this._secretArn = secretConfig.arn;
+        const secretLookup = new DataAwsSecretsmanagerSecret(this, 'lookup-secret', {
+          arn: secretConfig.arn,
+        });
+        additionalEnvVars['SECRET_NAME'] = secretLookup.name;
       } else {
         const secret = new SecretsmanagerSecret(this, 'secret', {
           name: this.functionName,
@@ -282,7 +288,10 @@ export class WorkspaceFunction extends TaggedConstruct {
       handler,
       filename: localWorkspaceDist.filePath,
       environment: {
-        variables: envVars,
+        variables: {
+          ...envVars,
+          ...additionalEnvVars,
+        }
       },
       deadLetterConfig: dlqArn ? {
         targetArn: dlqArn,
