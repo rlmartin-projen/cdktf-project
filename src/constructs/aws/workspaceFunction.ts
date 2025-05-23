@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { CloudwatchLogGroup } from '@cdktf/provider-aws/lib/cloudwatch-log-group';
 import { DataAwsIamPolicyDocument, DataAwsIamPolicyDocumentStatement } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
+import { DataAwsSecretsmanagerSecret } from '@cdktf/provider-aws/lib/data-aws-secretsmanager-secret';
 import { IamRole } from '@cdktf/provider-aws/lib/iam-role';
 import { IamRolePolicy } from '@cdktf/provider-aws/lib/iam-role-policy';
 import { LambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
@@ -12,7 +13,6 @@ import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 import { WorkspaceDist } from './workspaceDist';
-import { DataAwsSecretsmanagerSecret } from '@cdktf/provider-aws/lib/data-aws-secretsmanager-secret';
 
 const IAM_ROLE_MAX_LENGTH = 64;
 
