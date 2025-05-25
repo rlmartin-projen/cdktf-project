@@ -87,7 +87,7 @@ export interface EmbeddedPackage {
 
 interface GitHubEnvironmentReviewer {
   readonly id: number;
-  readonly 'type': 'User' | 'Team';
+  readonly type: 'User' | 'Team';
 }
 
 interface GitHubEnvironment {
@@ -415,7 +415,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       Object.keys(options.nodeScripts).forEach(name => this.setScript(name, options.nodeScripts![name]));
     }
 
-    const tfModules: Array<{name: string; source: string}> = [];
+    const tfModules: Array<{ name: string; source: string }> = [];
     terraformModules.forEach(module => {
       let sourceBase = terraformModulesSsh ? `git@github.com:${module.githubOrgName}` : `https://github.com/${module.githubOrgName}`;
 
@@ -914,12 +914,12 @@ export class CdktfProject extends typescript.TypeScriptProject {
 }
 
 function envVarListToGithubEnv(
-  list: string[] | { [key: string]: EnvNameInclusion} | undefined,
+  list: string[] | { [key: string]: EnvNameInclusion } | undefined,
   env: string,
   varType: 'secrets' | 'vars',
 ): object {
   const varMap = Array.isArray(list)
-    ? list.reduce((all, varName) => { all[varName] = 'none'; return all; }, Object.assign({}) as { [key: string]: EnvNameInclusion})
+    ? list.reduce((all, varName) => { all[varName] = 'none'; return all; }, Object.assign({}) as { [key: string]: EnvNameInclusion })
     : list ?? {}
   ;
   return Object.entries(varMap).reduce((all, [varName, inclusionType]) => {
