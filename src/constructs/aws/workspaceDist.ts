@@ -57,11 +57,11 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get s3Bucket(): string {
-    return this.maxSizeTernary(Token.asString, '', Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'bucket'));
+    return this.maxSizeTernary(Token.asString, Token.nullValue(), Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'bucket'));
   }
 
   get s3ObjectKey(): string {
-    return this.maxSizeTernary(Token.asString, '', Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'key'));
+    return this.maxSizeTernary(Token.asString, Token.nullValue(), Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'key'));
   }
 
   private maxSizeTernary<T>(tokenFunc: (obj: any) => T, trueValue: T, falseValue: T): T {
