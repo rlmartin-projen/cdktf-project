@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
-import { TerraformAsset } from 'cdktf';
+import { conditional, Op, TerraformAsset, Token } from 'cdktf';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 
@@ -23,7 +23,8 @@ const LAMBDA_MAX_UPLOAD_SIZE = 70167211;
 export class WorkspaceDist extends TaggedConstruct {
   private assetFile: DataArchiveFile;
   private assetFileName: string;
-  private assetS3File: S3Object | undefined;
+  private assetS3File: S3Object;
+  private countOfS3Files: number; // 0 or 1
 
   constructor(scope: Construct, id: string, config: WorkspaceDistConfig) {
     super(scope, id, config);
@@ -38,28 +39,28 @@ export class WorkspaceDist extends TaggedConstruct {
       outputPath: `${assetDir.path}/../dist.zip`,
       type: 'zip',
     });
-    if (this.assetFile.outputSize > LAMBDA_MAX_UPLOAD_SIZE) {
-      this.assetS3File = new S3Object(this, 's3-object', {
-        bucket: s3BucketName,
-        key: `${this.assetFile.outputMd5}.zip`,
-        source: this.assetFile.outputPath,
-      });
-    }
+    this.countOfS3Files = Token.asNumber(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), 1, 0));
+    this.assetS3File = new S3Object(this, 's3-object', {
+      bucket: s3BucketName,
+      count: this.countOfS3Files,
+      key: `${this.assetFile.outputMd5}.zip`,
+      source: this.assetFile.outputPath,
+    });
   }
 
   get filePath(): string {
-    return this.assetFile.outputPath;
+    return Token.asString(conditional(this.countOfS3Files === 0, this.assetFile.outputPath, Token.nullValue));
   }
 
   get name(): string {
     return this.assetFileName;
   }
 
-  get s3Bucket(): string | undefined {
-    return this.assetS3File?.bucket;
+  get s3Bucket(): string {
+    return Token.asString(conditional(this.countOfS3Files === 0, Token.nullValue, this.assetS3File.bucket));
   }
 
-  get s3ObjectKey(): string | undefined {
-    return this.assetS3File?.keyInput;
+  get s3ObjectKey(): string {
+    return Token.asString(conditional(this.countOfS3Files === 0, Token.nullValue, this.assetS3File.keyInput));
   }
 }

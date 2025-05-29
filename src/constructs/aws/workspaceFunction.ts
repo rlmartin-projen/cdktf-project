@@ -297,8 +297,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       runtime: runtime.functionRuntime,
       role: this._role.arn,
       handler,
-      // Don't specify a file to upload, if the file ends up in S3.
-      filename: localWorkspaceDist.s3Bucket ? undefined : localWorkspaceDist.filePath,
+      filename: localWorkspaceDist.filePath,
       s3Bucket: localWorkspaceDist.s3Bucket,
       s3Key: localWorkspaceDist.s3ObjectKey,
       environment: {
