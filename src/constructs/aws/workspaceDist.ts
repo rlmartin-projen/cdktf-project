@@ -3,6 +3,7 @@ import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import { TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
+import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
 
 export interface WorkspaceDistConfig extends TaggedConstructConfig {
   /**
@@ -10,15 +11,23 @@ export interface WorkspaceDistConfig extends TaggedConstructConfig {
    * subdirectory that includes compiled code to zip.
    */
   readonly workspacePath: string;
+  /**
+   * If the zipped file is too large for a direct upload to Lambda, it will get uploaded
+   * first to S3 into this bucket.
+   */
+  readonly s3BucketName: string;
 }
+
+const LAMBDA_MAX_UPLOAD_SIZE = 70167211;
 
 export class WorkspaceDist extends TaggedConstruct {
   private assetFile: DataArchiveFile;
   private assetFileName: string;
+  private assetS3File: S3Object | undefined;
 
   constructor(scope: Construct, id: string, config: WorkspaceDistConfig) {
     super(scope, id, config);
-    const { workspacePath } = config;
+    const { workspacePath, s3BucketName } = config;
     this.assetFileName = path.parse(workspacePath).name;
 
     const assetDir = new TerraformAsset(this, 'code-directory', {
@@ -29,6 +38,13 @@ export class WorkspaceDist extends TaggedConstruct {
       outputPath: `${assetDir.path}/../dist.zip`,
       type: 'zip',
     });
+    if (this.assetFile.outputSize > LAMBDA_MAX_UPLOAD_SIZE) {
+      this.assetS3File = new S3Object(this, 's3-object', {
+        bucket: s3BucketName,
+        key: `${this.assetFile.outputMd5}.zip`,
+        source: this.assetFile.outputPath,
+      });
+    }
   }
 
   get filePath(): string {
@@ -37,5 +53,13 @@ export class WorkspaceDist extends TaggedConstruct {
 
   get name(): string {
     return this.assetFileName;
+  }
+
+  get s3Bucket(): string | undefined {
+    return this.assetS3File?.bucket;
+  }
+
+  get s3ObjectKey(): string | undefined {
+    return this.assetS3File?.keyInput;
   }
 }
