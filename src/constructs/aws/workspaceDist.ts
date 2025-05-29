@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
-import { conditional, Op, TerraformAsset, Token } from 'cdktf';
+import { conditional, Fn, Op, TerraformAsset, Token } from 'cdktf';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 
@@ -57,11 +57,11 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get s3Bucket(): string {
-    return this.maxSizeTernary(Token.asString, '', this.assetS3File.bucket);
+    return this.maxSizeTernary(Token.asString, '', Fn.element(this.assetS3File, 0).bucket);
   }
 
   get s3ObjectKey(): string {
-    return this.maxSizeTernary(Token.asString, '', this.assetS3File.key);
+    return this.maxSizeTernary(Token.asString, '', Fn.element(this.assetS3File, 0).key);
   }
 
   private maxSizeTernary<T>(tokenFunc: (obj: any) => T, trueValue: T, falseValue: T): T {
