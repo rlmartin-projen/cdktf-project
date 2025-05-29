@@ -65,6 +65,6 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   private maxSizeTernary<T>(tokenFunc: (obj: any) => T, trueValue: T, falseValue: T): T {
-    return tokenFunc(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), trueValue, falseValue))
+    return tokenFunc(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), trueValue, falseValue));
   }
 }
