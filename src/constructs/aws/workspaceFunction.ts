@@ -30,7 +30,7 @@ interface ExternalSecret {
   readonly arn: string;
 }
 
-export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
+interface WorkspaceFunctionBaseConfig extends TaggedConstructConfig {
   /**
    * Non-standard IAM policy statements to inject into the function's role.
    * Optional
@@ -124,6 +124,24 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    * @default - {}
    */
   readonly triggers?: EventTriggers;
+}
+
+interface WorkspaceFunctionConfigWithPath extends WorkspaceFunctionBaseConfig {
+  /**
+   * If the zipped file is too large for a direct upload to Lambda, it will get uploaded
+   * first to S3 into this bucket.
+   */
+  readonly s3BucketName: string;
+  /**
+   * The absolute path to the workspace where the code is. Assumes a 'dist'
+   * subdirectory that includes compiled code to zip.
+   *
+   * This option is mutually-exclusive from workspaceDist above, with exactly one
+   * of the two required.
+   */
+  readonly workspacePath: string;
+}
+interface WorkspaceFunctionConfigWithDist extends WorkspaceFunctionBaseConfig {
   /**
    * The absolute path to the zip file in the assets directory where the function
    * code can be found. Assume use of TerraformAsset to ensure that the file
@@ -140,15 +158,12 @@ export interface WorkspaceFunctionConfig extends TaggedConstructConfig {
    * This option is mutually-exclusive from workspacePath below, with exactly one
    * of the two required.
    */
-  readonly workspaceDist?: WorkspaceDist;
-  /**
-   * The absolute path to the workspace where the code is. Assumes a 'dist'
-   * subdirectory that includes compiled code to zip.
-   *
-   * This option is mutually-exclusive from workspaceDist above, with exactly one
-   * of the two required.
-   */
-  readonly workspacePath?: string;
+  readonly workspaceDist: WorkspaceDist;
+}
+
+export type WorkspaceFunctionConfig = WorkspaceFunctionConfigWithDist | WorkspaceFunctionConfigWithPath;
+export function hasDist(obj: any): obj is WorkspaceFunctionConfigWithDist {
+  return (obj as WorkspaceFunctionConfigWithDist).workspaceDist !== undefined;
 }
 
 export function isExternalSecret(obj: any): obj is ExternalSecret {
@@ -185,12 +200,8 @@ export class WorkspaceFunction extends TaggedConstruct {
       tags,
       timeout = 30,
       triggers = {},
-      workspaceDist,
-      workspacePath,
     } = config;
-    if (workspaceDist && workspacePath) throw new Error('Please specify only one of [workspaceDist, workspacePath');
-    if (!workspaceDist && !workspacePath) throw new Error('Please specify one of [workspaceDist, workspacePath');
-    const pathFileName = workspacePath ? path.parse(workspacePath).name : workspaceDist!.name;
+    const pathFileName = hasDist(config) ? config.workspaceDist!.name : path.parse(config.workspacePath).name;
     this.functionName = nameOverride ?? `${namespace}-${pathFileName}${nameSuffix ? '-' + nameSuffix : ''}`;
     const additionalEnvVars: { [key: string]: string } = {};
 
@@ -280,13 +291,15 @@ export class WorkspaceFunction extends TaggedConstruct {
       });
     }
 
-    const localWorkspaceDist = workspaceDist ?? new WorkspaceDist(this, 'file-dist', { workspacePath: workspacePath! });
+    const localWorkspaceDist = hasDist(config) ? config.workspaceDist : new WorkspaceDist(this, 'file-dist', { workspacePath: config.workspacePath, s3BucketName: config.s3BucketName });
     this.func = new LambdaFunction(this, 'function', {
       functionName: this.functionName,
       runtime: runtime.functionRuntime,
       role: this._role.arn,
       handler,
       filename: localWorkspaceDist.filePath,
+      s3Bucket: localWorkspaceDist.s3Bucket,
+      s3Key: localWorkspaceDist.s3ObjectKey,
       environment: {
         variables: {
           ...envVars,
