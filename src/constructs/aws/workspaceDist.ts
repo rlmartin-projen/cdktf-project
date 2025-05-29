@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
-import { conditional, Fn, Op, propertyAccess, TerraformAsset, Token } from 'cdktf';
+import { TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 
@@ -12,19 +12,17 @@ export interface WorkspaceDistConfig extends TaggedConstructConfig {
    */
   readonly workspacePath: string;
   /**
-   * If the zipped file is too large for a direct upload to Lambda, it will get uploaded
-   * first to S3 into this bucket.
+   * If provided, the dist file will get uploaded into this S3 bucket.
+   * This is useful if you run into status code 413 RequestEntityTooLargeException errors
+   * when creating the Lambda function.
    */
-  readonly s3BucketName: string;
+  readonly s3BucketName?: string;
 }
-
-const LAMBDA_MAX_UPLOAD_SIZE = 70167211;
 
 export class WorkspaceDist extends TaggedConstruct {
   private assetFile: DataArchiveFile;
   private assetFileName: string;
-  private assetS3File: S3Object;
-  private countOfS3Files: number; // 0 or 1
+  private assetS3File: S3Object | undefined;
 
   constructor(scope: Construct, id: string, config: WorkspaceDistConfig) {
     super(scope, id, config);
@@ -39,32 +37,29 @@ export class WorkspaceDist extends TaggedConstruct {
       outputPath: `${assetDir.path}/../dist.zip`,
       type: 'zip',
     });
-    this.countOfS3Files = this.maxSizeTernary(Token.asNumber, 1, 0);
-    this.assetS3File = new S3Object(this, 's3-object', {
-      bucket: s3BucketName,
-      count: this.countOfS3Files,
-      key: `${this.assetFile.outputMd5}.zip`,
-      source: this.assetFile.outputPath,
-    });
+    if (s3BucketName) {
+      this.assetS3File = new S3Object(this, 's3-object', {
+        bucket: s3BucketName,
+        key: `${this.assetFile.outputMd5}.zip`,
+        source: this.assetFile.outputPath,
+      });
+    }
   }
 
-  get filePath(): string {
-    return this.maxSizeTernary(Token.asString, this.assetFile.outputPath, '');
+  get filePath(): string | undefined {
+    // Mutually-exclusive with s3 configuration properties
+    return this.assetS3File === undefined ? this.assetFile.outputPath : undefined;
   }
 
   get name(): string {
     return this.assetFileName;
   }
 
-  get s3Bucket(): string {
-    return this.maxSizeTernary(Token.asString, Token.nullValue(), Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'bucket'));
+  get s3Bucket(): string | undefined {
+    return this.assetS3File?.bucket;
   }
 
-  get s3ObjectKey(): string {
-    return this.maxSizeTernary(Token.asString, Token.nullValue(), Fn.lookup(propertyAccess(this.assetS3File.fqn, [0]), 'key'));
-  }
-
-  private maxSizeTernary<T>(tokenFunc: (obj: any) => T, trueValue: T, falseValue: T): T {
-    return tokenFunc(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), trueValue, falseValue));
+  get s3ObjectKey(): string | undefined {
+    return this.assetS3File?.key;
   }
 }
