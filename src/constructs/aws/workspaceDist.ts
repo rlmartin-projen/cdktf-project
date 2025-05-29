@@ -39,7 +39,7 @@ export class WorkspaceDist extends TaggedConstruct {
       outputPath: `${assetDir.path}/../dist.zip`,
       type: 'zip',
     });
-    this.countOfS3Files = Token.asNumber(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), 1, 0));
+    this.countOfS3Files = this.maxSizeTernary(Token.asNumber, 1, 0);
     this.assetS3File = new S3Object(this, 's3-object', {
       bucket: s3BucketName,
       count: this.countOfS3Files,
@@ -49,7 +49,7 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get filePath(): string {
-    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), this.assetFile.outputPath, ''));
+    return this.maxSizeTernary(Token.asString, this.assetFile.outputPath, '');
   }
 
   get name(): string {
@@ -57,10 +57,14 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get s3Bucket(): string {
-    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), '', this.assetS3File.bucket));
+    return this.maxSizeTernary(Token.asString, '', this.assetS3File.bucket);
   }
 
   get s3ObjectKey(): string {
-    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), '', this.assetS3File.keyInput));
+    return this.maxSizeTernary(Token.asString, '', this.assetS3File.key);
+  }
+
+  private maxSizeTernary<T>(tokenFunc: (obj: any) => T, trueValue: T, falseValue: T): T {
+    return tokenFunc(conditional(Op.gt(this.assetFile.outputSize, LAMBDA_MAX_UPLOAD_SIZE), trueValue, falseValue))
   }
 }
