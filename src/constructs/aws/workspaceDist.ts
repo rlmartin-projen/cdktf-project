@@ -49,7 +49,7 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get filePath(): string {
-    return Token.asString(conditional(this.countOfS3Files === 0, this.assetFile.outputPath, ''));
+    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), this.assetFile.outputPath, ''));
   }
 
   get name(): string {
@@ -57,10 +57,10 @@ export class WorkspaceDist extends TaggedConstruct {
   }
 
   get s3Bucket(): string {
-    return Token.asString(conditional(this.countOfS3Files === 0, '', this.assetS3File.bucket));
+    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), '', this.assetS3File.bucket));
   }
 
   get s3ObjectKey(): string {
-    return Token.asString(conditional(this.countOfS3Files === 0, '', this.assetS3File.keyInput));
+    return Token.asString(conditional(Op.eq(this.countOfS3Files, 0), '', this.assetS3File.keyInput));
   }
 }
