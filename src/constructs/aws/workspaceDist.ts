@@ -1,9 +1,9 @@
 import * as path from 'path';
 import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
+import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
 import { TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
-import { S3Object } from '@cdktf/provider-aws/lib/s3-object';
 
 export interface WorkspaceDistConfig extends TaggedConstructConfig {
   /**
