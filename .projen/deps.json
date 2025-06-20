@@ -99,6 +99,16 @@
       "type": "build"
     },
     {
+      "name": "@cdktf/provider-archive",
+      "version": "~10",
+      "type": "bundled"
+    },
+    {
+      "name": "@cdktf/provider-aws",
+      "version": "~19",
+      "type": "bundled"
+    },
+    {
       "name": "liquidjs",
       "version": "~10",
       "type": "bundled"
@@ -112,16 +122,6 @@
       "name": "projen",
       "version": "~0",
       "type": "peer"
-    },
-    {
-      "name": "@cdktf/provider-archive",
-      "version": "~10",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-aws",
-      "version": "~19",
-      "type": "runtime"
     },
     {
       "name": "@rlmartin-projen/projen-project",

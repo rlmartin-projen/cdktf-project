@@ -71,6 +71,8 @@
     "projen": "~0"
   },
   "bundledDependencies": [
+    "@cdktf/provider-archive",
+    "@cdktf/provider-aws",
     "liquidjs"
   ],
   "engines": {
