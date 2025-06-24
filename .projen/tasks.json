@@ -207,7 +207,7 @@
       "description": "Prepare a release from \"main\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "5"
+        "MAJOR": "6"
       },
       "steps": [
         {
@@ -232,7 +232,7 @@
       "description": "Prepare a release from \"dev\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "5",
+        "MAJOR": "6",
         "PRERELEASE": "dev"
       },
       "steps": [

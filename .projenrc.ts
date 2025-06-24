@@ -2,7 +2,7 @@ import { ProjenProject } from '@rlmartin-projen/projen-project';
 import { NpmAccess } from 'projen/lib/javascript';
 import { sharedDeps } from './src/cdktf-project';
 
-const majorVersion = 5;
+const majorVersion = 6;
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
