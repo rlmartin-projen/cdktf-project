@@ -1,7 +1,7 @@
 import { SsmParameter } from '@cdktf/provider-aws/lib/ssm-parameter';
-import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 import { Fn, TerraformOutput } from 'cdktf';
 import { Construct } from 'constructs';
+import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 
 type ParameterType = 'String' | 'StringList' | 'SecureString';
 
