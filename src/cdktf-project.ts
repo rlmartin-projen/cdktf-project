@@ -274,14 +274,14 @@ export interface CdktfProjectOptions extends typescript.TypeScriptProjectOptions
   readonly terraformModulesSsh?: boolean;
 
   /**
-   * List of Terraform variables to pull from GitHub secrets and set as TF_VAR_
+   * List of Terraform variables to pull from GitHub secrets/vars and set as TF_VAR_
    * environment variables during terraform plan. The secrets will need to be set
    * manually, on one of org/repo/environment. The name of the var is expected to
    * not include the TF_VAR_ prefix.
    *
    * @default - []
    */
-  readonly terraformVars?: string[];
+  readonly terraformVars?: EnvVars;
 
   /**
    * The Terraform version to use in the build pipelines.
@@ -325,7 +325,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       terraformProviders = [],
       terraformManualWorkflow = false,
       terraformModulesSsh = false,
-      terraformVars = [],
+      terraformVars = {},
       terraformVersion = 'latest',
       workflowNodeVersion = nodeVersion.toString(),
       workflowEnvVars = {},
@@ -496,13 +496,11 @@ export class CdktfProject extends typescript.TypeScriptProject {
     //     }
     //   }
     // });
-    const tfVars = cleanArray(terraformVars).reduce((all, current) => {
-      // GITHUB_ is a reserved prefix for secrets
-      const currentEscaped = current.match(/^GITHUB_/) ? `_${current}` : current;
-      all[`TF_VAR_${current}`] = `\${{ secrets.${currentEscaped} }}`;
-      return all;
-    }, Object.assign({}));
     Object.entries(deploymentEnvironments).map(([env, config]) => {
+      const tfVars = {
+        ...envVarListToGithubEnv(terraformVars?.secrets, env, 'secrets', true),
+        ...envVarListToGithubEnv(terraformVars?.vars, env, 'vars', true),
+      };
       const { branchFilters, onlyProtectedBranches, region = 'us-east-1', useOidc = false } = config;
       if (onlyProtectedBranches !== undefined && branchFilters !== undefined) throw new Error(`Please set either branchFilters OR onlyProtectedBranches for ${env}, not both.`);
       environments.push({
@@ -917,13 +915,15 @@ function envVarListToGithubEnv(
   list: string[] | { [key: string]: EnvNameInclusion } | undefined,
   env: string,
   varType: 'secrets' | 'vars',
+  isTfVar: boolean = false,
 ): object {
   const varMap = Array.isArray(list)
     ? list.reduce((all, varName) => { all[varName] = 'none'; return all; }, Object.assign({}) as { [key: string]: EnvNameInclusion })
     : list ?? {}
   ;
   return Object.entries(varMap).reduce((all, [varName, inclusionType]) => {
-    all[varName] = `\${{ ${varType}.${inclusionType == 'prefix' ? env.toUpperCase() + '_' : ''}${varName}${inclusionType == 'suffix' ? '_' + env.toUpperCase() : ''} }}`;
+    const currentEscaped = varName.match(/^GITHUB_/) ? `_${varName}` : varName;
+    all[`${isTfVar ? 'TF_VAR_' : ''}${varName}`] = `\${{ ${varType}.${inclusionType == 'prefix' ? env.toUpperCase() + '_' : ''}${currentEscaped}${inclusionType == 'suffix' ? '_' + env.toUpperCase() : ''} }}`;
     return all;
   }, Object.assign({}));
 }

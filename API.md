@@ -1735,7 +1735,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModules">terraformModules</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.TerraformModuleOptions">TerraformModuleOptions</a>[]</code> | Terraform Modules to add to cdktf.json. These are assumed to be internal to the Medly GitHub org. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformModulesSsh">terraformModulesSsh</a></code> | <code>boolean</code> | Set this to true for local dev when using SSH to connect to GitHub. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformProviders">terraformProviders</a></code> | <code>string[]</code> | Terraform Providers to add to cdktf.json. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code>string[]</code> | List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars">terraformVars</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.EnvVars">EnvVars</a></code> | List of Terraform variables to pull from GitHub secrets/vars and set as TF_VAR_ environment variables during terraform plan. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVersion">terraformVersion</a></code> | <code>string</code> | The Terraform version to use in the build pipelines. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowEnvVars">workflowEnvVars</a></code> | <code><a href="#@rlmartin-projen/cdktf-project.EnvVars">EnvVars</a></code> | Optional list of env vars to load from GitHub Secrets/Variables into workflow-level env variables. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowInputs">workflowInputs</a></code> | <code>{[ key: string ]: <a href="#@rlmartin-projen/cdktf-project.WorkflowInputOptions">WorkflowInputOptions</a>}</code> | Optional inputs (map of name => options) to inject into the workflow_dispatch. |
@@ -4098,13 +4098,13 @@ Terraform Providers to add to cdktf.json.
 ##### `terraformVars`<sup>Optional</sup> <a name="terraformVars" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.terraformVars"></a>
 
 ```typescript
-public readonly terraformVars: string[];
+public readonly terraformVars: EnvVars;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@rlmartin-projen/cdktf-project.EnvVars">EnvVars</a>
 - *Default:* []
 
-List of Terraform variables to pull from GitHub secrets and set as TF_VAR_ environment variables during terraform plan.
+List of Terraform variables to pull from GitHub secrets/vars and set as TF_VAR_ environment variables during terraform plan.
 
 The secrets will need to be set
 manually, on one of org/repo/environment. The name of the var is expected to
