@@ -3736,7 +3736,7 @@ public readonly eslint: boolean;
 ```
 
 - *Type:* boolean
-- *Default:* true
+- *Default:* true, unless biome is enabled
 
 Setup eslint.
 
@@ -4387,6 +4387,7 @@ const jobStep: JobStep = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.id">id</a></code> | <code>string</code> | A unique identifier for the step. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.if">if</a></code> | <code>string</code> | You can use the if conditional to prevent a job from running unless a condition is met. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.name">name</a></code> | <code>string</code> | A name for your step to display on GitHub. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.shell">shell</a></code> | <code>string</code> | Overrides the default shell settings in the runner's operating system and the job's default. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.workingDirectory">workingDirectory</a></code> | <code>string</code> | Specifies a working directory for a step. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.run">run</a></code> | <code>string</code> | Runs command-line programs using the operating system's shell. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.uses">uses</a></code> | <code>string</code> | Selects an action to run as part of a step in your job. |
@@ -4450,6 +4451,22 @@ public readonly name: string;
 - *Type:* string
 
 A name for your step to display on GitHub.
+
+---
+
+##### `shell`<sup>Optional</sup> <a name="shell" id="@rlmartin-projen/cdktf-project.JobStep.property.shell"></a>
+
+```typescript
+public readonly shell: string;
+```
+
+- *Type:* string
+
+Overrides the default shell settings in the runner's operating system and the job's default.
+
+Refer to GitHub documentation for allowed values.
+
+> [https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell)
 
 ---
 
