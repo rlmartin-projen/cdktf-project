@@ -314,6 +314,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
     const { nodeVersion = sharedOptions.nodeVersion } = options;
     const {
       artifactsFolder = 'dist',
+      buildWorkflowOptions = {},
       defaultReleaseBranch,
       deploymentEnvironments = {},
       majorVersion = 0,
@@ -561,6 +562,10 @@ export class CdktfProject extends typescript.TypeScriptProject {
           AWS_SECRET_ACCESS_KEY: `\${{ secrets.${env.toUpperCase()}_AWS_SECRET_ACCESS_KEY }}`,
         };
       }
+      const buildWorkflowPermissions = {
+        ...buildWorkflowOptions.permissions,
+        ...oidcPermissions,
+      }
       const tfSetupSteps: JobStep[] = [
         {
           name: 'Checkout code',
@@ -616,7 +621,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
             plan: {
               'runs-on': 'ubuntu-latest',
               'environment': `${env}-plan`,
-              'permissions': oidcPermissions,
+              'permissions': buildWorkflowPermissions,
               'outputs': {
                 latest_commit: '${{ steps.git_remote.outputs.latest_commit }}',
               },
@@ -670,7 +675,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               'runs-on': 'ubuntu-latest',
               'environment': env,
               'needs': 'plan',
-              'permissions': oidcPermissions,
+              'permissions': buildWorkflowPermissions,
               'if': applyStepConditional.join(' && '),
               'steps': [
                 setupNodeStep,
@@ -748,7 +753,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
               manual: {
                 'runs-on': 'ubuntu-latest',
                 'environment': `${env}-plan`,
-                'permissions': oidcPermissions,
+                'permissions': buildWorkflowPermissions,
                 'steps': [
                   ...filterJobSteps(tfSetupSteps, 'manual'),
                   {
