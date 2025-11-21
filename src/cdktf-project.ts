@@ -565,7 +565,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       const buildWorkflowPermissions = {
         ...buildWorkflowOptions.permissions,
         ...oidcPermissions,
-      }
+      };
       const tfSetupSteps: JobStep[] = [
         {
           name: 'Checkout code',
