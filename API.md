@@ -1627,6 +1627,7 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmRegistry">npmRegistry</a></code> | <code>string</code> | The host name of the npm registry to publish to. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmRegistryUrl">npmRegistryUrl</a></code> | <code>string</code> | The base URL of the npm package registry. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmTokenSecret">npmTokenSecret</a></code> | <code>string</code> | GitHub secret which contains the NPM token to use when publishing packages. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmTrustedPublishing">npmTrustedPublishing</a></code> | <code>boolean</code> | Use trusted publishing for publishing to npmjs.com Needs to be pre-configured on npm.js to work. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.packageManager">packageManager</a></code> | <code>projen.javascript.NodePackageManager</code> | The Node Package Manager used to execute scripts. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.packageName">packageName</a></code> | <code>string</code> | The "name" in package.json. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.peerDependencyOptions">peerDependencyOptions</a></code> | <code>projen.javascript.PeerDependencyOptions</code> | Options for `peerDeps`. |
@@ -1650,12 +1651,14 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.publishTasks">publishTasks</a></code> | <code>boolean</code> | Define publishing tasks that can be executed manually as well as workflows. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releasableCommits">releasableCommits</a></code> | <code>projen.ReleasableCommits</code> | Find commits that should be considered releasable Used to decide if a release is required. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseBranches">releaseBranches</a></code> | <code>{[ key: string ]: projen.release.BranchOptions}</code> | Defines additional release branches. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseEnvironment">releaseEnvironment</a></code> | <code>string</code> | The GitHub Actions environment used for the release. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseEveryCommit">releaseEveryCommit</a></code> | <code>boolean</code> | Automatically release new versions every commit to one of branches in `releaseBranches`. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseFailureIssue">releaseFailureIssue</a></code> | <code>boolean</code> | Create a github issue on every failed publishing task. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseFailureIssueLabel">releaseFailureIssueLabel</a></code> | <code>string</code> | The label to apply to issues indicating publish failures. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseSchedule">releaseSchedule</a></code> | <code>string</code> | CRON schedule to trigger new releases. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseTagPrefix">releaseTagPrefix</a></code> | <code>string</code> | Automatically add the given prefix to release tags. Useful if you are releasing on multiple branches with overlapping version numbers. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseTrigger">releaseTrigger</a></code> | <code>projen.release.ReleaseTrigger</code> | The release trigger to use. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowEnv">releaseWorkflowEnv</a></code> | <code>{[ key: string ]: string}</code> | Build environment variables for release workflows. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowName">releaseWorkflowName</a></code> | <code>string</code> | The name of the default release workflow. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowSetupSteps">releaseWorkflowSetupSteps</a></code> | <code>projen.github.workflows.JobStep[]</code> | A set of workflow steps to execute in order to setup the workflow container. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.versionrcOptions">versionrcOptions</a></code> | <code>{[ key: string ]: any}</code> | Custom configuration used when creating changelog with commit-and-tag-version package. |
@@ -1664,6 +1667,8 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.workflowRunsOnGroup">workflowRunsOnGroup</a></code> | <code>projen.GroupRunnerOptions</code> | Github Runner Group selection options. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.defaultReleaseBranch">defaultReleaseBranch</a></code> | <code>string</code> | The name of the main release branch. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.artifactsDirectory">artifactsDirectory</a></code> | <code>string</code> | A directory which will contain build artifacts. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.auditDeps">auditDeps</a></code> | <code>boolean</code> | Run security audit on dependencies. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.auditDepsOptions">auditDepsOptions</a></code> | <code>projen.javascript.AuditOptions</code> | Security audit options. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.autoApproveUpgrades">autoApproveUpgrades</a></code> | <code>boolean</code> | Automatically approve deps upgrade PRs, allowing them to be merged by mergify (if configued). |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.biome">biome</a></code> | <code>boolean</code> | Setup Biome. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.biomeOptions">biomeOptions</a></code> | <code>projen.javascript.BiomeOptions</code> | Biome options. |
@@ -1672,8 +1677,8 @@ const cdktfProjectOptions: CdktfProjectOptions = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.buildWorkflowTriggers">buildWorkflowTriggers</a></code> | <code>projen.github.workflows.Triggers</code> | Build workflow triggers. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.bundlerOptions">bundlerOptions</a></code> | <code>projen.javascript.BundlerOptions</code> | Options for `Bundler`. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.checkLicenses">checkLicenses</a></code> | <code>projen.javascript.LicenseCheckerOptions</code> | Configure which licenses should be deemed acceptable for use by dependencies. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeCov">codeCov</a></code> | <code>boolean</code> | Define a GitHub workflow step for sending code coverage metrics to https://codecov.io/ Uses codecov/codecov-action@v4 A secret is required for private repos. Configured with `@codeCovTokenSecret`. |
-| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeCovTokenSecret">codeCovTokenSecret</a></code> | <code>string</code> | Define the secret name for a specified https://codecov.io/ token A secret is required to send coverage for private repositories. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeCov">codeCov</a></code> | <code>boolean</code> | Define a GitHub workflow step for sending code coverage metrics to https://codecov.io/ Uses codecov/codecov-action@v5 By default, OIDC auth is used. Alternatively a token can be provided via `codeCovTokenSecret`. |
+| <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.codeCovTokenSecret">codeCovTokenSecret</a></code> | <code>string</code> | Define the secret name for a specified https://codecov.io/ token. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.copyrightOwner">copyrightOwner</a></code> | <code>string</code> | License copyright owner. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.copyrightPeriod">copyrightPeriod</a></code> | <code>string</code> | The copyright years to put in the LICENSE file. |
 | <code><a href="#@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.dependabot">dependabot</a></code> | <code>boolean</code> | Use dependabot to handle dependency upgrades. |
@@ -2586,6 +2591,19 @@ GitHub secret which contains the NPM token to use when publishing packages.
 
 ---
 
+##### `npmTrustedPublishing`<sup>Optional</sup> <a name="npmTrustedPublishing" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.npmTrustedPublishing"></a>
+
+```typescript
+public readonly npmTrustedPublishing: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Use trusted publishing for publishing to npmjs.com Needs to be pre-configured on npm.js to work.
+
+---
+
 ##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.packageManager"></a>
 
 ```typescript
@@ -2945,6 +2963,25 @@ be provided for the default branch.
 
 ---
 
+##### `releaseEnvironment`<sup>Optional</sup> <a name="releaseEnvironment" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseEnvironment"></a>
+
+```typescript
+public readonly releaseEnvironment: string;
+```
+
+- *Type:* string
+- *Default:* no environment used, unless set at the artifact level
+
+The GitHub Actions environment used for the release.
+
+This can be used to add an explicit approval step to the release
+or limit who can initiate a release through environment protection rules.
+
+When multiple artifacts are released, the environment can be overwritten
+on a per artifact basis.
+
+---
+
 ##### ~~`releaseEveryCommit`~~<sup>Optional</sup> <a name="releaseEveryCommit" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseEveryCommit"></a>
 
 - *Deprecated:* Use `releaseTrigger: ReleaseTrigger.continuous()` instead
@@ -3031,6 +3068,19 @@ public readonly releaseTrigger: ReleaseTrigger;
 - *Default:* Continuous releases (`ReleaseTrigger.continuous()`)
 
 The release trigger to use.
+
+---
+
+##### `releaseWorkflowEnv`<sup>Optional</sup> <a name="releaseWorkflowEnv" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.releaseWorkflowEnv"></a>
+
+```typescript
+public readonly releaseWorkflowEnv: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+- *Default:* {}
+
+Build environment variables for release workflows.
 
 ---
 
@@ -3135,6 +3185,36 @@ public readonly artifactsDirectory: string;
 - *Default:* "dist"
 
 A directory which will contain build artifacts.
+
+---
+
+##### `auditDeps`<sup>Optional</sup> <a name="auditDeps" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.auditDeps"></a>
+
+```typescript
+public readonly auditDeps: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Run security audit on dependencies.
+
+When enabled, creates an "audit" task that checks for known security vulnerabilities
+in dependencies. By default, runs during every build and checks for "high" severity
+vulnerabilities or above in all dependencies (including dev dependencies).
+
+---
+
+##### `auditDepsOptions`<sup>Optional</sup> <a name="auditDepsOptions" id="@rlmartin-projen/cdktf-project.CdktfProjectOptions.property.auditDepsOptions"></a>
+
+```typescript
+public readonly auditDepsOptions: AuditOptions;
+```
+
+- *Type:* projen.javascript.AuditOptions
+- *Default:* default options
+
+Security audit options.
 
 ---
 
@@ -3255,7 +3335,7 @@ public readonly codeCov: boolean;
 - *Type:* boolean
 - *Default:* false
 
-Define a GitHub workflow step for sending code coverage metrics to https://codecov.io/ Uses codecov/codecov-action@v4 A secret is required for private repos. Configured with `@codeCovTokenSecret`.
+Define a GitHub workflow step for sending code coverage metrics to https://codecov.io/ Uses codecov/codecov-action@v5 By default, OIDC auth is used. Alternatively a token can be provided via `codeCovTokenSecret`.
 
 ---
 
@@ -3266,9 +3346,9 @@ public readonly codeCovTokenSecret: string;
 ```
 
 - *Type:* string
-- *Default:* if this option is not specified, only public repositories are supported
+- *Default:* OIDC auth is used
 
-Define the secret name for a specified https://codecov.io/ token A secret is required to send coverage for private repositories.
+Define the secret name for a specified https://codecov.io/ token.
 
 ---
 
@@ -3630,7 +3710,7 @@ public readonly workflowGitIdentity: GitIdentity;
 ```
 
 - *Type:* projen.github.GitIdentity
-- *Default:* GitHub Actions
+- *Default:* default GitHub Actions user
 
 The git identity to use in workflows.
 
@@ -3736,7 +3816,7 @@ public readonly eslint: boolean;
 ```
 
 - *Type:* boolean
-- *Default:* true
+- *Default:* true, unless biome is enabled
 
 Setup eslint.
 
@@ -4387,6 +4467,7 @@ const jobStep: JobStep = { ... }
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.id">id</a></code> | <code>string</code> | A unique identifier for the step. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.if">if</a></code> | <code>string</code> | You can use the if conditional to prevent a job from running unless a condition is met. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.name">name</a></code> | <code>string</code> | A name for your step to display on GitHub. |
+| <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.shell">shell</a></code> | <code>string</code> | Overrides the default shell settings in the runner's operating system and the job's default. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.workingDirectory">workingDirectory</a></code> | <code>string</code> | Specifies a working directory for a step. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.run">run</a></code> | <code>string</code> | Runs command-line programs using the operating system's shell. |
 | <code><a href="#@rlmartin-projen/cdktf-project.JobStep.property.uses">uses</a></code> | <code>string</code> | Selects an action to run as part of a step in your job. |
@@ -4450,6 +4531,22 @@ public readonly name: string;
 - *Type:* string
 
 A name for your step to display on GitHub.
+
+---
+
+##### `shell`<sup>Optional</sup> <a name="shell" id="@rlmartin-projen/cdktf-project.JobStep.property.shell"></a>
+
+```typescript
+public readonly shell: string;
+```
+
+- *Type:* string
+
+Overrides the default shell settings in the runner's operating system and the job's default.
+
+Refer to GitHub documentation for allowed values.
+
+> [https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell)
 
 ---
 
