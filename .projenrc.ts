@@ -20,6 +20,7 @@ const project = new ProjenProject({
   repositoryUrl: 'https://github.com/rlmartin-projen/cdktf-project',
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
+  npmTrustedPublishing: true,
   majorVersion,
   releaseBranches: {
     dev: { prerelease: 'dev', npmDistTag: 'dev', majorVersion },
