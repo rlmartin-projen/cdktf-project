@@ -2,7 +2,7 @@ import { ProjenProject } from '@rlmartin-projen/projen-project';
 import { NpmAccess } from 'projen/lib/javascript';
 import { sharedDeps } from './src/cdktf-project';
 
-const majorVersion = 6;
+const majorVersion = 7;
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
@@ -20,6 +20,7 @@ const project = new ProjenProject({
   repositoryUrl: 'https://github.com/rlmartin-projen/cdktf-project',
   releaseToNpm: true,
   npmAccess: NpmAccess.PUBLIC,
+  npmTrustedPublishing: true,
   majorVersion,
   releaseBranches: {
     dev: { prerelease: 'dev', npmDistTag: 'dev', majorVersion },

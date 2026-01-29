@@ -195,7 +195,7 @@ export class WorkspaceFunction extends TaggedConstruct {
       nameOverride,
       nameSuffix,
       networking,
-      runtime = LambdaRuntime.NODEJS_18_X,
+      runtime = LambdaRuntime.NODEJS_22_X,
       secret: secretConfig,
       tags,
       timeout = 30,
