@@ -1,7 +1,7 @@
-import { CloudwatchEventRule } from '@cdktf/provider-aws/lib/cloudwatch-event-rule';
-import { CloudwatchEventTarget } from '@cdktf/provider-aws/lib/cloudwatch-event-target';
-import { LambdaPermission } from '@cdktf/provider-aws/lib/lambda-permission';
-import { S3BucketNotification } from '@cdktf/provider-aws/lib/s3-bucket-notification';
+import { CloudwatchEventRule } from '@cdktn/provider-aws/lib/cloudwatch-event-rule';
+import { CloudwatchEventTarget } from '@cdktn/provider-aws/lib/cloudwatch-event-target';
+import { LambdaPermission } from '@cdktn/provider-aws/lib/lambda-permission';
+import { S3BucketNotification } from '@cdktn/provider-aws/lib/s3-bucket-notification';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 

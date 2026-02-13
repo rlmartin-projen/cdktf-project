@@ -12,7 +12,7 @@ const project = new ProjenProject({
   ],
   bundledDeps: [
     '@cdktf/provider-archive@~10',
-    '@cdktf/provider-aws@~19',
+    '@cdktn/provider-aws@~22',
   ],
   devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',
