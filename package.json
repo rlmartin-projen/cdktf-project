@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@cdktf/provider-archive": "~10",
-    "@cdktf/provider-aws": "~19",
+    "@cdktn/provider-aws": "~22",
     "@rlmartin-projen/projen-project": "~0",
     "cdktf": "~0",
     "constructs": "~10",
@@ -72,7 +72,7 @@
   },
   "bundledDependencies": [
     "@cdktf/provider-archive",
-    "@cdktf/provider-aws",
+    "@cdktn/provider-aws",
     "liquidjs"
   ],
   "engines": {
