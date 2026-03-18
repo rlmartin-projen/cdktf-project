@@ -99,13 +99,13 @@
       "type": "build"
     },
     {
-      "name": "@cdktf/provider-archive",
-      "version": "~10",
+      "name": "@cdktn/provider-archive",
+      "version": "~12",
       "type": "bundled"
     },
     {
       "name": "@cdktn/provider-aws",
-      "version": "~22",
+      "version": "~23",
       "type": "bundled"
     },
     {
@@ -129,7 +129,7 @@
       "type": "runtime"
     },
     {
-      "name": "cdktf",
+      "name": "cdktn",
       "version": "~0",
       "type": "runtime"
     },

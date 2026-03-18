@@ -5,13 +5,13 @@ import { JobStep as GitHubJobStep } from 'projen/lib/github/workflows-model';
 import { cleanArray, isGitHubTeam } from './helpers';
 
 export const sharedDeps = [
-  'cdktf@~0',
+  'cdktn@~0',
   'constructs@~10',
   'projen@~0',
 ];
 
 const deps = [
-  'cdktf-cli@~0',
+  'cdktn-cli@~0',
   ...sharedDeps,
 ];
 function mergeUnique<T>(arr1: T[], arr2: T[]): T[] {
@@ -347,13 +347,13 @@ export class CdktfProject extends typescript.TypeScriptProject {
       releaseWorkflow: false,
       sampleCode: false,
       scripts: {
-        'cdktf-get': 'cdktf get',
-        'cdktf-build': 'cdktf get && tsc',
-        'cdktf-diff': 'cdktf diff',
-        'cdktf-synth': 'cdktf synth',
+        'cdktn-get': 'cdktn get',
+        'cdktn-build': 'cdktn get && tsc',
+        'cdktn-diff': 'cdktn diff',
+        'cdktn-synth': 'cdktn synth',
         'tsc-compile': 'tsc --pretty',
         'tsc-watch': 'tsc -w',
-        'cdktf-upgrade': 'npm i cdktf@latest cdktf-cli@latest',
+        'cdktn-upgrade': 'npm i cdktn@latest cdktn-cli@latest',
         ...options.scripts,
       },
       stale: false,
@@ -438,7 +438,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           excludeStackIdFromLogicalIds: 'true',
           allowSepCharsInLogicalIds: 'true',
         },
-        // Prevents cdktf synth from needing write access to cdktf.json
+        // Prevents cdktn synth from needing write access to cdktf.json
         projectId: 'false',
       },
     });
@@ -599,11 +599,11 @@ export class CdktfProject extends typescript.TypeScriptProject {
         }),
         {
           name: 'Build',
-          run: 'yarn cdktf-build',
+          run: 'yarn cdktn-build',
         },
         {
           name: 'Generate Terraform',
-          run: 'yarn cdktf-synth',
+          run: 'yarn cdktn-synth',
         },
         awsCredsStep,
       ].filter(x => x) as JobStep[];
@@ -791,7 +791,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
           allow_squash_merge: true,
           allow_merge_commit: false,
           delete_branch_on_merge: true,
-          topics: ['cdktf', 'infra', 'platform'].join(', '),
+          topics: ['cdktf', 'cdktn', 'infra', 'platform'].join(', '),
         },
         collaborators: githubAdmins.filter(name => !isGitHubTeam(name)).map(name => {
           return {
@@ -843,7 +843,7 @@ export class CdktfProject extends typescript.TypeScriptProject {
       contents: [
         'import { Construct } from \'constructs\';',
         'import { Environments } from \'./environments\';',
-        'import { TerraformStack } from \'cdktf\';',
+        'import { TerraformStack } from \'cdktn\';',
         '',
         'export const pushStacks = (scope: Construct): Environments<TerraformStack> => {',
         '  return {',

@@ -208,7 +208,7 @@
       "description": "Prepare a release from \"main\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "7"
+        "MAJOR": "8"
       },
       "steps": [
         {
@@ -233,7 +233,7 @@
       "description": "Prepare a release from \"dev\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "7",
+        "MAJOR": "8",
         "PRERELEASE": "dev"
       },
       "steps": [
@@ -307,7 +307,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @stylistic/eslint-plugin @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version constructs eslint-import-resolver-typescript eslint-plugin-import eslint jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @cdktf/provider-archive @cdktn/provider-aws liquidjs @rlmartin-projen/projen-project cdktf"
+          "exec": "yarn upgrade @stylistic/eslint-plugin @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version constructs eslint-import-resolver-typescript eslint-plugin-import eslint jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @cdktn/provider-archive @cdktn/provider-aws liquidjs @rlmartin-projen/projen-project cdktn"
         },
         {
           "exec": "npx projen"

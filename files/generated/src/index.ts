@@ -1,4 +1,4 @@
-import { App, TerraformStack } from 'cdktf';
+import { App, TerraformStack } from 'cdktn';
 import { pushBackend } from './backend';
 import { Environment } from './environments';
 import { pushStacks } from './stack';

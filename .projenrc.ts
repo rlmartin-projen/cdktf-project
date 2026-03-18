@@ -2,7 +2,7 @@ import { ProjenProject } from '@rlmartin-projen/projen-project';
 import { NpmAccess } from 'projen/lib/javascript';
 import { sharedDeps } from './src/cdktf-project';
 
-const majorVersion = 7;
+const majorVersion = 8;
 const project = new ProjenProject({
   author: 'Ryan Martin',
   authorAddress: 'rlmartin@gmail.com',
@@ -11,8 +11,8 @@ const project = new ProjenProject({
     ...sharedDeps,
   ],
   bundledDeps: [
-    '@cdktf/provider-archive@~10',
-    '@cdktn/provider-aws@~22',
+    '@cdktn/provider-archive@~12',
+    '@cdktn/provider-aws@~23',
   ],
   devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',

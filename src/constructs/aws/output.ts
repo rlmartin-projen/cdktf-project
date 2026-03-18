@@ -1,5 +1,5 @@
 import { SsmParameter } from '@cdktn/provider-aws/lib/ssm-parameter';
-import { Fn, TerraformOutput } from 'cdktf';
+import { Fn, TerraformOutput } from 'cdktn';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 

@@ -7,7 +7,7 @@ import { IamRolePolicy } from '@cdktn/provider-aws/lib/iam-role-policy';
 import { LambdaFunction } from '@cdktn/provider-aws/lib/lambda-function';
 import { SecretsmanagerSecret } from '@cdktn/provider-aws/lib/secretsmanager-secret';
 import { SecretsmanagerSecretVersion } from '@cdktn/provider-aws/lib/secretsmanager-secret-version';
-import { ITerraformDependable } from 'cdktf';
+import { ITerraformDependable } from 'cdktn';
 import { Construct } from 'constructs';
 import { LambdaRuntime } from 'projen/lib/awscdk';
 import { S3LambdaTrigger } from './s3LambdaTrigger';
