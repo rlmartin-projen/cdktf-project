@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
+import { DataArchiveFile } from '@cdktn/provider-archive/lib/data-archive-file';
 import { S3Object } from '@cdktn/provider-aws/lib/s3-object';
-import { TerraformAsset } from 'cdktf';
+import { TerraformAsset } from 'cdktn';
 import { Construct } from 'constructs';
 import { TaggedConstruct, TaggedConstructConfig } from './taggedConstruct';
 

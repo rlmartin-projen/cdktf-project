@@ -11,7 +11,7 @@ const project = new ProjenProject({
     ...sharedDeps,
   ],
   bundledDeps: [
-    '@cdktf/provider-archive@~10',
+    '@cdktn/provider-archive@~12',
     '@cdktn/provider-aws@~22',
   ],
   devDeps: ['@rlmartin-projen/projen-project@~0'],
