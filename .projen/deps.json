@@ -105,7 +105,7 @@
     },
     {
       "name": "@cdktn/provider-aws",
-      "version": "~22",
+      "version": "~23",
       "type": "bundled"
     },
     {
