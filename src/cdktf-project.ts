@@ -346,16 +346,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
       pullRequestTemplate: false,
       releaseWorkflow: false,
       sampleCode: false,
-      scripts: {
-        'cdktn-get': 'cdktn get',
-        'cdktn-build': 'cdktn get && tsc',
-        'cdktn-diff': 'cdktn diff',
-        'cdktn-synth': 'cdktn synth',
-        'tsc-compile': 'tsc --pretty',
-        'tsc-watch': 'tsc -w',
-        'cdktn-upgrade': 'npm i cdktn@latest cdktn-cli@latest',
-        ...options.scripts,
-      },
       stale: false,
       tsconfig: {
         ...options.tsconfig,
@@ -386,6 +376,20 @@ export class CdktfProject extends typescript.TypeScriptProject {
     super(projectOpts);
     addFiles(this, files);
 
+    // Register cdktn tasks explicitly (the `scripts` constructor option was
+    // removed in projen >=0.101.x after being deprecated).
+    this.addTask('cdktn-get', { exec: 'cdktn get' });
+    this.addTask('cdktn-build', { exec: 'cdktn get && tsc' });
+    this.addTask('cdktn-diff', { exec: 'cdktn diff' });
+    this.addTask('cdktn-synth', { exec: 'cdktn synth' });
+    this.addTask('cdktn-upgrade', { exec: 'npm i cdktn@latest cdktn-cli@latest' });
+    this.addTask('tsc-compile', { exec: 'tsc --pretty' });
+    this.addTask('tsc-watch', { exec: 'tsc -w' });
+
+    if (options.nodeScripts) {
+      Object.keys(options.nodeScripts).forEach(name => this.addTask(name, { exec: options.nodeScripts![name] }));
+    }
+
     this.gitignore.exclude(
       '*.d.ts',
       '*.js',
@@ -400,7 +404,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
       '!.projenrc.js',
     );
 
-
     const githubAdmins = Object.keys(repoAdmins).map(name => name.match(/^@/) ? name : `@${name}`);
     new TextFile(this, '.github/CODEOWNERS', {
       readonly: true,
@@ -411,10 +414,6 @@ export class CdktfProject extends typescript.TypeScriptProject {
         `README.md ${githubAdmins.join(' ')}`,
       ] : [],
     });
-
-    if (options.nodeScripts) {
-      Object.keys(options.nodeScripts).forEach(name => this.setScript(name, options.nodeScripts![name]));
-    }
 
     const tfModules: Array<{ name: string; source: string }> = [];
     terraformModules.forEach(module => {
