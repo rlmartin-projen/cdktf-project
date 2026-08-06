@@ -1,9 +1,9 @@
 import { ProjenProject } from '@rlmartin-projen/projen-project';
 import { GithubWorkflow } from 'projen/lib/github';
+import { JobPermission } from 'projen/lib/github/workflows-model';
 import { NpmAccess } from 'projen/lib/javascript';
 import { ReleaseTrigger } from 'projen/lib/release/release-trigger';
 import { sharedDeps } from './src/cdktf-project';
-import { JobPermission } from 'projen/lib/github/workflows-model';
 
 const majorVersion = 8;
 const project = new ProjenProject({
