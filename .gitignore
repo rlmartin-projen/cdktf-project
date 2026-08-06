@@ -50,4 +50,5 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+!/.github/workflows/release-all.yml
 !/.projenrc.ts

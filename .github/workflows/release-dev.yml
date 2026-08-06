@@ -3,9 +3,6 @@
 name: release-dev
 run-name: ${{ inputs.dry_run && format('[DRY RUN] release-dev by @{0}', github.actor) || '' }}
 on:
-  push:
-    branches:
-      - dev
   workflow_dispatch:
     inputs:
       dry_run:
