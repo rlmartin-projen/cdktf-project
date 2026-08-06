@@ -57,7 +57,7 @@ releaseAll.addJob('publish-prod', {
   uses: './.github/workflows/release.yml',
   permissions: {
     idToken: JobPermission.WRITE,
-    contents: JobPermission.READ,
+    contents: JobPermission.WRITE,
   },
 });
 releaseAll.addJob('publish-beta', {

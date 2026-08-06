@@ -11,7 +11,7 @@ jobs:
     if: github.ref_name == 'main'
     permissions:
       id-token: write
-      contents: read
+      contents: write
     uses: ./.github/workflows/release.yml
   publish-beta:
     if: github.ref_name == 'dev'
