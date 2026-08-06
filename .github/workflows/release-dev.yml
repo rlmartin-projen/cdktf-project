@@ -9,6 +9,7 @@ on:
         description: Dry run (skip actual publishing)
         required: false
         type: boolean
+  workflow_call: {}
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false

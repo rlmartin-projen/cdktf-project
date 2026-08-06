@@ -39,6 +39,13 @@ const project = new ProjenProject({
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+
+// Add workflow_call trigger to release workflows so they can be called as
+// reusable workflows from release-all.yml.
+for (const workflowName of ['release', 'release-dev']) {
+  project.github?.tryFindWorkflow(workflowName)?.on({ workflowCall: {} });
+}
+
 const releaseAll = new GithubWorkflow(project.github!, 'release-all', {});
 releaseAll.on({
   push: {
