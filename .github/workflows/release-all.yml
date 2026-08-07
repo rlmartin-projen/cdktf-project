@@ -13,7 +13,7 @@ jobs:
       id-token: write
       contents: write
     uses: ./.github/workflows/release.yml
-  publish-beta:
+  publish-dev:
     if: github.ref_name == 'dev'
     permissions:
       id-token: write

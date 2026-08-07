@@ -58,13 +58,13 @@
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@rlmartin-projen/projen-project": "~0",
+    "@rlmartin-projen/projen-project": "0.0.37-dev.0",
     "projen": "~0"
   },
   "dependencies": {
     "@cdktn/provider-archive": "~12",
     "@cdktn/provider-aws": "~23",
-    "@rlmartin-projen/projen-project": "~0",
+    "@rlmartin-projen/projen-project": "0.0.37-dev.0",
     "cdktn": "~0",
     "constructs": "~10",
     "liquidjs": "~10",
