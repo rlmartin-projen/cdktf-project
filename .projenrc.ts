@@ -14,7 +14,7 @@ const project = new ProjenProject({
     '@cdktn/provider-archive@~12',
     '@cdktn/provider-aws@~23',
   ],
-  devDeps: ['@rlmartin-projen/projen-project@0.0.37-dev.0'],
+  devDeps: ['@rlmartin-projen/projen-project@~0'],
   name: '@rlmartin-projen/cdktf-project',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/rlmartin-projen/cdktf-project',

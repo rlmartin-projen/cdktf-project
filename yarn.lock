@@ -761,10 +761,10 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-10.0.0.tgz#f6b40472d96c210094a556ee5ccb8e77f1bd30af"
   integrity sha512-hAX0pT/73190NLqBPPWSdBVGtbY6VOhWYK3qqHqtXQ1gK7kS2yz4+ivsN07hpJ6I3aeMtKP6J6npsEKOAzuTLA==
 
-"@rlmartin-projen/projen-project@0.0.37-dev.0":
-  version "0.0.37-dev.0"
-  resolved "https://registry.yarnpkg.com/@rlmartin-projen/projen-project/-/projen-project-0.0.37-dev.0.tgz#7d34f1d59c3dffbae395f0b84fa13d3e55b7ebd8"
-  integrity sha512-bByOrlDY8KK1Jsu5zM878jxIdwd9Fga0Hq4g4sa5Rt4Nn6yiyBh3S2w6W4hOKovW51zz0s+khVF/bAdZndMHFg==
+"@rlmartin-projen/projen-project@~0":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@rlmartin-projen/projen-project/-/projen-project-0.0.37.tgz#182efb47bd7a71e75fd220e1a3dd1f2df8f461da"
+  integrity sha512-NhG7SowO5UOSOKcfHJjCLOiVfQHoA3GmAQVDT2Ag2FKydKBWlkRZe5kBolOqeUPPzClygzZ++oeaw7sx8sHnIA==
   dependencies:
     liquidjs "~10"
     projen "~0"
